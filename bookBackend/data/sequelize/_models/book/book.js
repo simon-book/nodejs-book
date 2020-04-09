@@ -5,6 +5,7 @@ var moment = require('moment');
 var sequelize = require("../../../../service/sequelizeConn.js");
 
 var Branch = require("../brach/branch.js");
+var BookCategory = require("./bookCategory.js");
 
 var Book = sequelize.define('book', {
     bookId: {
@@ -23,6 +24,7 @@ var Book = sequelize.define('book', {
     //     allowNull: false
     // },
     keywords: Sequelize.TEXT,
+    writer: Sequelize.TEXT,
     cover: Sequelize.TEXT, //竖向封面
     horiCover: Sequelize.TEXT, //横向封面
     abstractContent: Sequelize.TEXT, //摘要
@@ -33,6 +35,24 @@ var Book = sequelize.define('book', {
     readCount: Sequelize.INTEGER, //阅读数
     wordsCount: Sequelize.INTEGER, //字数
     bookPrice: Sequelize.INTEGER, //整本书价格
+    category1Id: { //主分类
+        type: Sequelize.BIGINT,
+        references: {
+            model: BookCategory,
+            key: 'category_id',
+            deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
+        },
+        allowNull: false
+    },
+    category2Id: { //次分类
+        type: Sequelize.BIGINT,
+        references: {
+            model: BookCategory,
+            key: 'category_id',
+            deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
+        },
+        allowNull: true
+    },
     freeChapters: {
         type: Sequelize.INTEGER,
         defaultValue: 2
@@ -55,20 +75,11 @@ var Book = sequelize.define('book', {
         allowNull: false,
         defaultValue: "vip_free"
     },
-    categoryIds: {
-        type: Sequelize.ARRAY(Sequelize.BIGINT),
-        get: function() {
-            return _.map(this.getDataValue("categoryIds"), function(value) {
-                return parseInt(value)
-            })
-        },
-        allowNull: false
-    },
     branchId: {
         type: Sequelize.BIGINT,
         references: {
             model: Branch,
-            key: 'id',
+            key: 'branch_id',
             deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
         },
         allowNull: false
@@ -84,6 +95,8 @@ var Book = sequelize.define('book', {
     underscored: true,
     indexes: [{
         fields: ['branch_id']
+    }, {
+        fields: ['title']
     }],
     defaultScope: {
         where: {

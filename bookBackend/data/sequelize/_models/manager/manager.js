@@ -6,15 +6,34 @@ var sequelize = require("../../../../service/sequelizeConn.js");
 
 var Branch = require("../brach/branch.js");
 
-var BookCategory = sequelize.define('book_category', {
-    categoryId: {
+var Manager = sequelize.define('manager', {
+    managerId: {
         type: Sequelize.BIGINT,
         primaryKey: true,
         allowNull: false,
         unique: true,
         autoIncrement: true
     },
-    name: {
+    // name: {
+    //     type: Sequelize.TEXT,
+    //     allowNull: false
+    // },
+    nickname: {
+        type: Sequelize.TEXT,
+        allowNull: false
+    },
+    phone: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+    },
+    // email: Sequelize.TEXT,
+    password: {
+        type: Sequelize.TEXT,
+        allowNull: false
+    },
+    avatarUrl: Sequelize.TEXT,
+    // salt: Sequelize.TEXT,
+    roleType: { //administrator超级管理员，manager普通管理员
         type: Sequelize.TEXT,
         allowNull: false
     },
@@ -22,22 +41,25 @@ var BookCategory = sequelize.define('book_category', {
         type: Sequelize.BIGINT,
         references: {
             model: Branch,
-            key: 'id',
+            key: 'branch_id',
             deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
         },
         allowNull: false
     },
+    remark: Sequelize.TEXT,
     statusId: {
         type: Sequelize.INTEGER,
         defaultValue: 1
     }
 }, {
     schema: __PGSQL__.schemas.book_publisher,
-    tableName: 'book_category',
+    tableName: 'manager',
     timestamps: true,
     underscored: true,
     indexes: [{
         fields: ['branch_id']
+    }, {
+        fields: ['phone']
     }],
     defaultScope: {
         where: {
@@ -48,5 +70,14 @@ var BookCategory = sequelize.define('book_category', {
     }
 });
 
+Branch.hasMany(Manager, {
+    as: 'managers',
+    foreignKey: 'branchId'
+})
 
-module.exports = BookCategory;
+Manager.belongsTo(Branch, {
+    as: 'branch',
+    foreignKey: 'branchId'
+})
+
+module.exports = Manager;

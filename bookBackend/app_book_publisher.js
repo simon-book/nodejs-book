@@ -33,7 +33,7 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser('IB_Ck!'));
 // app.use(cookieSession({secret: 'IB_Ss!'}));
 app.use(session({
-    name: 'reports_sid',
+    name: 'book_sid',
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: false,
@@ -48,8 +48,8 @@ app.set('jsonp callback name', 'onJsonpLoad');
 app.use(__G__.CONTEXT + "/static", express.static(path.join(__dirname, '/statics')));
 app.use(__G__.CONTEXT + "/html", express.static(path.join(__dirname, '/html')));
 
-
-app.use(__G__.CONTEXT || '/shuyu/branch', require('./controller/branchHttpRoutes.js'));
+app.use(__G__.CONTEXT || '/shuyu', require('./controller/index.js'));
+app.use(__G__.CONTEXT || '/shuyu/book', require('./controller/bookHttpRoutes.js'));
 
 
 

@@ -5,55 +5,58 @@ var moment = require('moment');
 var sequelize = require("../../../../service/sequelizeConn.js");
 
 var Branch = require("../brach/branch.js");
+var Book = require("./book.js");
 
-var Manager = sequelize.define('manager', {
-    managerId: {
+var BookChapter = sequelize.define('book_chapter', {
+    chapterId: {
         type: Sequelize.BIGINT,
         primaryKey: true,
         allowNull: false,
         unique: true,
         autoIncrement: true
     },
-    name: {
+    number: {
+        type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    title: {
         type: Sequelize.TEXT,
         allowNull: false
     },
-    password: {
-        type: Sequelize.TEXT,
+    cover: Sequelize.TEXT, //竖向封面
+    price: Sequelize.INTEGER, //本章价格
+    contentFormat: {
+        type: Sequelize.ENUM("text", "picture"),
         allowNull: false
     },
-    nickname: {
-        type: Sequelize.TEXT,
-        allowNull: false
-    },
-    avatarUrl: Sequelize.TEXT,
-    phone: {
-        type: Sequelize.TEXT,
-        allowNull: false,
-    },
-    email: Sequelize.TEXT,
-    salt: Sequelize.TEXT,
-    roleType: { //administrator超级管理员，manager普通管理员
-        type: Sequelize.TEXT,
+    contentText: Sequelize.TEXT,
+    contentPictures: Sequelize.JSONB,
+    sourceDomain: Sequelize.TEXT,
+    bookId: {
+        type: Sequelize.BIGINT,
+        references: {
+            model: Book,
+            key: 'book_id',
+            deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
+        },
         allowNull: false
     },
     branchId: {
         type: Sequelize.BIGINT,
         references: {
             model: Branch,
-            key: 'id',
+            key: 'branch_id',
             deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
         },
         allowNull: false
     },
-    remark: Sequelize.TEXT,
     statusId: {
         type: Sequelize.INTEGER,
         defaultValue: 1
     }
 }, {
     schema: __PGSQL__.schemas.book_publisher,
-    tableName: 'manager',
+    tableName: 'book',
     timestamps: true,
     underscored: true,
     indexes: [{
@@ -69,4 +72,4 @@ var Manager = sequelize.define('manager', {
 });
 
 
-module.exports = Manager;
+module.exports = BookChapter;

@@ -20,14 +20,15 @@ var Branch = sequelize.define('branch', {
         allowNull: false,
         unique: true
     },
-    contacts: {
-        type: Sequelize.TEXT,
-        allowNull: false
-    },
-    phone: {
-        type: Sequelize.TEXT,
-        allowNull: false
-    },
+    // contacts: {
+    //     type: Sequelize.TEXT,
+    //     allowNull: false
+    // },
+    // phone: {
+    //     type: Sequelize.TEXT,
+    //     allowNull: false
+    // },
+    // email: Sequelize.TEXT,
     ServicePhone: Sequelize.TEXT,
     ServiceEmail: Sequelize.TEXT,
     ServiceOnline: Sequelize.TEXT,

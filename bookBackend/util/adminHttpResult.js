@@ -3,9 +3,6 @@ var RtnCode = require('./RtnCode.js');
 function jsonFailOut(req, res, errCode, errMsg, data) {
     var data = data || {};
     var rtnCode = RtnCode[errCode];
-    // if (rtnCode && errMsg) rtnCode[1] = errMsg;
-    // if (!rtnCode && errMsg) rtnCode = [10002, errMsg];
-    // else if (!rtnCode && !errMsg) rtnCode = RtnCode["SERVICE_VALID"];
 
     res.set({
         'Content-Type': 'application/json;charset=utf-8',

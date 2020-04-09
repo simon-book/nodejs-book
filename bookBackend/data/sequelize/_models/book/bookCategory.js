@@ -6,36 +6,23 @@ var sequelize = require("../../../../service/sequelizeConn.js");
 
 var Branch = require("../brach/branch.js");
 
-var BookChapter = sequelize.define('book_chapter', {
-    bookId: {
+var BookCategory = sequelize.define('book_category', {
+    categoryId: {
         type: Sequelize.BIGINT,
         primaryKey: true,
         allowNull: false,
         unique: true,
         autoIncrement: true
     },
-    number: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-    },
-    title: {
+    name: {
         type: Sequelize.TEXT,
         allowNull: false
     },
-    cover: Sequelize.TEXT, //竖向封面
-    price: Sequelize.INTEGER, //本章价格
-    contentFormat: {
-        type: Sequelize.ENUM("text", "picture"),
-        allowNull: false
-    },
-    contentText: Sequelize.TEXT,
-    contentPictures: Sequelize.JSONB,
-    sourceDomain: Sequelize.TEXT,
     branchId: {
         type: Sequelize.BIGINT,
         references: {
             model: Branch,
-            key: 'id',
+            key: 'branch_id',
             deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
         },
         allowNull: false
@@ -46,7 +33,7 @@ var BookChapter = sequelize.define('book_chapter', {
     }
 }, {
     schema: __PGSQL__.schemas.book_publisher,
-    tableName: 'book',
+    tableName: 'book_category',
     timestamps: true,
     underscored: true,
     indexes: [{
@@ -62,4 +49,4 @@ var BookChapter = sequelize.define('book_chapter', {
 });
 
 
-module.exports = BookChapter;
+module.exports = BookCategory;
