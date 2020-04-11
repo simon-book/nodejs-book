@@ -23,6 +23,7 @@ var Book = sequelize.define('book', {
     //     type: Sequelize.TEXT,
     //     allowNull: false
     // },
+    sn: Sequelize.TEXT, //编码
     keywords: Sequelize.TEXT,
     writer: Sequelize.TEXT,
     cover: Sequelize.TEXT, //竖向封面
@@ -30,6 +31,10 @@ var Book = sequelize.define('book', {
     abstractContent: Sequelize.TEXT, //摘要
     chapterCount: Sequelize.INTEGER, //章节数
     lastChapterId: Sequelize.BIGINT, //最后一章Id
+    lastChapterNumber: { //最后一章number
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+    },
     recommend: Sequelize.INTEGER, //推荐指数
     coinCount: Sequelize.INTEGER, //已兑换金币数
     readCount: Sequelize.INTEGER, //阅读数

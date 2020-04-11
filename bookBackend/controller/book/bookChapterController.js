@@ -7,18 +7,35 @@ var adminHttpResult = require('../../util/adminHttpResult.js');
 var errHandler = require('../../util/errHandler.js');
 var util = require('../../util/index.js');
 var bookChapterSequelize = require('../../data/sequelize/book/bookChapterSequelize.js');
+var bookSequelize = require('../../data/sequelize/book/bookSequelize.js');
 
 exports.create = async function(req, res) {
     try {
         var currentUser = req.currentUser;
         var body = req.body;
-        if (!body || !body.title || !body.bookType || !body.category1Id) {
+        if (!body || !body.title || !body.number || !body.bookId || !body.contentFormat) {
             adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
             return;
         }
         body.branchId = currentUser.branchId;
-        var added = await bookChapterSequelize.create(body);
-        adminHttpResult.jsonSuccOut(req, res, added);
+        // var lastChapter = await bookChapterSequelize.findOne({
+        //     order: [
+        //         [sequelize.fn('max', sequelize.col('number')), 'DESC'],
+        //     ]
+        // });
+        var book = await bookSequelize.findByPk(body.bookId);
+        if (!book || book.branchId != currentUser.branchId) {
+            adminHttpResult.jsonFailOut(req, res, "BOOK_ERROR", "book不存在");
+            return;
+        }
+        var newChapter = await bookChapterSequelize.create(body);
+        adminHttpResult.jsonSuccOut(req, res, newChapter);
+        book.set("chapterCount", (book.chapterCount || 0) + 1);
+        if (!book.lastChapterId || !book.lastChapterNumber || book.lastChapterNumber < newChapter.number) {
+            book.set("lastChapterId", newChapter.id);
+            book.set("lastChapterNumber", newChapter.number);
+        }
+        book.save();
     } catch (err) {
         errHandler.setHttpError(req.originalUrl, req.body, err);
         adminHttpResult.jsonFailOut(req, res, "SERVICE_INVALID", null, err);

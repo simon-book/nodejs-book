@@ -1,46 +1,32 @@
-var _ = require('lodash');
 var Sequelize = require('sequelize');
-var Op = Sequelize.Op;
 var moment = require('moment');
 var sequelize = require("../../../../service/sequelizeConn.js");
 
 var Branch = require("../brach/branch.js");
-var Book = require("./book.js");
+var Book = require("../book/book.js");
+var PageBlockBook = require("./pageBlockBook.js");
 
-var BookChapter = sequelize.define('book_chapter', {
-    chapterId: {
+var PageBlock = sequelize.define('page_block', {
+    blockId: {
         type: Sequelize.BIGINT,
         primaryKey: true,
         allowNull: false,
         unique: true,
         autoIncrement: true
     },
-    number: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-    },
-    title: {
+    name: {
         type: Sequelize.TEXT,
         allowNull: false
     },
-    cover: Sequelize.TEXT, //竖向封面
-    price: Sequelize.INTEGER, //本章价格
-    contentFormat: {
-        type: Sequelize.ENUM("text", "picture"),
-        allowNull: false
-    },
-    contentText: Sequelize.TEXT,
-    contentPictures: Sequelize.JSONB,
-    sourceDomain: Sequelize.TEXT,
-    bookId: {
-        type: Sequelize.BIGINT,
-        references: {
-            model: Book,
-            key: 'book_id',
-            deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
-        },
-        allowNull: false
-    },
+    blockKey: Sequelize.TEXT,
+    carousel: Sequelize.JSONB,
+    // [{
+    //     title: "健身教练",
+    //     img: "http://img.xjdcyw.com/img/5e7d5ac9fc31a30d57b92f2f.img_500_0.img",
+    //     url: "https://m.hzjmmm.com/#/book/1388",
+    // }]
+    orderIndex: Sequelize.BIGINT,
+    label: Sequelize.TEXT,
     branchId: {
         type: Sequelize.BIGINT,
         references: {
@@ -56,13 +42,11 @@ var BookChapter = sequelize.define('book_chapter', {
     }
 }, {
     schema: __PGSQL__.schemas.book_publisher,
-    tableName: 'book',
+    tableName: 'page_block',
     timestamps: true,
     underscored: true,
     indexes: [{
-        fields: ['book_id']
-    }, {
-        fields: ['number']
+        fields: ['branch_id']
     }],
     defaultScope: {
         where: {
@@ -73,5 +57,16 @@ var BookChapter = sequelize.define('book_chapter', {
     }
 });
 
+Book.belongsToMany(PageBlock, {
+    as: 'pageBlocks',
+    through: PageBlockBook,
+    foreignKey: 'bookId'
+})
+PageBlock.belongsToMany(Book, {
+    as: 'books',
+    through: PageBlockBook,
+    foreignKey: 'pageBlockId'
+})
 
-module.exports = BookChapter;
+
+module.exports = PageBlock;
