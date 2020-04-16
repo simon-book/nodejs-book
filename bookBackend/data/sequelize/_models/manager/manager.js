@@ -4,7 +4,7 @@ var Op = Sequelize.Op;
 var moment = require('moment');
 var sequelize = require("../../../../service/sequelizeConn.js");
 
-var Branch = require("../brach/branch.js");
+var Branch = require("../branch/branch.js");
 
 var Manager = sequelize.define('manager', {
     managerId: {
@@ -69,15 +69,5 @@ var Manager = sequelize.define('manager', {
         }
     }
 });
-
-Branch.hasMany(Manager, {
-    as: 'managers',
-    foreignKey: 'branchId'
-})
-
-Manager.belongsTo(Branch, {
-    as: 'branch',
-    foreignKey: 'branchId'
-})
 
 module.exports = Manager;
