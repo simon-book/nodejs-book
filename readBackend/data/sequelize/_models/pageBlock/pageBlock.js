@@ -47,11 +47,6 @@ var PageBlock = sequelize.define('page_block', {
 }, {
     schema: __PGSQL__.schemas.book_publisher,
     tableName: 'page_block',
-    timestamps: true,
-    underscored: true,
-    indexes: [{
-        fields: ['branch_id']
-    }],
     defaultScope: {
         where: {
             statusId: {

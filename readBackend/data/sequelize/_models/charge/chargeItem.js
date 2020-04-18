@@ -63,11 +63,6 @@ var ChargeItem = sequelize.define('charge_item', {
 }, {
     schema: __PGSQL__.schemas.book_publisher,
     tableName: 'charge_item',
-    timestamps: true,
-    underscored: true,
-    indexes: [{
-        fields: ['branch_id']
-    }],
     defaultScope: {
         where: {
             statusId: {

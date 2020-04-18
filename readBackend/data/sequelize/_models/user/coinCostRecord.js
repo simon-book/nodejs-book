@@ -4,36 +4,48 @@ var Op = Sequelize.Op;
 var moment = require('moment');
 var sequelize = require("../../../../service/sequelizeConn.js");
 
-var Branch = require("../branch/branch.js");
-
-var BookCategory = sequelize.define('book_category', {
-    categoryId: {
+var CoinCostRecord = sequelize.define('user_coin_cost_record', {
+    recordId: {
         type: Sequelize.BIGINT,
         primaryKey: true,
         allowNull: false,
         unique: true,
         autoIncrement: true
     },
-    name: {
+    costCount: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+    },
+    targetType: { //"book","chapter"
         type: Sequelize.TEXT,
+        allowNull: false
+    },
+    targetId: {
+        type: Sequelize.BIGINT,
+        allowNull: false
+    },
+    userId: {
+        type: Sequelize.BIGINT,
         allowNull: false
     },
     branchId: {
         type: Sequelize.BIGINT,
-        references: {
-            model: Branch,
-            key: 'branch_id',
-            deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
-        },
         allowNull: false
     },
-    statusId: {
+    statusId: { //0已删除， 1已记录
         type: Sequelize.INTEGER,
         defaultValue: 1
     }
 }, {
-    schema: __PGSQL__.schemas.book_publisher,
-    tableName: 'book_category',
+    schema: __PGSQL__.schemas.book_reader,
+    tableName: 'user_coin_cost_record',
+    timestamps: true,
+    underscored: true,
+    indexes: [{
+        fields: ['user_id']
+    }, {
+        fields: ['target_id']
+    }],
     defaultScope: {
         where: {
             statusId: {
@@ -43,5 +55,4 @@ var BookCategory = sequelize.define('book_category', {
     }
 });
 
-
-module.exports = BookCategory;
+module.exports = CoinCostRecord;

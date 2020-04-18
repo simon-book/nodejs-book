@@ -39,10 +39,7 @@ var PageBlockBooks = sequelize.define('page_block_books', {
     }
 }, {
     schema: __PGSQL__.schemas.book_publisher,
-    tableName: 'page_block_books',
-    timestamps: false,
-    underscored: true,
-    indexes: []
+    tableName: 'page_block_books'
 });
 
 Book.belongsToMany(PageBlock, {

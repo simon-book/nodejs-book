@@ -4,52 +4,44 @@ var Op = Sequelize.Op;
 var moment = require('moment');
 var sequelize = require("../../../../service/sequelizeConn.js");
 
-var User = sequelize.define('user', {
-    userId: {
+var UserChargeRecord = sequelize.define('user_charge_record', {
+    recordId: {
         type: Sequelize.BIGINT,
         primaryKey: true,
         allowNull: false,
         unique: true,
         autoIncrement: true
     },
-    account: {
+    chargeTotal: Sequelize.DECIMAL(21, 2),
+    chargePaid: Sequelize.DECIMAL(21, 2),
+    paidTime: Sequelize.DATE,
+    chargeItemId: { //"coin", "vip"
         type: Sequelize.TEXT,
         allowNull: false
     },
-    password: {
+    chargeItemType: { //"coin", "vip"
         type: Sequelize.TEXT,
         allowNull: false
     },
-    nickname: Sequelize.TEXT,
-    phone: Sequelize.TEXT,
-    avatarUrl: Sequelize.TEXT,
-    wxOpenId: Sequelize.TEXT,
+    userId: {
+        type: Sequelize.BIGINT,
+        allowNull: false
+    },
     branchId: {
         type: Sequelize.BIGINT,
         allowNull: false
     },
-    vipType: { //none，vip
-        type: Sequelize.TEXT,
-        defaultValue: "none"
-    },
-    vipEndDate： Sequelize.DATE,
-    coinAmount: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0
-    },
-    statusId: {
+    statusId: { //0已删除， 1已记录，2已完成，3已取消或已过期
         type: Sequelize.INTEGER,
         defaultValue: 1
     }
 }, {
     schema: __PGSQL__.schemas.book_reader,
-    tableName: 'user',
+    tableName: 'user_charge_record',
     timestamps: true,
     underscored: true,
     indexes: [{
-        fields: ['branch_id']
-    }, {
-        fields: ['account']
+        fields: ['user_id']
     }],
     defaultScope: {
         where: {
@@ -60,4 +52,4 @@ var User = sequelize.define('user', {
     }
 });
 
-module.exports = Manager;
+module.exports = UserChargeRecord;

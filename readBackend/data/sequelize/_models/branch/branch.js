@@ -47,11 +47,6 @@ var Branch = sequelize.define('branch', {
 }, {
     schema: __PGSQL__.schemas.book_publisher,
     tableName: 'branch',
-    timestamps: true,
-    underscored: true,
-    indexes: [{
-        fields: ['name']
-    }],
     defaultScope: {
         where: {
             statusId: {

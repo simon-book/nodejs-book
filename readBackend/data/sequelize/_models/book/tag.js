@@ -34,9 +34,6 @@ var Tag = sequelize.define('tag', {
 }, {
     schema: __PGSQL__.schemas.book_publisher,
     tableName: 'tag',
-    timestamps: true,
-    underscored: true,
-    indexes: [],
     defaultScope: {
         where: {
             statusId: {
