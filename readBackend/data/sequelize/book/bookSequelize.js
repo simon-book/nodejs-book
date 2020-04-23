@@ -5,33 +5,31 @@ var sequelize = require('../../../service/sequelizeConn.js');
 
 var Book = require('../_models/book/book.js')
 var Tag = require('../_models/book/tag.js')
-var BookTag = require('../_models/book/bookTag.js')
+var BookCategory = require('../_models/book/bookCategory.js')
+var bookChapter = require('../_models/book/bookChapter.js')
 
-exports.create = function(obj) {
-    return new Promise(function(resolve, reject) {
-        Book.create(obj).then(function(results) {
-            resolve(results);
-        }, reject).catch(function(err) {
-            reject(err);
-        });
-    })
-}
+Book.belongsTo(BookCategory, {
+    as: "category",
+    foreignKey: 'categoryId'
+})
 
-exports.countBooks = function(where) {
+exports.findByPk = function(id) {
     return new Promise(function(resolve, reject) {
-        Book.unscoped().count(where ? { where: where } : null).then(function(results) {
-            resolve(results);
-        }, reject).catch(function(err) {
-            reject(err);
-        });
-    })
-}
-
-exports.update = function(obj, where) {
-    return new Promise(function(resolve, reject) {
-        Book.update(obj, {
-            where: where,
-            returning: true
+        Book.findByPk(id, {
+            attributes: {
+                exclude: ["coinCount", "branchId", "statusId", "createdAt", "updatedAt"]
+            },
+            include: [{
+                model: Tag,
+                as: 'tags',
+                required: false,
+                attributes: ["tagId", "name"]
+            }, {
+                model: BookCategory,
+                as: 'category',
+                required: false,
+                attributes: ["categoryId", "name"]
+            }]
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
@@ -40,18 +38,20 @@ exports.update = function(obj, where) {
     })
 }
 
-exports.findByPk = function(id) {
-    return new Promise(function(resolve, reject) {
-        Book.findByPk(id).then(function(results) {
-            resolve(results);
-        }, reject).catch(function(err) {
-            reject(err);
-        });
-    })
-}
-
 exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
-
+    var include = [{
+        model: BookCategory,
+        as: 'category',
+        required: false,
+        attributes: ["categoryId", "name"]
+    }]
+    if (tagWhere) include.push({
+        model: Tag,
+        as: 'tags',
+        required: true,
+        where: tagWhere,
+        attributes: ["tagId", "name"]
+    })
     return new Promise(function(resolve, reject) {
         sequelize.transaction({
             deferrable: Sequelize.Deferrable.SET_DEFERRED
@@ -59,7 +59,13 @@ exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
             var all = []
             all.push(Book.count({
                 where: where,
-                transaction: t
+                transaction: t,
+                include: tagWhere ? [{
+                    model: Tag,
+                    as: 'tags',
+                    required: true,
+                    where: tagWhere
+                }] : null
             }))
             all.push(Book.findAll({
                 where: where,
@@ -69,18 +75,8 @@ exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
                     ['bookId', 'DESC']
                 ],
                 transaction: t,
-                include: [tagWhere ? {
-                    model: Tag,
-                    as: 'tags',
-                    required: true,
-                    where: tagWhere,
-                    attributes: ["tagId", "name"]
-                } : {
-                    model: Tag,
-                    as: 'tags',
-                    required: false,
-                    attributes: ["tagId", "name"]
-                }],
+                attributes: ["bookId", "title", "cover", "horiCover", "categoryId", "abstractContent", "chapterCount", "recommend", "readCount", "publishStatus", "chargeType", "updatedAt"],
+                include: include
             }));
             return Promise.all(all);
         }).then(function(results) {
@@ -89,31 +85,4 @@ exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
             reject(err);
         })
     })
-
-    // return new Promise(function(resolve, reject) {
-    //     Book.findAndCountAll({
-    //         where: where,
-    //         limit: limit || 10000,
-    //         offset: offset || 0,
-    //         order: order || [
-    //             ['bookId', 'DESC']
-    //         ],
-    //         include: [tagWhere ? {
-    //             model: Tag,
-    //             as: 'tags',
-    //             required: true,
-    //             where: tagWhere,
-    //             attributes: ["tagId", "name"]
-    //         } : {
-    //             model: Tag,
-    //             as: 'tags',
-    //             required: false,
-    //             attributes: ["tagId", "name"]
-    //         }],
-    //     }).then(function(results) {
-    //         resolve(results);
-    //     }, reject).catch(function(err) {
-    //         reject(err);
-    //     });
-    // })
 }

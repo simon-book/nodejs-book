@@ -5,26 +5,6 @@ var sequelize = require('../../../service/sequelizeConn.js');
 
 var BookCategory = require('../_models/book/bookCategory.js')
 
-exports.create = function(obj) {
-    return new Promise(function(resolve, reject) {
-        BookCategory.create(obj).then(function(results) {
-            resolve(results);
-        }, reject).catch(function(err) {
-            reject(err);
-        });
-    })
-}
-
-exports.findByPk = function(id) {
-    return new Promise(function(resolve, reject) {
-        BookCategory.findByPk(id).then(function(results) {
-            resolve(results);
-        }, reject).catch(function(err) {
-            reject(err);
-        });
-    })
-}
-
 exports.findAll = function(where, offset, limit, order) {
     return new Promise(function(resolve, reject) {
         BookCategory.findAll({
@@ -33,7 +13,8 @@ exports.findAll = function(where, offset, limit, order) {
             offset: offset || 0,
             order: order || [
                 ['categoryId', 'DESC']
-            ]
+            ],
+            attributes: ["categoryId", "name"]
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {

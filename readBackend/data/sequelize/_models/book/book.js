@@ -33,11 +33,11 @@ var Book = sequelize.define('book', {
         type: Sequelize.INTEGER,
         defaultValue: 0
     }, //章节数
-    lastChapterId: Sequelize.BIGINT, //最后一章Id
-    lastChapterNumber: { //最后一章number
-        type: Sequelize.INTEGER,
-        defaultValue: 0
-    },
+    // lastChapterId: Sequelize.BIGINT, //最后一章Id
+    // lastChapterNumber: { //最后一章number
+    //     type: Sequelize.INTEGER,
+    //     defaultValue: 0
+    // },
     recommend: {
         type: Sequelize.INTEGER,
         defaultValue: 99
@@ -58,6 +58,10 @@ var Book = sequelize.define('book', {
         type: Sequelize.DECIMAL(21, 2),
         defaultValue: 0
     }, //整本书价格
+    chapterPrice: {
+        type: Sequelize.DECIMAL(21, 2),
+        defaultValue: 0
+    }, //单章价格
     categoryId: { //主分类
         type: Sequelize.BIGINT,
         references: {
@@ -105,6 +109,8 @@ var Book = sequelize.define('book', {
 }, {
     schema: __PGSQL__.schemas.book_publisher,
     tableName: 'book',
+    timestamps: true,
+    underscored: true,
     defaultScope: {
         where: {
             statusId: {

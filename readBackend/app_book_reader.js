@@ -17,7 +17,7 @@ process.env.NODE_ENV = __G__.NODE_ENV;
 
 var app = express();
 // all environments
-app.set('port', process.env.PORT || 3800);
+app.set('port', process.env.PORT || 3900);
 app.set('views', path.join(__dirname, 'templates'));
 app.set('view engine', 'ejs');
 app.set('view options');
@@ -48,7 +48,7 @@ app.set('jsonp callback name', 'onJsonpLoad');
 app.use(__G__.CONTEXT + "/static", express.static(path.join(__dirname, '/statics')));
 app.use(__G__.CONTEXT + "/html", express.static(path.join(__dirname, '/html')));
 
-app.use(__G__.CONTEXT || '/shuyu', require('./controller/index.js'));
+app.use(__G__.CONTEXT || '/api/reader', require('./controller/index.js'));
 // app.use(__G__.CONTEXT || '/shuyu/book', require('./controller/bookHttpRoutes.js'));
 // app.use(__G__.CONTEXT || '/shuyu/pageBlock', require('./controller/pageBlockHttpRoutes.js'));
 

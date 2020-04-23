@@ -55,5 +55,10 @@ PageBlock.belongsToMany(Book, {
     through: PageBlockBooks,
     foreignKey: 'blockId'
 })
+PageBlockBooks.belongsTo(Book, {
+    as: 'book',
+    foreignKey: 'bookId'
+})
+
 
 module.exports = PageBlockBooks;

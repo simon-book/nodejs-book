@@ -48,7 +48,7 @@ app.set('jsonp callback name', 'onJsonpLoad');
 app.use(__G__.CONTEXT + "/static", express.static(path.join(__dirname, '/statics')));
 app.use(__G__.CONTEXT + "/html", express.static(path.join(__dirname, '/html')));
 
-app.use(__G__.CONTEXT || '/shuyu', require('./controller/index.js'));
+app.use(__G__.CONTEXT || '/api/publisher', require('./controller/index.js'));
 // app.use(__G__.CONTEXT || '/shuyu/book', require('./controller/bookHttpRoutes.js'));
 // app.use(__G__.CONTEXT || '/shuyu/pageBlock', require('./controller/pageBlockHttpRoutes.js'));
 

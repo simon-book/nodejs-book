@@ -52,13 +52,13 @@ var PageBlock = sequelize.define('page_block', {
     indexes: [{
         fields: ['branch_id']
     }],
-    defaultScope: {
-        where: {
-            statusId: {
-                [Op.ne]: 0
-            }
-        }
-    }
+    // defaultScope: {
+    //     where: {
+    //         statusId: {
+    //             [Op.ne]: 0
+    //         }
+    //     }
+    // }
 });
 
 

@@ -32,14 +32,15 @@ exports.create = async function(req, res) {
             adminHttpResult.jsonFailOut(req, res, "BOOK_ERROR", "book不存在");
             return;
         }
+        if (!body.price && book.chapterPrice) body.price = book.chapterPrice;
         var newChapter = await bookChapterSequelize.create(body);
         adminHttpResult.jsonSuccOut(req, res, newChapter);
         book.set("chapterCount", (book.chapterCount || 0) + 1);
         book.set("wordsCount", (book.wordsCount || 0) + (newChapter.wordsCount || 0));
-        if (!book.lastChapterId || !book.lastChapterNumber || book.lastChapterNumber < newChapter.number) {
-            book.set("lastChapterId", newChapter.id);
-            book.set("lastChapterNumber", newChapter.number);
-        }
+        // if (!book.lastChapterId || !book.lastChapterNumber || book.lastChapterNumber < newChapter.number) {
+        //     book.set("lastChapterId", newChapter.chapterId);
+        //     book.set("lastChapterNumber", newChapter.number);
+        // }
         book.save();
     } catch (err) {
         errHandler.setHttpError(req.originalUrl, req.body, err);

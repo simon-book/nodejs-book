@@ -6,29 +6,23 @@ var moment = require('moment');
 var adminHttpResult = require('../../util/adminHttpResult.js');
 var errHandler = require('../../util/errHandler.js');
 var util = require('../../util/index.js');
+var bookCategorySequelize = require('../../data/sequelize/book/bookCategorySequelize.js');
+var tagSequelize = require('../../data/sequelize/book/tagSequelize.js');
 var bookSequelize = require('../../data/sequelize/book/bookSequelize.js');
+var bookChapterSequelize = require('../../data/sequelize/book/bookChapterSequelize.js');
 
-exports.create = async function(req, res) {
+exports.listCategory = async function(req, res) {
     try {
-        var currentUser = req.currentUser;
-        var body = req.body;
-        if (!body || !body.title || !body.bookType || !body.categoryId) {
+        var branchId = req.params.branchId;
+        var body = req.query;
+        if (!branchId) {
             adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
             return;
         }
-        body.branchId = currentUser.branchId;
-        if (!body.sn) {
-            var count = await bookSequelize.countBooks({
-                branchId: currentUser.branchId
-            })
-            body.sn = util.prefixInteger(count + 1, 8);
-        }
-        var added = await bookSequelize.create(body);
-        if (body.tags && body.tags.length) {
-            var tagIds = _map(body.tags, "tagId");
-            await added.setTags(tagIds);
-        }
-        adminHttpResult.jsonSuccOut(req, res, added);
+        var list = await bookCategorySequelize.findAll({
+            branchId: branchId
+        });
+        adminHttpResult.jsonSuccOut(req, res, list);
     } catch (err) {
         errHandler.setHttpError(req.originalUrl, req.body, err);
         adminHttpResult.jsonFailOut(req, res, "SERVICE_INVALID", null, err);
@@ -36,32 +30,18 @@ exports.create = async function(req, res) {
     }
 }
 
-exports.update = async function(req, res) {
+exports.listTag = async function(req, res) {
     try {
-        var currentUser = req.currentUser;
-        var body = req.body;
-        if (!body || !body.bookId) {
+        var branchId = req.params.branchId;
+        var body = req.query;
+        if (!branchId) {
             adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
             return;
         }
-        var book = await bookSequelize.findByPk(body.bookId);
-        if (!book || book.branchId != currentUser.branchId) {
-            adminHttpResult.jsonFailOut(req, res, "BOOK_ERROR", "book不存在");
-            return;
-        }
-        // delete body.chapterCount;
-        // delete body.lastChapterId;
-        // delete body.coinCount;
-        // delete body.readCount;
-        var added = await bookSequelize.update(body, {
-            bookId: body.bookId
-        })
-        added = added[1][0];
-        if (body.tags && body.tags.length) {
-            var tagIds = _.map(body.tags, "tagId");
-            await added.setTags(tagIds);
-        }
-        adminHttpResult.jsonSuccOut(req, res, true);
+        var list = await tagSequelize.findAll({
+            branchId: branchId
+        });
+        adminHttpResult.jsonSuccOut(req, res, list);
     } catch (err) {
         errHandler.setHttpError(req.originalUrl, req.body, err);
         adminHttpResult.jsonFailOut(req, res, "SERVICE_INVALID", null, err);
@@ -69,22 +49,24 @@ exports.update = async function(req, res) {
     }
 }
 
-exports.delete = async function(req, res) {
+exports.listCategoryAndTag = async function(req, res) {
     try {
-        var currentUser = req.currentUser;
-        var body = req.params;
-        if (!body || !body.bookId) {
+        var branchId = req.params.branchId;
+        var body = req.query;
+        if (!branchId) {
             adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
             return;
         }
-        var book = await bookSequelize.findByPk(body.bookId);
-        if (!book || book.branchId != currentUser.branchId) {
-            adminHttpResult.jsonFailOut(req, res, "BOOK_ERROR", "book不存在");
-            return;
-        }
-        book.set("statusId", 0);
-        await book.save();
-        adminHttpResult.jsonSuccOut(req, res, true);
+        var categoryList = await bookCategorySequelize.findAll({
+            branchId: branchId
+        });
+        var tagList = await tagSequelize.findAll({
+            branchId: branchId
+        });
+        adminHttpResult.jsonSuccOut(req, res, {
+            categoryList: categoryList,
+            tagList: tagList
+        });
     } catch (err) {
         errHandler.setHttpError(req.originalUrl, req.body, err);
         adminHttpResult.jsonFailOut(req, res, "SERVICE_INVALID", null, err);
@@ -92,16 +74,19 @@ exports.delete = async function(req, res) {
     }
 }
 
-exports.list = async function(req, res) {
+exports.listBook = async function(req, res) {
     try {
-        var currentUser = req.currentUser;
-        var body = req.body;
-        if (!body) body = {};
+        var branchId = req.params.branchId;
+        var body = req.query;
+        if (!branchId) {
+            adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
+            return;
+        }
         var pageSize = body.pageSize || 20;
         var page = body.page || 1;
         var offset = pageSize * (page - 1);
         var where = {
-            branchId: currentUser.branchId
+            branchId: branchId
         }
         if (body.categoryId) where.categoryId = body.categoryId;
         if (body.bookType) where.bookType = body.bookType;
@@ -120,16 +105,24 @@ exports.list = async function(req, res) {
                 [Op.like]: '%' + body.searchContent + '%'
             }
         }];
-        if (body.tagIds) {
+        if (body.tagId) {
             var tagWhere = {
-                tagId: {
-                    [Op.in]: body.tagIds
-                }
+                tagId: body.tagId
             }
         }
         var list = await bookSequelize.findAndCountAll(where, offset, pageSize, null, tagWhere);
         adminHttpResult.jsonSuccOut(req, res, {
-            list: list[1],
+            list: _.map(list[1], function(book) {
+                book = book.get();
+                book.categoryName = book.category ? book.category.name : "";
+                delete book.category;
+                book.tags = _.map(book.tags, function(tag) {
+                    tag = tag.get();
+                    delete tag.book_tags;
+                    return tag;
+                })
+                return book;
+            }),
             pagination: {
                 totalNum: list[0],
                 page: page,

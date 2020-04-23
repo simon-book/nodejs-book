@@ -56,7 +56,7 @@ router.get('/list_page_block', pageBlockController.list);
 
 router.post('/add_books_to_block', pageBlockController.addBooks);
 router.post('/delete_books_from_block', pageBlockController.deleteBooks);
-router.get('/list_books_of_block/:blockId', pageBlockController.listBooks);
+router.post('/list_books_of_block/:blockId', pageBlockController.listBooks);
 router.post('/update_book_order_in_block', pageBlockController.orderBooks);
 
 router.post('/create_charge_item', chargeItemController.create);

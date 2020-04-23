@@ -29,6 +29,7 @@ var Branch = sequelize.define('branch', {
     //     allowNull: false
     // },
     // email: Sequelize.TEXT,
+    logo: Sequelize.TEXT,
     ServicePhone: Sequelize.TEXT,
     ServiceEmail: Sequelize.TEXT,
     ServiceOnline: Sequelize.TEXT,

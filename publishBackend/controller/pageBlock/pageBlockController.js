@@ -141,7 +141,7 @@ exports.deleteBooks = async function(req, res) {
 exports.listBooks = async function(req, res) {
     try {
         var currentUser = req.currentUser;
-        var body = req.params;
+        var body = req.body;
         if (!body || !body.blockId) {
             adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
             return;
@@ -151,11 +151,19 @@ exports.listBooks = async function(req, res) {
             adminHttpResult.jsonFailOut(req, res, "PAGE_BLOCK_ERROR", "pageBlock不存在");
             return;
         }
-        var list = await pageBlock.getBooks();
-        list = _.sortBy(list, function(book) {
-            return book.page_block_books.orderIndex;
-        })
-        adminHttpResult.jsonSuccOut(req, res, list);
+        var pageSize = body.pageSize || 20;
+        var page = body.page || 1;
+        var offset = pageSize * (page - 1);
+        var list = await pageBlockSequelize.findBlockBooks(body.blockId, pageSize, offset);
+        // adminHttpResult.jsonSuccOut(req, res, list);
+        adminHttpResult.jsonSuccOut(req, res, {
+            list: list.rows,
+            pagination: {
+                totalNum: list.count,
+                page: page,
+                pageSize: pageSize
+            }
+        });
     } catch (err) {
         errHandler.setHttpError(req.originalUrl, req.body, err);
         adminHttpResult.jsonFailOut(req, res, "SERVICE_INVALID", null, err);

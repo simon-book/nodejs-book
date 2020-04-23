@@ -5,6 +5,7 @@ var sequelize = require('../../../service/sequelizeConn.js');
 
 var PageBlock = require('../_models/pageBlock/pageBlock.js')
 var PageBlockBooks = require('../_models/pageBlock/pageBlockBooks.js')
+var Book = require('../_models/book/book.js')
 
 exports.create = function(obj) {
     return new Promise(function(resolve, reject) {
@@ -50,5 +51,30 @@ exports.findAll = function(where, offset, limit, order) {
         }, reject).catch(function(err) {
             reject(err);
         });
+    })
+}
+
+exports.findBlockBooks = function(blockId, limit, offset) {
+    return new Promise(function(resolve, reject) {
+        PageBlockBooks.findAndCountAll({
+            where: {
+                blockId: blockId
+            },
+            limit: limit || 100000,
+            offset: offset || 0,
+            order: [
+                ['orderIndex', 'DESC']
+            ],
+            attributes: ["id"],
+            include: [{
+                model: Book,
+                as: 'book',
+                required: false
+            }]
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        })
     })
 }

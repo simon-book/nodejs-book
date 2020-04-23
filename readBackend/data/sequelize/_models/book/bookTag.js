@@ -33,7 +33,9 @@ var BookTags = sequelize.define('book_tags', {
     }
 }, {
     schema: __PGSQL__.schemas.book_publisher,
-    tableName: 'book_tags'
+    tableName: 'book_tags',
+    timestamps: false,
+    underscored: true
 });
 
 Tag.belongsToMany(Book, {

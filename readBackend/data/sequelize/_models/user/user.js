@@ -32,7 +32,7 @@ var User = sequelize.define('user', {
         type: Sequelize.TEXT,
         defaultValue: "none"
     },
-    vipEndDate： Sequelize.DATE,
+    vipEndDate: Sequelize.DATE,
     coinAmount: {
         type: Sequelize.INTEGER,
         defaultValue: 0
@@ -60,4 +60,4 @@ var User = sequelize.define('user', {
     }
 });
 
-module.exports = Manager;
+module.exports = User;

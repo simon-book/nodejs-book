@@ -5,16 +5,6 @@ var sequelize = require('../../../service/sequelizeConn.js');
 
 var ChargeItem = require('../_models/charge/chargeItem.js')
 
-exports.create = function(obj) {
-    return new Promise(function(resolve, reject) {
-        ChargeItem.create(obj).then(function(results) {
-            resolve(results);
-        }, reject).catch(function(err) {
-            reject(err);
-        });
-    })
-}
-
 exports.findByPk = function(id) {
     return new Promise(function(resolve, reject) {
         ChargeItem.findByPk(id).then(function(results) {

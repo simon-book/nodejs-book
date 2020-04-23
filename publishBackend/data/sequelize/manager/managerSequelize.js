@@ -10,6 +10,9 @@ exports.findOne = function(where) {
     return new Promise(function(resolve, reject) {
         Manager.findOne({
             where: where,
+            order: [
+                ["managerId", "ASC"]
+            ],
             include: [{
                 model: Branch,
                 as: 'branch',

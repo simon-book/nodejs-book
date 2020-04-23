@@ -14,6 +14,8 @@ module.exports = {
     PAGE_BLOCK_ERROR: [10010, "page block数据发生错误！"],
     CHARGE_ITEM_ERROR: [10011, "charge item数据发生错误！"],
 
+    USER_ERROR: [20001, "用户数据错误！"],
+
     URL_ERROR: [20001, "接口不存在"],
     NULL: []
 }
