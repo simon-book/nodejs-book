@@ -1,0 +1,89 @@
+<%- include('common/header', {}); %>
+<link href="<%=__G__.CONTEXT%>/static/src/css/chapter.css" type="text/css" rel="stylesheet" />
+<script>
+var article_id = "387998";
+var chapter_id = "41";
+var nextcid = "42";
+var prevcid = "40";
+var articlename = "电网大师";
+var chaptername = "第42章 心无旁骛";
+var hash = "6f49c0846a72c1f8";
+var preloadhtml = '<p class="preload"><i class="ptm-iconfont fa fa-spinner fa-spin"></i> 正在为您转码……</p>';
+var localpre = "read.wtao.cc";
+var sourceurl = "https://www.35xs.co/book/452999/113667259.html";
+</script>
+<div class="pt-reader">
+    <div class="body">
+        <div class="content anim">
+            <p class="title">第42章 心无旁骛</p>
+            <div class="content_btn ptm-clearfix">
+                <div class="ptm-col-xs-3">
+                    <a class="ptm-btn ptm-btn-primary ptm-btn-block ptm-btn-outlined" id="addmark">加入书架</a>
+                </div>
+                <div class="ptm-col-xs-6">
+                    <a class="ptm-btn ptm-btn-primary ptm-btn-block ptm-btn-outlined" href="/387_387998/">查看目录</a>
+                </div>
+                <div class="ptm-col-xs-3">
+                    <a class="ptm-btn ptm-btn-primary ptm-btn-block ptm-btn-outlined" href="/home/index/bookcase">查看书架</a>
+                </div>
+            </div>
+            <div class="content_toolbar ptm-clearfix">
+                <div class="ptm-pull-left">
+                    <button class="ptm-btn ptm-btn-primary ptm-btn-outlined" data-tol="size-s">小</button>
+                    <button class="ptm-btn ptm-btn-primary ptm-btn-outlined" data-tol="size-m">中</button>
+                    <button class="ptm-btn ptm-btn-primary ptm-btn-outlined" data-tol="size-l">大</button>
+                </div>
+                <div class="ptm-pull-right">
+                    <button class="ptm-btn ptm-btn-primary ptm-btn-outlined" data-tol="mode-d">默认</button>
+                    <button class="ptm-btn ptm-btn-primary ptm-btn-outlined" data-tol="mode-p">护眼</button>
+                    <button class="ptm-btn ptm-btn-primary ptm-btn-outlined" data-tol="mode-n">夜间</button>
+                </div>
+            </div>
+            <div class="chaptercontent" id="BookText">
+                &nbsp;&nbsp;<br><br>&nbsp;&nbsp;“刘三爷，你这是来找麻烦了？”袁九道。<br><br>
+                &nbsp;&nbsp;换做以前，面对如此威势，肯定会心生退意，但学到了修炼法诀，实力暴增，这种层面上的力量，已经无法带来压迫了。<br><br>
+                &nbsp;&nbsp;“事情是你先引起来的，我自然要奉陪！”刘三爷道。<br><br>
+                &nbsp;&nbsp;袁九嗤笑：“你派人卧底鸿达地产，想要整垮我女儿的公司，却说我先引起来，还真是恶人先告状！”<br><br>
+                &nbsp;&nbsp;“少说这些废话，也不用想着拖延时间，道上走了这么多年，应该明白规矩，既然是砸场子，就要迎战，想要以多取胜，用卑鄙手段将我们留下，你袁九以后也就不用混了！”<br><br>
+            </div>
+            <div class="chapterad">
+                <script type="text/javascript" src="https://www.wtao.cc/other/fuli.js"></script>
+            </div>
+            <div class="content_btn ptm-clearfix">
+                <div class="ptm-col-xs-3">
+                    <a class="ptm-btn ptm-btn-primary ptm-btn-block ptm-btn-outlined" href="/387_387998/40.html">上一章</a> </div>
+                <div class="ptm-col-xs-6">
+                    <a class="ptm-btn ptm-btn-primary ptm-btn-block ptm-btn-outlined" href="/387_387998/">查看目录</a>
+                </div>
+                <div class="ptm-col-xs-3">
+                    <a class="ptm-btn ptm-btn-primary ptm-btn-block ptm-btn-outlined" href="/387_387998/42.html">下一章</a> </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function addmark() {
+    lastread.set(article_id, chapter_id, articlename, chaptername, '琶江老鱼', '玄幻小说', '387');
+}
+$(function() {
+    $('body').on('tap', function() {
+        addmark();
+    });
+    $('#addmark').on('tap', function() {
+        addmark();
+        alert('《' + articlename + '》已加入书架');
+    });
+});
+</script>
+<div class="footer">
+    <p>本站系基于互联网搜索引擎技术为您提供信息检索服务。</p>
+    <p>Copyright ©2020</script>
+    </p>
+</div>
+<script src="<%=__G__.CONTEXT%>/static/common/lib/zepto.min.js"></script>
+<script src="<%=__G__.CONTEXT%>/static/src/js/base.js"></script>
+<script src="<%=__G__.CONTEXT%>/static/src/js/trans.js"></script>
+<script src="/static/src/js/chapter.js"></script>
+</body>
+
+</html>

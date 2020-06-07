@@ -7,23 +7,11 @@
 var http = require('http');
 var https = require('https');
 
-http = __G__.NODE_ENV == "prod"?https:http;
-
-/*Class CPlatServer
- * @Method
- *  .request(action, body, headers)
-        send http request to platform server.
- *  .complete(callback)
-        Register a callback function, these will cache in a callback queue, Its will execute when the response on 'end' .
- *  .error(callback)
-        Register a callback function, these will cache in a callback queue, Its will execute when the request on 'error' .
-*/
-
-CPlatServer = function (options) {
+CPlatServer = function(options) {
     this.options = {
-        // protocol: options.protocol || __plat__.protocol,
-        host: options.host || __plat__.host,
-        port: options.port || __plat__.port,
+        protocol: options.protocol,
+        host: options.host,
+        port: options.port,
         path: options.path,
         method: options.method || 'POST',
         headers: options.headers || {
@@ -42,24 +30,28 @@ CPlatServer = function (options) {
 };
 
 CPlatServer.prototype = {
-    setOptions: function (opts) {
+    setOptions: function(opts) {
         this.options = _.assign(this.options, opts);
     },
-    setPath: function (path) {
+    setPath: function(path) {
         this.options.path = path;
     },
-    insertHeader: function (key, value) {
+    insertHeader: function(key, value) {
         this.options.headers[key] = value;
     },
-    request: function (body) {
+    request: function(body) {
         var _self = this;
         var _index = _self.requestIndex;
-        var req = http.request(_self.options, function (res) {
+        var _http = null;
+        if (_self.options.protocol == "https:") _http = https;
+        else _http = http;
+        delete _self.options.protocol;
+        var req = _http.request(_self.options, function(res) {
             var _data = '';
-            res.on('data', function (chunk) {
+            res.on('data', function(chunk) {
                 _data += chunk;
             });
-            res.on('end', function () {
+            res.on('end', function() {
                 if (res.statusCode == 200)
                     _self.fire.call(_self, "completed", _data, _index);
                 else
@@ -67,10 +59,10 @@ CPlatServer.prototype = {
             });
 
         });
-        req.on('error', function (e) {
+        req.on('error', function(e) {
             _self.fire.call(_self, "error", e, _index);
         });
-        req.on('timeout', function (e) {
+        req.on('timeout', function(e) {
             req.abort();
             _self.fire.call(_self, "error", e, _index);
         });
@@ -84,17 +76,17 @@ CPlatServer.prototype = {
         _self.requestIndex++;
         return _self;
     },
-    completed: function (callback) {
+    completed: function(callback) {
         if (!callback || typeof callback !== 'function') return this;
         this.callbackQueue['completed'].push(callback);
         return this;
     },
-    error: function (callback) {
+    error: function(callback) {
         if (!callback || typeof callback !== 'function') return this;
         this.callbackQueue['error'].push(callback);
         return this;
     },
-    fire: function (event, result, index) {
+    fire: function(event, result, index) {
         var _data;
         // result = JSON.parse(result);
         if (result && event == "completed") result = JSON.parse(result);

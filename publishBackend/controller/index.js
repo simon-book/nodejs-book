@@ -9,6 +9,8 @@ var tagController = require('./book/tagController.js');
 var bookChapterController = require('./book/bookChapterController.js');
 var pageBlockController = require('./pageBlock/pageBlockController.js');
 var chargeItemController = require('./charge/chargeItemController.js');
+var copyController = require('./copy/copyController.js');
+
 
 // var JFUM = require('jfum');
 // var jfum = new JFUM({
@@ -63,5 +65,11 @@ router.post('/create_charge_item', chargeItemController.create);
 router.post('/update_charge_item', chargeItemController.update);
 router.get('/delete_charge_item/:chargeItemId', chargeItemController.delete);
 router.get('/list_charge_item', chargeItemController.list);
+
+
+router.get('/copyBook', function(req, res) {
+    copyController.htmlParse();
+    res.send(true);
+})
 
 module.exports = router;
