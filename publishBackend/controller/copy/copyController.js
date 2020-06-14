@@ -5,7 +5,8 @@ var moment = require('moment');
 var cheerio = require('cheerio');
 var httpGateway = require('../../data/http/httpGateway.js')
 
-exports.htmlParse = async function() {
+//抓取m.35xs.co的小说
+exports.copy_35xiaoshuo_book = async function() {
     try {
         var uri = "https://m.35xs.co/Book/List?page=1";
         var html = await httpGateway.htmlStartReq(uri);

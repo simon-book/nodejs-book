@@ -1,0 +1,24 @@
+<%- include('common/top', {}); %>
+<link rel="stylesheet" type="text/css" href="/static/src/css/reset.css" />
+<link rel="stylesheet" type="text/css" href="/static/src/css/login.css" />
+<%- include('common/pageHeader', {}); %>
+<div class="login_box">
+    <form name="form_login" method="post">
+        <div class="login_name"> <span class="person_bg"></span> <input type="text" class="name login_nm" name="username" value="用户名"></div>
+        <p class="tips_text">请输入用户名</p>
+        <div class="login_name"> <span class="psw_bg"></span> <input type="text" class="name login_psw" name="password" value="你的账号密码"></div>
+        <p class="tips_text">请输入密码</p>
+        <div class="submit_btn"> <label style="padding-bottom: 5px; padding-top: 5px; display: block;"> <input type="checkbox" name="CookiesTime" value="30" checked="checked">30天内免登录 <div class="validation-summary-valid" data-valmsg-summary="true">
+                    <ul>
+                        <li style="display:none"></li>
+                    </ul>
+                </div> </label> <input type="button" class="login_bto login_in" value="登录" /></div><input name="__RequestVerificationToken" type="hidden" value="Nc76lIvSh47SCFmTLE6dwYRgrtmRSIi7IGdhWjwKMaSZOSpEP-sjJtn1_hQ3Gic7zGPkhEck7Ziz3vmZUwGUpDwZbfbmPzAgpNxhu0NzpOs1" />
+    </form>
+    <p class="text_login"> <input type="button" class="login_bto login_in" onclick="javascript:location.href='/user/register'" value="免费注册" /></p>
+    <div class="tip_box">
+        <h2>温馨提示：</h2>
+        <p>1、登录成功后，可使用永久书架，保存的书永不丢失；<br />2、手机站与PC站共用一个帐号，可实现书架同步。</p>
+    </div>
+</div>
+<%- include('common/footer', {}); %>
+<%- include('common/bottom', {}); %>

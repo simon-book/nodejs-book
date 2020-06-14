@@ -1,0 +1,55 @@
+<%- include('common/top', {}); %>
+<link rel="stylesheet" type="text/css" href="/static/src/css/reset.css" />
+<link rel="stylesheet" type="text/css" href="/static/src/css/sort.css" />
+<%- include('common/pageHeader', {}); %>
+<nav class="sortChannel_nav">
+    <a id="cate0" href="/cate/">全部</a>
+    <a id="cate1" href="/cate/1/">玄幻奇幻</a>
+    <a id="cate2" href="/cate/2/">武侠仙侠</a>
+    <a id="cate6" href="/cate/6/">科幻灵异</a>
+    <a id="cate7" href="/cate/7/">历史军事</a>
+    <a id="cate8" href="/cate/8/">都市言情</a>
+    <a id="cate9" href="/cate/9/">现代言情</a>
+    <a id="cate10" href="/cate/10/">校园言情</a>
+    <a id="cate11" href="/cate/11/">古代言情</a>
+    <a id="cate12" href="/cate/12/">女生频道</a>
+    <a id="cate13" href="/cate/13/">经典美文</a>
+    <a id="cate14" href="/cate/14/">穿越时空</a>
+    <a id="cate15" href="/cate/15/">网游竞技</a>
+    <a id="cate16" href="/cate/16/">小说同人</a>
+    <a id="cate17" href="/cate/17/">未分类</a>
+</nav>
+<div class="recommend">
+    <div id="main">
+        <div class="hot_sale">
+            <div class="bookimg"> <a href="/book/404406/"> <img class="lazy" data-original="https://www.35xs.co/data/bookimg/404406.jpg" src="//files.35xs.co/m/images/defaultimg.png"> </a></div>
+            <div class="bookinfo"> <a href="/book/404406/">
+                    <div class="detail">
+                        <p class="title">皇叔宠妃悠着点</p>
+                        <p class="author">作者：竹九乐</p>
+                    </div>
+                    <div class="score">8分</div>
+                </a></div>
+            <p class="review"><span class="longview"></span>简介：</p>
+        </div>
+        <div class="hot_sale">
+            <div class="bookimg"> <a href="/book/460474/"> <img class="lazy" data-original="https://www.35xs.co/data/noimg.jpg" src="//files.35xs.co/m/images/defaultimg.png"> </a></div>
+            <div class="bookinfo"> <a href="/book/460474/">
+                    <div class="detail">
+                        <p class="title">西游路上的狐狸</p>
+                        <p class="author">作者：过tt万</p>
+                    </div>
+                    <div class="score">8分</div>
+                </a></div>
+            <p class="review"><span class="longview"></span>简介：</p>
+        </div>
+        <p class="page" data-invalidpageerrmsg="页索引无效" data-outrangeerrmsg="页索引超出范围" data-pagecount="22040" data-pageparameter="page" data-pagerid="Webdiyer.MvcPager" data-urlformat="/Book/List?page=__page__">首页上页<a href="/Book/List?page=2">下页</a><a href="/Book/List?page=22040">尾页</a></p>
+    </div>
+</div>
+<%- include('common/footer', {}); %>
+<script type="text/javascript" language="javascript">
+$(function() {
+    $("#cate0").addClass("on");
+});
+</script>
+<%- include('common/bottom', {}); %>

@@ -66,9 +66,8 @@ router.post('/update_charge_item', chargeItemController.update);
 router.get('/delete_charge_item/:chargeItemId', chargeItemController.delete);
 router.get('/list_charge_item', chargeItemController.list);
 
-
-router.get('/copyBook', function(req, res) {
-    copyController.htmlParse();
+router.get('/copy_35xiaoshuo_book', function(req, res) {
+    copyController.copy_35xiaoshuo_book();
     res.send(true);
 })
 
