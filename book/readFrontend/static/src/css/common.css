@@ -1,0 +1,302 @@
+* {
+    margin: 0;
+    padding: 0;
+    /* background-attachment:fixed;*/
+}
+
+div,
+p {
+    wrap-work: break-word;
+    word-break: break-all;
+    word-wrap: break-word;
+    word-break: normal;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -ms-box-sizing: border-box;
+}
+
+li {
+    list-style: none;
+}
+
+em {
+    font-style: normal;
+}
+
+body {
+    color: #4c6978;
+    font: 14px 'microsoft yahei', Arial, Helvetica, sans-serif;
+}
+
+input,
+textarea {
+    font: 12px '宋体', Arial, Helvetica, sans-serif;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -box-sizing: border-box;
+}
+
+img {
+    border: none;
+}
+
+a {
+    color: #4c6978;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.clearfix {
+    display: block;
+}
+
+.clearfix:after {
+    clear: both;
+    content: ".";
+    display: block;
+    height: 0;
+    visibility: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: 16px;
+    font-weight: normal;
+}
+
+
+/*底部*/
+footer {
+    padding: 15px 10px;
+    text-align: center;
+    line-height: 33px;
+    background: #68aac2;
+    position: relative;
+    font-size: 14px;
+}
+
+footer .backTop img {
+    position: absolute;
+    right: 25px;
+    top: 15px;
+    cursor: pointer;
+    width: 31px;
+}
+
+footer .channel a {
+    margin: 0 5px;
+    color: #c5d7df;
+    text-shadow: 1px 1px #3e86a8;
+}
+
+/*搜索框*/
+.searchForm {
+    text-align: center;
+    margin: 10px;
+    position: relative;
+    clear: both;
+}
+
+.searchForm_input {
+    border: 1px #c0deea solid;
+    font-size: 14px;
+    background: #f8fdff;
+    padding: 0 5px;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    color: #cbcfd1;
+}
+
+.searchForm_btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 0;
+    height: 30px;
+    width: 60px;
+    color: #C0DEEA;
+    padding-left: 25px;
+    line-height: 30px;
+    border: none;
+    background: url(../images/icon-search.gif) no-repeat 15% 50%;
+    background-size: 18px;
+    border-left: 1px #C0DEEA solid;
+}
+
+/*子页面头部*/
+.channelHeader {
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    font-size: 16px;
+    color: #fff;
+    /*text-shadow: 1px 1px #2680aa;*/
+    /*background-size: 136px 45px;*/
+    background-color: #68aac2;
+    border-top: 1px #8ec5d9 solid;
+    overflow: hidden;
+    padding: 0;
+}
+
+.iconback {
+    float: left;
+}
+
+.iconhome {
+    float: right;
+}
+
+.iconback,
+.iconhome {
+    margin-top: 3px;
+    font-size: 12px;
+    text-align: center;
+    color: #fff;
+    line-height: 40px;
+    width: 40px;
+    height: 40px;
+}
+
+.iconback img,
+.iconhome img {
+    width: 40px;
+    height: 40px;
+    font-size: 12px;
+    text-align: center;
+    line-height: 40px;
+}
+
+.hot_sale {
+    display: block;
+    position: relative;
+    padding: 10px 5px 10px 0;
+    overflow: hidden;
+    border-bottom: 1px #d6d6d6 solid;
+}
+
+.hot_sale .bookimg {
+    float: left;
+    width: 70px;
+    height: 80px;
+}
+
+.hot_sale .bookimg img {
+    border: 1px #b4dae8 solid;
+    width: 60px;
+    height: 80px;
+}
+
+.hot_sale .bookinfo {
+    overflow: hidden;
+}
+
+.hot_sale .title {
+    color: #375868;
+    font-size: 16px;
+    height: 20px;
+    overflow: hidden;
+}
+
+.hot_sale .author {
+    font-size: 14px;
+    color: #7f9ba8;
+    height: 24px;
+    line-height: 24px;
+}
+
+.hot_sale .review {
+    font-size: 14px;
+    color: #7f9ba8;
+    line-height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.hot_sale:last-child {
+    border-bottom-color: #fff;
+}
+
+.historyArea .historyItem {
+    overflow: hidden;
+    background: #edfaff;
+}
+
+.historyArea .historyItem:nth-child(2n) {
+    background: #fff;
+}
+
+.historyArea .historyItem .num {
+    height: 24px;
+    width: 32px;
+    border-radius: 3px;
+    display: inline-block;
+    float: left;
+    background: #68aac2;
+    color: #fff;
+    text-align: center;
+    line-height: 24px;
+    margin: 10px;
+}
+
+.historyArea .historyItem .info {
+    float: left;
+    margin: 10px 0;
+    font-size: 12px;
+}
+
+.historyArea .historyItem .title {
+    font-size: 16px;
+}
+
+.historyArea .historyItem .otherInfo {
+    font-size: 12px;
+    color: #7f9ba8;
+}
+
+.historyArea .historyItem .otherInfo p {
+    margin: 4px 0;
+}
+
+.historyArea .historyItem .otherInfo p:last-child {
+    margin: 0;
+}
+
+.historyArea .historyItem .lastReaded {
+    color: red;
+}
+
+.page {
+    background: #68aac2;
+    padding: 0 10px;
+    color: #c5d7df;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+
+.page a {
+    color: #fff;
+    margin: 0 4px;
+}
+
+.page a.disabled {
+    color: #ddd;
+}
+
+.page a.disabled {
+    color: #c5d7df;
+}

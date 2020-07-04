@@ -1,0 +1,33 @@
+<%- include('common/top', {}); %>
+<link rel="stylesheet" type="text/css" href="/static/src/css/common.css" />
+<link rel="stylesheet" type="text/css" href="/static/src/css/login.css" />
+<%- include('common/pageHeader', {}); %>
+<div class="login_box">
+    <form name="form_reg" method="post">
+        <div class="login_name">
+            <span class="person_bg"></span>
+            <input type="text" class="name register_nm" name="username" value="账号名，5~16位字符">
+        </div>
+        <div class="login_name">
+            <span class="psw_bg"></span>
+            <input type="text" class="name register_mail" name="usermail" value="邮箱">
+        </div>
+        <div class="login_name">
+            <span class="psw_bg"></span>
+            <input type="text" class="name register_psw" name="userpass" value="账号密码">
+        </div>
+        <div class="login_name">
+            <span class="psw_bg"></span>
+            <input type="text" class="name register_repsw" name="userpassqr" value="再次输入密码">
+        </div>
+        <div class="submit_btn">
+            <input type="button" class="reg_bto login_in register_in" value="立即注册">
+        </div>
+        <!-- <input name="__RequestVerificationToken" type="hidden" value="kVkrKioDo1BTLL7y_pN6oA0rlZuMZzbQ32JwaE5gfZ7OJg2VtsnArPLi9bPkef0MOk__ADkGFRBf0zBDI_crKFgzYC952_jwJqMCjnYBgLM1" /> -->
+    </form>
+</div>
+<p class="text_register"> 已有账号？<a href="/login">立即登录</a><br /></p>
+</div>
+<%- include('common/footer', {}); %>
+<script language="javascript" type="text/javascript" src="/static/src/js/login.js"></script>
+<%- include('common/bottom', {}); %>

@@ -1,0 +1,97 @@
+.Readpager {
+    height: 35px;
+    line-height: 35px;
+    color: #68aac2;
+    overflow: hidden;
+    margin: 15px 15px 0 15px;
+    border: 1px solid #68aac2;
+    border-radius: 3px;
+}
+
+.Readpager a {
+    width: 33%;
+    float: left;
+    text-align: center;
+    border-right: 1px solid #68aac2;
+}
+
+.Readpager a:last-child {
+    border: none;
+}
+
+.Readsetter {
+    height: 35px;
+    color: #68aac2;
+    margin: 10px 15px 0 15px;
+    overflow: hidden;
+}
+
+.Readsetter .box {
+    float: left;
+    width: 40%;
+    overflow: hidden;
+}
+
+.Readsetter button {
+    height: 32px;
+    width: 32%;
+    float: left;
+    text-align: center;
+    border: 1px solid #68aac2;
+    background: none;
+    margin-right: 1%;
+    border-radius: 3px;
+}
+
+.Readsetter button.on {
+    background: #68aac2;
+    color: #fff;
+}
+
+.Readsetter button:last-child {
+    margin-right: 0;
+}
+
+.Readsetter .box:last-child {
+    margin-left: 20%;
+}
+
+.Readarea {
+    font-size: 18px;
+    line-height: 35px;
+    padding: 10px;
+    color: #333;
+}
+
+.Readarea p {
+    margin-bottom: 18px;
+    text-indent: 2em;
+}
+
+body.default {
+    background: #efefef;
+}
+
+body.huyan {
+    background: #bed5c5;
+}
+
+body.yejian {
+    background: #333;
+}
+
+body.yejian * {
+    color: #aaa !important;
+}
+
+body.fontBig #chaptercontent p {
+    font-size: 18px !important;
+}
+
+body.fontMiddle #chaptercontent p {
+    font-size: 16px !important;
+}
+
+body.fontSmall #chaptercontent p {
+    font-size: 14px !important;
+}
