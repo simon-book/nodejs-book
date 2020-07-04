@@ -211,8 +211,8 @@ footer .channel a {
 .hot_sale .author {
     font-size: 14px;
     color: #7f9ba8;
-    height: 25px;
-    line-height: 20px;
+    height: 24px;
+    line-height: 24px;
 }
 
 .hot_sale .review {
@@ -228,4 +228,75 @@ footer .channel a {
 
 .hot_sale:last-child {
     border-bottom-color: #fff;
+}
+
+.historyArea .historyItem {
+    overflow: hidden;
+    background: #edfaff;
+}
+
+.historyArea .historyItem:nth-child(2n) {
+    background: #fff;
+}
+
+.historyArea .historyItem .num {
+    height: 24px;
+    width: 32px;
+    border-radius: 3px;
+    display: inline-block;
+    float: left;
+    background: #68aac2;
+    color: #fff;
+    text-align: center;
+    line-height: 24px;
+    margin: 10px;
+}
+
+.historyArea .historyItem .info {
+    float: left;
+    margin: 10px 0;
+    font-size: 12px;
+}
+
+.historyArea .historyItem .title {
+    font-size: 16px;
+}
+
+.historyArea .historyItem .otherInfo {
+    font-size: 12px;
+    color: #7f9ba8;
+}
+
+.historyArea .historyItem .otherInfo p {
+    margin: 4px 0;
+}
+
+.historyArea .historyItem .otherInfo p:last-child {
+    margin: 0;
+}
+
+.historyArea .historyItem .lastReaded {
+    color: red;
+}
+
+.page {
+    background: #68aac2;
+    padding: 0 10px;
+    color: #c5d7df;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+
+.page a {
+    color: #fff;
+    margin: 0 4px;
+}
+
+.page a.disabled {
+    color: #ddd;
+}
+
+.page a.disabled {
+    color: #c5d7df;
 }

@@ -1,25 +1,32 @@
 <%- include('common/top', {}); %>
-<link rel="stylesheet" type="text/css" href="/static/src/css/reset.css" />
+<link rel="stylesheet" type="text/css" href="/static/src/css/common.css" />
 <link rel="stylesheet" type="text/css" href="/static/src/css/login.css" />
 <%- include('common/pageHeader', {}); %>
 <div class="login_box">
     <form name="form_reg" method="post">
-        <div class="login_name"> <span class="person_bg"></span> <input type="text" class="name register_nm" name="username" value="账号名，5~16位字符"></div>
-        <p class="tips_text">账号名为5-16位字符，由英文、数字组成，不能全数字</p>
-        <div class="login_name"> <span class="psw_bg"></span> <input type="text" class="name register_mail" name="usermail" value="邮箱"></div>
-        <p class="tips_text">请输入常用的电子邮箱地址，以便您激活账号、找回密码等。</p>
-        <div class="login_name"> <span class="psw_bg"></span> <input type="text" class="name register_psw" name="userpass" value="账号密码"></div>
-        <p class="tips_text">请输入密码</p>
-        <div class="login_name"> <span class="psw_bg"></span> <input type="text" class="name register_repsw" name="userpassqr" value="再次输入密码"></div>
-        <p class="tips_text">请再次输入密码</p>
-        <div class="submit_btn"><input type="button" class="reg_bto login_in register_in" value="立即注册"></div><input name="__RequestVerificationToken" type="hidden" value="kVkrKioDo1BTLL7y_pN6oA0rlZuMZzbQ32JwaE5gfZ7OJg2VtsnArPLi9bPkef0MOk__ADkGFRBf0zBDI_crKFgzYC952_jwJqMCjnYBgLM1" />
+        <div class="login_name">
+            <span class="person_bg"></span>
+            <input type="text" class="name register_nm" name="username" value="账号名，5~16位字符">
+        </div>
+        <div class="login_name">
+            <span class="psw_bg"></span>
+            <input type="text" class="name register_mail" name="usermail" value="邮箱">
+        </div>
+        <div class="login_name">
+            <span class="psw_bg"></span>
+            <input type="text" class="name register_psw" name="userpass" value="账号密码">
+        </div>
+        <div class="login_name">
+            <span class="psw_bg"></span>
+            <input type="text" class="name register_repsw" name="userpassqr" value="再次输入密码">
+        </div>
+        <div class="submit_btn">
+            <input type="button" class="reg_bto login_in register_in" value="立即注册">
+        </div>
+        <!-- <input name="__RequestVerificationToken" type="hidden" value="kVkrKioDo1BTLL7y_pN6oA0rlZuMZzbQ32JwaE5gfZ7OJg2VtsnArPLi9bPkef0MOk__ADkGFRBf0zBDI_crKFgzYC952_jwJqMCjnYBgLM1" /> -->
     </form>
-    <div class="validation-summary-valid" data-valmsg-summary="true">
-        <ul>
-            <li style="display:none"></li>
-        </ul>
-    </div>
-    <p class="text_register text_font"> 已有账号？<a href="/user/login">立即登录</a><br /></p>
+</div>
+<p class="text_register"> 已有账号？<a href="/login">立即登录</a><br /></p>
 </div>
 <%- include('common/footer', {}); %>
 <script language="javascript" type="text/javascript" src="/static/src/js/login.js"></script>

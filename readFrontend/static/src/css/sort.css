@@ -29,34 +29,3 @@
     border-left: 1px #d6d6d6 solid;
     margin-left: -1px;
 }
-
-.page {
-    background: #68aac2;
-    padding: 0 10px;
-    color: #c5d7df;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-}
-
-.page a {
-    color: #fff;
-    margin: 0 5px;
-}
-
-.pageinput {
-    float: right;
-}
-
-.page .page_txt {
-    padding: 2px 5px;
-    border: 1px #c5d7df solid;
-    background: #f6fcff;
-    color: #4c6978;
-    border-radius: 5px;
-    font-size: 14px;
-    width: 80px;
-    margin-right: 5px;
-    color: #333;
-    text-align: center;
-}

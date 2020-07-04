@@ -1,154 +1,60 @@
-/*.button {
-    width: 40px;
-    line-height: 38px;
+.Readpager {
+    height: 35px;
+    line-height: 35px;
+    color: #68aac2;
+    overflow: hidden;
+    margin: 15px 15px 0 15px;
+    border: 1px solid #68aac2;
+    border-radius: 3px;
+}
+
+.Readpager a {
+    width: 33%;
+    float: left;
     text-align: center;
-    font-weight: bold;
+    border-right: 1px solid #68aac2;
+}
+
+.Readpager a:last-child {
+    border: none;
+}
+
+.Readsetter {
+    height: 35px;
+    color: #68aac2;
+    margin: 10px 15px 0 15px;
+    overflow: hidden;
+}
+
+.Readsetter .box {
+    float: left;
+    width: 40%;
+    overflow: hidden;
+}
+
+.Readsetter button {
+    height: 32px;
+    width: 32%;
+    float: left;
+    text-align: center;
+    border: 1px solid #68aac2;
+    background: none;
+    margin-right: 1%;
+    border-radius: 3px;
+}
+
+.Readsetter button.on {
+    background: #68aac2;
     color: #fff;
-    text-shadow: 1px 1px 1px #333;
-    border-radius: 5px;
-    margin: 3px 10px 10px 0;
-    position: relative;
-    overflow: hidden;
 }
 
-.sizebg {
-    width: 15px;
-    line-height: 38px;
-    text-align: center;
-    font-weight: bold;
-    color: #000;
-    text-shadow: 1px 1px 1px #333;
-    border-radius: 5px;
-    margin: 3px 3px 3px 0;
-    position: relative;
-    overflow: hidden;
+.Readsetter button:last-child {
+    margin-right: 0;
 }
 
-.lighton {
-    border: 1px solid #d2a000;
-    box-shadow: 0 1px 2px #fedd71 inset, 0 -1px 0 #a38b39 inset, 0 -2px 3px #fedd71 inset;
-    background: -webkit-linear-gradient(top, #fece34, #d8a605);
-    background: -moz-linear-gradient(top, #fece34, #d8a605);
-    background: linear-gradient(top, #fece34, #d8a605);
+.Readsetter .box:last-child {
+    margin-left: 20%;
 }
-
-.lightoff,
-.huyanoff,
-.sizebgon {
-    border: 1px solid #333;
-    box-shadow: 0 1px 2px #8b8b8b inset, 0 -1px 0 #3d3d3d inset, 0 -2px 3px #8b8b8b inset;
-    background: -webkit-linear-gradient(top, #656565, #4c4c4c);
-    background: -moz-linear-gradient(top, #656565, #4a4a4a);
-    background: linear-gradient(top, #656565, #4a4a4a);
-}
-
-.huyanon {
-    border: 1px solid #64c878;
-    box-shadow: 0 1px 2px #b9ecc4 inset, 0 -1px 0 #6c9f76 inset, 0 -2px 3px #b9ecc4 inset;
-    background: -webkit-linear-gradient(top, #90dfa2, #84d494);
-    background: -moz-linear-gradient(top, #90dfa2, #84d494);
-    background: linear-gradient(top, #90dfa2, #84d494);
-}
-
-.nr_set {
-    padding: 10px;
-    padding-right: 10px;
-    border-bottom: 2px solid #0065B5;
-    font-size: 12px;
-}
-
-.nr_set .set1 {
-    border: 1px solid #0065B5;
-    padding: 5px 10px;
-    margin-left: 10px;
-    border-radius: 5px;
-    color: #0065B5
-}
-
-.nr_set .set2 {
-    border: 1px solid #0065B5;
-    padding: 5px 7px;
-    margin-left: 5px;
-    border-radius: 3px;
-    color: #0065B5
-}
-
-.nr_set .set2 p {
-    border: 1px solid #0065B5;
-    padding: 5px 5px;
-    margin-left: 5px;
-    border-radius: 3px;
-    color: #0065B5
-}
-
-.remindbg,
-.remind,
-.remind2,
-.remind2_1,
-.remind2_2 {
-    position: absolute;
-    z-index: 1000000;
-}
-
-.remindbg {
-    background: #000;
-    opacity: 0.6;
-    height: 100%;
-    width: 100%;
-    z-index: 100000;
-    top: 0;
-    left: 0;
-}
-
-.remind,
-.remind2 {
-    left: 50%;
-    margin-left: -107.5px;
-    width: 215px;
-}
-
-.remind {
-    top: 60px;
-}
-
-.remind2 {
-    top: 35%;
-}
-
-.remind2_1,
-.remind2_2 {
-    left: 50%;
-    margin-left: -160px;
-    width: 320px;
-}
-
-.remind2_1 {
-    top: 0;
-}
-
-.remind2_2 {
-    bottom: 0;
-}
-
-.read {
-    background: #fafafa;
-}
-
-.Readtitle {
-    font-size: 16px;
-    font-weight: bold;
-    line-height: 40px;
-    padding: 0 10px;
-    background: #d4eaf2;
-}
-
-.Readtitle_girl {
-    background: #fef1f5;
-}
-
-.Readtitle_partner {
-    background: #fbfff2;
-}*/
 
 .Readarea {
     font-size: 18px;
@@ -162,146 +68,30 @@
     text-indent: 2em;
 }
 
-.Readpage {
-    font-size: 14px;
-    padding: 0;
-    background: #d4eaf2;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
+body.default {
+    background: #efefef;
 }
 
-.Readpage a {
-    font-size: 16px;
-    padding: 8px 8px;
-    line-height: 35px;
+body.huyan {
+    background: #bed5c5;
 }
 
-.Readpage .Readpage_up {
-    color: #2a779d;
-    padding-left: 10px;
-    background-size: 90px;
+body.yejian {
+    background: #333;
 }
 
-.Readpage .Readpage_down {
-    text-shadow: 1px 1px #2a779d;
-    color: #fff;
-    background-size: 90px;
+body.yejian * {
+    color: #aaa !important;
 }
 
-.Readpage .page_txt {
-    width: 45px;
-    padding: 4px;
-    border: 1px #68aac2 solid;
-    font-size: 14px;
-    margin-left: 15px;
-    background: #f2fcff;
+body.fontBig #chaptercontent p {
+    font-size: 18px !important;
 }
 
-.Readpage .page_btn {
-    font-size: 14px;
-    border: none;
-    background: none;
-    color: #4c6978;
-    padding: 4px 5px;
-    margin-right: 15px;
-    background: #f2fcff;
-    font-weight: bold;
+body.fontMiddle #chaptercontent p {
+    font-size: 16px !important;
 }
 
-.Read_Night,
-.Read_Night .ReadAd,
-.Read_Night .ReadAd,
-.Read_Night footer {
-    background-color: #080C10;
-    color: #424952;
-}
-
-.Read_Night .Readtitle,
-.Read_Night .Readpage,
-.Read_Night .ToFast_Area .sel {
-    color: #606871;
-    background: #1d2731;
-}
-
-.Read_Night footer a {
-    color: #606871;
-    text-shadow: none;
-}
-
-.Read_Night footer .sel {
-    color: #2a779d;
-    font-weight: bold;
-}
-
-.Read_Night footer img {
-    opacity: 0.5;
-}
-
-.Read_Night .topMenu a,
-.Read_Night .bottomMenu a {
-    color: #606871;
-    background-color: #1d2731;
-    border-bottom: 1px #081522 solid;
-}
-
-.Read_Night .bottomMenu a {
-    border: none;
-    border-top: 1px #081522 solid;
-}
-
-.Read_Night .bottomMenu .sel {
-    font-weight: bold;
-    color: #ccc;
-    text-shadow: 1px 1px 1px #000;
-}
-
-.Read_Night .ToBg_Menu,
-.Read_Night .ToFast_Area,
-.Read_Night .ToMsg_Area {
-    background: #1d2731;
-    border: 1px #081522 solid;
-}
-
-.Read_Night .ToFast_Area a {
-    background: #080C10;
-    border: 1px #081522 solid;
-}
-
-.Read_Night .ToMsg_Area a {
-    background: none;
-    border: none;
-    color: #606871;
-}
-
-.Read_Night .ToMsg_Area .userMsg_btn {
-    border-bottom: 2px #081522 solid;
-    text-shadow: none;
-}
-
-.Read_Night .ToMsg_Area .userMsg_btn:hover {
-    border: none;
-    border-top: 2px #081522 solid;
-}
-
-.Read_Night .ReadAd2 {
-    border-top: 1px #081522 solid;
-}
-
-.Read_Night .page_btn,
-.Read_Night .page_txt {
-    background: #111820;
-    color: #4c6978;
-    border: 1px #000 solid;
-}
-
-.Read_Night .Readpage .Readpage_down,
-.Read_Night .Readpage .Readpage_up {
-    text-shadow: none;
-    background: none;
-}
-
-.Read_Night .Readpage .Readpage_down {
-    color: #4c6978;
-    font-weight: bold;
+body.fontSmall #chaptercontent p {
+    font-size: 14px !important;
 }
