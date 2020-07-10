@@ -3,59 +3,76 @@ var _ = require('lodash');
 var Op = Sequelize.Op;
 var moment = require('moment');
 var cheerio = require('cheerio');
+var util = require('../../util/index.js');
 var httpGateway = require('../../data/http/httpGateway.js')
 var branchMap = require('./commonController.js').branchMap
-
+var bookSequelize = require('../../data/sequelize/book/bookSequelize.js');
 //抓取m.35xs.co的小说
 exports.copy_35xiaoshuo_book = async function() {
     try {
         var branch = branchMap["m.35xs.co"];
-        var uri = branch.copyUrl + "/Book/List?page=1";
-        var html = await httpGateway.htmlStartReq(uri);
-        var $ = cheerio.load(html);
-        var targetItems = $("#main").children(".hot_sale");
-        var books = [];
-        for (var i = 0; i < targetItems.length; i++) {
-            var item = targetItems[i];
-            var bookImg = $(item).find("img.lazy").attr("data-original");
-            var bookTitle = $(item).find("p.title").text();
-            var bookAuthor = $(item).find("p.author").text();
-            var bookDesc = $(item).find("p.review").text().slice(3);
-            var bookHref = branch.copyUrl + $(item).find("a").attr("href");
-            var bookScore = parseInt($(item).find(".score").text()) * 2;
-            // console.log(bookTitle, bookAuthor, bookDesc, bookImg, bookHref, bookScore);
-            var book = {
-                title: bookTitle,
-                author: bookAuthor,
-                desc: bookDesc,
-                img: bookImg,
-                href: bookHref,
-                score: bookScore,
-                muluHref: bookHref + "mulu/",
-                mulu: []
-            }
-            var bookHtml = await httpGateway.htmlStartReq(book.href);
-            var $ = cheerio.load(bookHtml);
-            var sort = $(".sort");
-            book.sort = sort.text().slice(3);
-            var nexts = sort.nextAll("li");
-            book.published = $(nexts[0]).text().slice(3);
-            book.updatedAt = $(nexts[1]).text().slice(3);
+        var index = 1;
+        do {
+            var uri = branch.copyUrl + "/Book/List?page=" + index;
+            var html = await httpGateway.htmlStartReq(uri);
+            var $ = cheerio.load(html);
+            var targetItems = $("#main").children(".hot_sale");
+            for (var i = 0; i < targetItems.length; i++) {
+                try {
+                    var item = targetItems[i];
+                    var bookHref = $(item).find("a").attr("href");
+                    var book = {
+                        copyInfo: {
+                            d: branch.copyUrl,
+                            a: bookHref,
+                            m: bookHref + "mulu/"
+                        },
+                        branchId: branch.branchId,
+                        bookType: 1,
+                        recommend: 60 + parseInt(40 * Math.random()),
+                        chapters: []
+                    }
+                    var bookHtml = await httpGateway.htmlStartReq(branch.copyUrl + book.copyInfo.a);
+                    var $ = cheerio.load(bookHtml);
+                    book.title = $("header .title").text();
+                    book.cover = branch.copyUrl + $("#thumb img").attr("src");
+                    var liItems = $("#book_detail").children();
+                    book.writer = $(liItems[0]).text().slice(3);
+                    book.category = $(liItems[1]).find("a").text() || "未分类";
+                    book.categoryId = branch.category[book.category];
+                    book.publishStatus = branch.publishStatus[$(liItems[2]).text().slice(3)];
+                    book.lastUpdatedAt = $(liItems[3]).text().slice(3);
+                    book.abstractContent = $("p.review").text();
 
-            var muluHtml = await httpGateway.htmlStartReq(book.muluHref);
-            var $ = cheerio.load(muluHtml);
-            var chapters = $("#chapterlist").children();
-            for (var j = 1; j < chapters.length; j++) {
-                var a = $(chapters[j]).children()[0];
-                book.mulu.push({
-                    title: $(a).text(),
-                    number: j,
-                    href: branch.copyUrl + $(a).attr("href")
-                });
+                    var muluHtml = await httpGateway.htmlStartReq(branch.copyUrl + book.copyInfo.m);
+                    var $ = cheerio.load(muluHtml);
+                    var chapters = $("#chapterlist").children();
+                    book.chapterCount = chapters.length - 1;
+                    for (var j = 1; j < chapters.length; j++) {
+                        var a = $(chapters[j]).children()[0];
+                        book.chapters.push({
+                            title: $(a).text(),
+                            number: j,
+                            type: 1,
+                            branchId: branch.branchId,
+                            domain: branch.copyUrl,
+                            txt: $(a).attr("href")
+                        });
+                    }
+                    if (!book.chapters.length) continue;
+                    var count = await bookSequelize.countBooks({
+                        branchId: branch.branchId
+                    });
+                    book.sn = util.prefixInteger(count + 1, 8);
+                    console.log(book);
+                    await bookSequelize.create(book);
+                } catch (err) {
+                    console.log(index, i);
+                    console.log(err);
+                }
             }
-            console.log(book);
-            books.push(book);
-        }
+        } while ()
+
     } catch (err) {
         console.log(err);
     }

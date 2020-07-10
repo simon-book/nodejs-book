@@ -7,6 +7,7 @@ var adminHttpResult = require('../../util/adminHttpResult.js');
 var errHandler = require('../../util/errHandler.js');
 var util = require('../../util/index.js');
 var branchSequelize = require('../../data/sequelize/branch/branchSequelize.js');
+var managerSequelize = require('../../data/sequelize/manager/managerSequelize.js');
 
 exports.createBranch = async function(req, res) {
     try {

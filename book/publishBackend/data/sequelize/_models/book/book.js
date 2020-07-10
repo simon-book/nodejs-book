@@ -20,17 +20,14 @@ var Book = sequelize.define('book', {
         allowNull: false
     },
     sn: Sequelize.TEXT, //编码
-    keywords: Sequelize.TEXT,
+    // keywords: Sequelize.TEXT,
     writer: Sequelize.TEXT,
     cover: Sequelize.TEXT, //竖向封面
     horiCover: Sequelize.TEXT, //横向封面
     abstractContent: Sequelize.TEXT, //摘要
     chapterCount: Sequelize.INTEGER, //章节数
     recommend: Sequelize.INTEGER, //推荐指数
-    readCount: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0
-    }, //阅读数
+    readCount: Sequelize.INTEGER, //阅读数
     categoryId: { //主分类
         type: Sequelize.BIGINT,
         references: {
@@ -42,7 +39,7 @@ var Book = sequelize.define('book', {
     },
     bookType: { //1:"novel", 2:"cartoon", 3:"photo", 4:"video"
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
         defaultValue: 1
     },
     publishStatus: Sequelize.INTEGER, //1:"serialize", 2:"finish"
