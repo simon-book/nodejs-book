@@ -63,6 +63,8 @@ var Book = sequelize.define('book', {
         fields: ['branch_id']
     }, {
         fields: ['title']
+    }, {
+        fields: ['writer']
     }]
 });
 

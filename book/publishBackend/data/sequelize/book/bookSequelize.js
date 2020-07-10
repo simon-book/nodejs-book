@@ -22,7 +22,7 @@ exports.create = function(obj) {
     return new Promise(function(resolve, reject) {
         Book.create(obj, {
             include: [{
-                association: BookChapter,
+                association: Book_Chapter,
                 as: 'chapters'
             }]
         }).then(function(results) {
@@ -50,6 +50,18 @@ exports.update = function(obj, where) {
         Book.update(obj, {
             where: where,
             returning: true
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
+exports.findOneBook = function(where) {
+    return new Promise(function(resolve, reject) {
+        Book.findOne({
+            where: where
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
