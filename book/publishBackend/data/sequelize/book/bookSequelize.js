@@ -45,6 +45,27 @@ exports.countBooks = function(where) {
     })
 }
 
+exports.updateBookAndChapters = function(book, chapters) {
+    return new Promise(function(resolve, reject) {
+        sequelize.transaction({
+            deferrable: Sequelize.Deferrable.SET_DEFERRED
+        }, function(t) {
+            var all = []
+            all.push(book.save({
+                transaction: t
+            }));
+            all.push(BookChapter.bulkCreate(chapters, {
+                transaction: t
+            }))
+            return Promise.all(all);
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        })
+    })
+}
+
 exports.update = function(obj, where) {
     return new Promise(function(resolve, reject) {
         Book.update(obj, {
@@ -81,7 +102,6 @@ exports.findByPk = function(id) {
 }
 
 exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
-
     return new Promise(function(resolve, reject) {
         sequelize.transaction({
             deferrable: Sequelize.Deferrable.SET_DEFERRED

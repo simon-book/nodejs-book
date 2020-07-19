@@ -6,7 +6,7 @@ var bookCategoryController = require('./book/bookCategoryController.js');
 var bookController = require('./book/bookController.js');
 var tagController = require('./book/tagController.js');
 var bookChapterController = require('./book/bookChapterController.js');
-var copyController = require('./copy/copyController.js');
+var copy35xsController = require('./copy/copy35xsController.js');
 
 router.post('/create_brand', branchController.createBranch);
 router.post('/update_brand', branchController.updateBranch);
@@ -48,7 +48,7 @@ router.post('/list_book_chapter', bookChapterController.list);
 // router.post('/update_book_order_in_block', pageBlockController.orderBooks);
 
 router.get('/copy_35xiaoshuo_book', function(req, res) {
-    copyController.copy_35xiaoshuo_book();
+    copy35xsController.copy_book();
     res.send(true);
 })
 

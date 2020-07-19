@@ -45,6 +45,7 @@ var Book = sequelize.define('book', {
     publishStatus: Sequelize.INTEGER, //1:"serialize", 2:"finish"
     lastUpdatedAt: Sequelize.DATE, //最近更新时间
     copyInfo: Sequelize.JSONB, //复制来源相关信息
+    originId: Sequelize.TEXT, //复制原始ID
     branchId: {
         type: Sequelize.BIGINT,
         references: {
@@ -57,7 +58,7 @@ var Book = sequelize.define('book', {
 }, {
     schema: __PGSQL__.schemas.book_publisher,
     tableName: 'book',
-    timestamps: false,
+    timestamps: true,
     underscored: true,
     indexes: [{
         fields: ['branch_id']
