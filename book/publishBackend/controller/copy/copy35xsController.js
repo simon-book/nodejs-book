@@ -33,8 +33,6 @@ exports.copy_book = async function() {
                         } else {
                             await create_book(bookHref);
                         }
-
-
                     } catch (err) {
                         console.log(index, i);
                         console.log(err);
@@ -112,7 +110,7 @@ async function create_book(bookHref) {
 }
 
 
-function update_book(savedBook) {
+async function update_book(savedBook) {
     try {
         var bookHtml = await httpGateway.htmlStartReq(branch.copyUrl + savedBook.copyInfo.a);
         var $ = cheerio.load(bookHtml);
@@ -145,3 +143,8 @@ function update_book(savedBook) {
         console.log(err);
     }
 }
+
+
+// exports.copy_chapter = async function(chapterId) {
+
+// }
