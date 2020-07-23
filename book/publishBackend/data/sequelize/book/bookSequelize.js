@@ -118,6 +118,10 @@ exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
                 order: order || [
                     ['bookId', 'DESC']
                 ],
+                raw: true,
+                attributes: {
+                    exclude: ["copyInfo", "originId", "branchId"]
+                },
                 transaction: t,
                 include: [tagWhere ? {
                     model: Tag,

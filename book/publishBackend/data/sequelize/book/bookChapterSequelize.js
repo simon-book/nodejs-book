@@ -30,8 +30,7 @@ exports.update = function(obj, where) {
 exports.findOne = function(where) {
     return new Promise(function(resolve, reject) {
         BookChapter.findOne({
-            where: where,
-            attributes: ["chapterId", "title"]
+            where: where
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
@@ -57,11 +56,10 @@ exports.findAndCountAll = function(where, offset, limit, order) {
             limit: limit || 10000,
             offset: offset || 0,
             order: order || [
-                ['chapterId', 'DESC']
+                ['number', 'ASC']
             ],
-            attributes: {
-                exclude: ["contentText", "contentFormatedText", "contentPictures"]
-            }
+            raw: true,
+            attributes: ["chapterId", "number", "title", "cover"]
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {

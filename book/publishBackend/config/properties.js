@@ -38,6 +38,9 @@ module.exports = function() {
             accessKey: "minioadmin",
             secretKey: "minioadmin"
         };
+        global.__HOSTMAP__ = {
+            "localhost": 1,
+        };
     } else if (environment == "test") {
 
     } else if (environment == "prod") {

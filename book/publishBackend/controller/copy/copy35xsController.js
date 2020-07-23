@@ -7,6 +7,9 @@ var util = require('../../util/index.js');
 var httpGateway = require('../../data/http/httpGateway.js')
 var branchMap = require('./commonController.js').branchMap
 var bookSequelize = require('../../data/sequelize/book/bookSequelize.js');
+var bookChapterSequelize = require('../../data/sequelize/book/bookChapterSequelize.js');
+
+
 //抓取m.35xs.co的小说
 var branch = branchMap["m.35xs.co"];
 
@@ -24,9 +27,8 @@ exports.copy_book = async function() {
                     try {
                         var item = targetItems[i];
                         var bookHref = $(item).find("a").attr("href");
-                        var originId = bookHref.split("/")[2];
                         var savedBook = await bookSequelize.findOneBook({
-                            originId: originId
+                            originId: bookHref.split("/")[2]
                         })
                         if (savedBook) {
                             await update_book(savedBook);
@@ -56,7 +58,7 @@ async function create_book(bookHref) {
                 a: bookHref,
                 m: bookHref + "mulu/"
             },
-            originId: originId,
+            originId: bookHref.split("/")[2],
             branchId: branch.branchId,
             bookType: 1,
             recommend: 60 + parseInt(40 * Math.random()),
@@ -69,9 +71,9 @@ async function create_book(bookHref) {
         book.cover = branch.copyUrl + $("#thumb img").attr("src");
         var liItems = $("#book_detail").children();
         book.writer = $(liItems[0]).text().slice(3);
-        // book.category = $(liItems[1]).find("a").text() || "未分类";
+        book.category = $(liItems[1]).find("a").text() || "未分类";
         // book.categoryId = branch.category[book.category];
-        book.categoryId = branch.category[category][1];
+        book.categoryId = branch.category[book.category][1];
         book.publishStatus = branch.publishStatus[$(liItems[2]).text().slice(3)];
         // book.lastUpdatedAt = $(liItems[3]).text().slice(3);
         book.lastUpdatedAt = new Date($($(".recommend h2 a")[0]).text().split("：")[1]);
@@ -102,20 +104,19 @@ async function create_book(bookHref) {
             branchId: branch.branchId
         });
         book.sn = util.prefixInteger(count + 1, 8);
-        console.log(book);
+        // console.log(book);
         await bookSequelize.create(book);
     } catch (err) {
         console.log(err);
     }
 }
 
-
 async function update_book(savedBook) {
     try {
         var bookHtml = await httpGateway.htmlStartReq(branch.copyUrl + savedBook.copyInfo.a);
         var $ = cheerio.load(bookHtml);
         var lastUpdatedAt = new Date($($(".recommend h2 a")[0]).text().split("：")[1]);
-        if (Math.abs(lastUpdatedAt.getTime() - new Date(savedBook.lastUpdatedAt).getTime) < 10000) {
+        if (Math.abs(lastUpdatedAt.getTime() - new Date(savedBook.lastUpdatedAt).getTime()) < 10000) {
             savedBook.set("lastUpdatedAt", lastUpdatedAt);
             var liItems = $("#book_detail").children();
             savedBook.set("publishStatus", branch.publishStatus[$(liItems[2]).text().slice(3)]);
@@ -136,15 +137,10 @@ async function update_book(savedBook) {
                 });
             }
             savedBook.set("chapterCount", chapters.length - 1)
-            console.log(savedBook, newChapters);
+            // console.log(savedBook, newChapters);
             await bookSequelize.update(savedBook, newChapters);
         }
     } catch (err) {
         console.log(err);
     }
 }
-
-
-// exports.copy_chapter = async function(chapterId) {
-
-// }
