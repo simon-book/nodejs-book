@@ -55,6 +55,7 @@ exports.detail = async function(req, res) {
                     chapter.set("domain", null);
                     chapter.save();
                 }
+                checkSiblingsChapters(body.bookId, body.number);
             }
         } else if (chpaterDetail.type == "picture") {
             chpaterDetail.content = chapter.pics;
@@ -98,4 +99,41 @@ exports.list = async function(req, res) {
         adminHttpResult.jsonFailOut(req, res, "SERVICE_INVALID", null, err);
         return;
     }
+}
+
+
+async function checkSiblingsChapters(bookId, number) {
+    try {
+        var numbers = [number + 1, number + 2, number + 3, number + 4, number + 5];
+        var chapters = await bookChapterSequelize.findAll({
+            number: {
+                [Op.in]: numbers
+            },
+            bookId: bookId
+        });
+        _.forEach(chapters, async function(chapter) {
+            if (!chapter.local) {
+                {
+                    var bookHtml = await httpGateway.htmlStartReq(chapter.domain + chapter.txt);
+                    var $ = cheerio.load(bookHtml, {
+                        decodeEntities: false
+                    });
+                    $("#chaptercontent").children().last().remove();
+                    var content = $("#chaptercontent").html();
+                    chpaterDetail.content = content;
+                    adminHttpResult.jsonSuccOut(req, res, chpaterDetail);
+                    var result = await MossClient.put("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number, content);
+                    if (result) {
+                        chapter.set("local", 1);
+                        chapter.set("txt", null);
+                        chapter.set("domain", null);
+                        chapter.save();
+                    }
+                }
+            }
+        })
+    } catch (err) {
+        console.log(err);
+    }
+
 }

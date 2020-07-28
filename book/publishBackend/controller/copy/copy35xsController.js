@@ -116,7 +116,7 @@ async function update_book(savedBook) {
         var bookHtml = await httpGateway.htmlStartReq(branch.copyUrl + savedBook.copyInfo.a);
         var $ = cheerio.load(bookHtml);
         var lastUpdatedAt = new Date($($(".recommend h2 a")[0]).text().split("：")[1]);
-        if (Math.abs(lastUpdatedAt.getTime() - new Date(savedBook.lastUpdatedAt).getTime()) < 10000) {
+        if (Math.abs(lastUpdatedAt.getTime() - new Date(savedBook.lastUpdatedAt).getTime()) > 10000) {
             savedBook.set("lastUpdatedAt", lastUpdatedAt);
             var liItems = $("#book_detail").children();
             savedBook.set("publishStatus", branch.publishStatus[$(liItems[2]).text().slice(3)]);

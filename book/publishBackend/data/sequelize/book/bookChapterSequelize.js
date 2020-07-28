@@ -39,6 +39,21 @@ exports.findOne = function(where) {
     })
 }
 
+exports.findAll = function(where) {
+    return new Promise(function(resolve, reject) {
+        BookChapter.findAll({
+            where: where,
+            order: [
+                ["number", "ASC"]
+            ]
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
 exports.findByPk = function(id) {
     return new Promise(function(resolve, reject) {
         BookChapter.findByPk(id).then(function(results) {
