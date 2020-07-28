@@ -300,3 +300,11 @@ footer .channel a {
 .page a.disabled {
     color: #c5d7df;
 }
+
+.pageSelecter {
+    width: 100px;
+    height: 24px;
+    border-radius: 2px;
+    outline: none;
+    background-color: #fff;
+}
