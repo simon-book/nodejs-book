@@ -32,6 +32,13 @@ module.exports = function() {
                 book_reader: 'book_reader',
             }
         };
+        global.__MOSS__ = {
+            endPoint: "127.0.0.1",
+            port: 9000,
+            useSSL: false,
+            accessKey: "minioadmin",
+            secretKey: "minioadmin"
+        };
     } else if (environment == "test") {
 
     } else if (environment == "prod") {

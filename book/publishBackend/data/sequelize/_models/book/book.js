@@ -69,5 +69,10 @@ var Book = sequelize.define('book', {
     }]
 });
 
+Book.belongsTo(BookCategory, {
+    as: "category",
+    foreignKey: 'categoryId'
+})
+
 
 module.exports = Book;

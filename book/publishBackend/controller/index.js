@@ -14,10 +14,10 @@ var MossClient = require('../service/mossConn.js');
 router.post('/create_brand', branchController.createBranch);
 router.post('/update_brand', branchController.updateBranch);
 
-// router.post('/login', loginController.login);
-// router.use(loginController.isLogin);
-// router.get('/logout', loginController.logout);
-// router.get('/getUser', loginController.getUser);
+router.post('/login', loginController.login);
+router.use(loginController.isLogin);
+router.get('/logout', loginController.logout);
+router.get('/getUser', loginController.getUser);
 
 router.post('/create_book_category', bookCategoryController.create);
 router.post('/update_book_category', bookCategoryController.update);
@@ -39,9 +39,13 @@ router.post('/delete_books_from_block', pageBlockController.deleteBooks);
 router.post('/list_books_of_block/:blockId', pageBlockController.listBooks);
 router.post('/update_book_order_in_block', pageBlockController.orderBooks);
 
+router.post('/create_book', bookController.create);
+router.post('/update_book', bookController.update);
 router.get('/get_book_detail/:bookId', bookController.detail);
 router.post('/list_book', bookController.list);
 
+router.post('/create_book_chapter', bookChapterController.create);
+router.post('/update_book_chapter', bookChapterController.update);
 router.post('/get_book_chapter_detail', bookChapterController.detail);
 router.post('/list_book_chapter', bookChapterController.list);
 

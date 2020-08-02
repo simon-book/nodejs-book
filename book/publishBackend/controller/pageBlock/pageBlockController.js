@@ -157,7 +157,9 @@ exports.listBooks = async function(req, res) {
         var list = await pageBlockSequelize.findBlockBooks(body.blockId, pageSize, offset);
         // adminHttpResult.jsonSuccOut(req, res, list);
         adminHttpResult.jsonSuccOut(req, res, {
-            list: list.rows,
+            list: _.map(list.rows, function(row) {
+                return row.book;
+            }),
             pagination: {
                 totalNum: list.count,
                 page: page,

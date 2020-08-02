@@ -8,6 +8,92 @@ var errHandler = require('../../util/errHandler.js');
 var util = require('../../util/index.js');
 var bookSequelize = require('../../data/sequelize/book/bookSequelize.js');
 
+exports.create = async function(req, res) {
+    try {
+        var currentUser = req.currentUser;
+        var body = req.body;
+        if (!body || !body.title || !body.bookType || !body.categoryId) {
+            adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
+            return;
+        }
+        body.branchId = currentUser.branchId;
+        if (!body.sn) {
+            var count = await bookSequelize.countBooks({
+                branchId: currentUser.branchId
+            })
+            body.sn = util.prefixInteger(count + 1, 8);
+        }
+        body.lastUpdatedAt = new Date();
+        var added = await bookSequelize.create(body);
+        if (body.tags && body.tags.length) {
+            var tagIds = _map(body.tags, "tagId");
+            await added.setTags(tagIds);
+        }
+        adminHttpResult.jsonSuccOut(req, res, added);
+    } catch (err) {
+        errHandler.setHttpError(req.originalUrl, req.body, err);
+        adminHttpResult.jsonFailOut(req, res, "SERVICE_INVALID", null, err);
+        return;
+    }
+}
+
+exports.update = async function(req, res) {
+    try {
+        var currentUser = req.currentUser;
+        var body = req.body;
+        if (!body || !body.bookId) {
+            adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
+            return;
+        }
+        var book = await bookSequelize.findByPk(body.bookId);
+        if (!book || book.branchId != currentUser.branchId) {
+            adminHttpResult.jsonFailOut(req, res, "BOOK_ERROR", "book不存在");
+            return;
+        }
+        // delete body.chapterCount;
+        // delete body.lastChapterId;
+        // delete body.coinCount;
+        // delete body.readCount;
+        body.lastUpdatedAt = new Date();
+        var added = await bookSequelize.update(body, {
+            bookId: body.bookId
+        })
+        added = added[1][0];
+        if (body.tags && body.tags.length) {
+            var tagIds = _.map(body.tags, "tagId");
+            await added.setTags(tagIds);
+        }
+        adminHttpResult.jsonSuccOut(req, res, true);
+    } catch (err) {
+        errHandler.setHttpError(req.originalUrl, req.body, err);
+        adminHttpResult.jsonFailOut(req, res, "SERVICE_INVALID", null, err);
+        return;
+    }
+}
+
+exports.delete = async function(req, res) {
+    try {
+        var currentUser = req.currentUser;
+        var body = req.params;
+        if (!body || !body.bookId) {
+            adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
+            return;
+        }
+        var book = await bookSequelize.findByPk(body.bookId);
+        if (!book || book.branchId != currentUser.branchId) {
+            adminHttpResult.jsonFailOut(req, res, "BOOK_ERROR", "book不存在");
+            return;
+        }
+        book.set("statusId", 0);
+        await book.save();
+        adminHttpResult.jsonSuccOut(req, res, true);
+    } catch (err) {
+        errHandler.setHttpError(req.originalUrl, req.body, err);
+        adminHttpResult.jsonFailOut(req, res, "SERVICE_INVALID", null, err);
+        return;
+    }
+}
+
 exports.detail = async function(req, res) {
     try {
         var currentUser = req.currentUser;

@@ -6,6 +6,7 @@ var sequelize = require('../../../service/sequelizeConn.js');
 var Book = require('../_models/book/book.js')
 var BookChapter = require('../_models/book/bookChapter.js')
 var Tag = require('../_models/book/tag.js')
+var BookCategory = require('../_models/book/bookCategory.js')
 var BookTag = require('../_models/book/bookTag.js')
 
 var Book_Chapter = Book.hasMany(BookChapter, {
@@ -82,7 +83,18 @@ exports.update = function(obj, where) {
 exports.findOneBook = function(where) {
     return new Promise(function(resolve, reject) {
         Book.findOne({
-            where: where
+            where: where,
+            include: [{
+                model: Tag,
+                as: 'tags',
+                required: false,
+                attributes: ["tagId", "name"]
+            }, {
+                model: BookCategory,
+                as: 'category',
+                required: false,
+                attributes: ["categoryId", "name"]
+            }]
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
@@ -93,7 +105,19 @@ exports.findOneBook = function(where) {
 
 exports.findByPk = function(id) {
     return new Promise(function(resolve, reject) {
-        Book.findByPk(id).then(function(results) {
+        Book.findByPk(id, {
+            include: [{
+                model: Tag,
+                as: 'tags',
+                required: false,
+                attributes: ["tagId", "name"]
+            }, {
+                model: BookCategory,
+                as: 'category',
+                required: false,
+                attributes: ["categoryId", "name"]
+            }]
+        }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
             reject(err);

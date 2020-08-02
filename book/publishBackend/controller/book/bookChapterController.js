@@ -2,67 +2,126 @@ var Sequelize = require('sequelize');
 var _ = require('lodash');
 var Op = Sequelize.Op;
 var moment = require('moment');
-var cheerio = require('cheerio');
+
 var adminHttpResult = require('../../util/adminHttpResult.js');
 var errHandler = require('../../util/errHandler.js');
 var util = require('../../util/index.js');
 var bookChapterSequelize = require('../../data/sequelize/book/bookChapterSequelize.js');
 var bookSequelize = require('../../data/sequelize/book/bookSequelize.js');
-var httpGateway = require('../../data/http/httpGateway.js')
 var MossClient = require('../../service/mossConn.js');
+
+exports.create = async function(req, res) {
+    try {
+        var currentUser = req.currentUser;
+        var body = req.body;
+        if (!body || !body.title || !body.number || !body.bookId) {
+            adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
+            return;
+        }
+        body.branchId = currentUser.branchId;
+        body.number = parseInt(body.number);
+        var chapter = await bookChapterSequelize.findOne({
+            number: body.number,
+            bookId: body.bookId
+        });
+        if (chapter) {
+            adminHttpResult.jsonFailOut(req, res, "BOOK_CHAPTER_ERROR", "book chapter number重复");
+            return;
+        }
+        var book = await bookSequelize.findByPk(body.bookId);
+        if (!book || book.branchId != currentUser.branchId) {
+            adminHttpResult.jsonFailOut(req, res, "BOOK_ERROR", "book不存在");
+            return;
+        }
+        // if (!body.price && book.chapterPrice) body.price = book.chapterPrice;
+        if (body.local == 1) {
+            var result = await MossClient.put("branch" + book.branchId, book.bookId + "/" + body.number + ".txt", body.txt);
+            if (result) body.txt = null;
+            else body.local = 2;
+        }
+
+
+        var newChapter = await bookChapterSequelize.create(body);
+        adminHttpResult.jsonSuccOut(req, res, newChapter);
+        book.set("chapterCount", (book.chapterCount || 0) + 1);
+        // book.set("wordsCount", (book.wordsCount || 0) + (newChapter.wordsCount || 0));
+        // if (!book.lastChapterId || !book.lastChapterNumber || book.lastChapterNumber < newChapter.number) {
+        //     book.set("lastChapterId", newChapter.chapterId);
+        //     book.set("lastChapterNumber", newChapter.number);
+        // }
+        book.save();
+    } catch (err) {
+        errHandler.setHttpError(req.originalUrl, req.body, err);
+        adminHttpResult.jsonFailOut(req, res, "SERVICE_INVALID", null, err);
+        return;
+    }
+}
+
+exports.update = async function(req, res) {
+    try {
+        var currentUser = req.currentUser;
+        var body = req.body;
+        if (!body || !body.chapterId) {
+            adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
+            return;
+        }
+        var chapter = await bookChapterSequelize.findByPk(body.chapterId);
+        if (!chapter || chapter.branchId != currentUser.branchId) {
+            adminHttpResult.jsonFailOut(req, res, "BOOK_CHAPTER_ERROR", "book chapter不存在");
+            return;
+        }
+        delete body.bookId;
+        var added = await bookChapterSequelize.update(body, {
+            chapterId: body.chapterId
+        })
+        adminHttpResult.jsonSuccOut(req, res, true);
+    } catch (err) {
+        errHandler.setHttpError(req.originalUrl, req.body, err);
+        adminHttpResult.jsonFailOut(req, res, "SERVICE_INVALID", null, err);
+        return;
+    }
+}
 
 exports.detail = async function(req, res) {
     try {
         var currentUser = req.currentUser;
         var body = req.body;
-        if (!body || !body.number || !body.bookId) {
+        if (!body || !body.number) {
             adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
             return;
         }
         var chapter = await bookChapterSequelize.findOne({
-            number: body.number,
-            bookId: body.bookId
+            bookId: body.bookId,
+            number: body.number
         });
         if (!chapter || chapter.branchId != currentUser.branchId) {
             adminHttpResult.jsonFailOut(req, res, "BOOK_CHAPTER_ERROR", "book chapter不存在");
             return;
         }
-        var chpaterDetail = {
-            chapterId: chapter.chapterId,
-            number: chapter.number,
-            title: chapter.title,
-            bookId: chapter.bookId,
-            type: chapter.type == 1 ? "text" : "picture"
-        }
-        if (chpaterDetail.type == "text") {
-            if (chapter.local) {
-                var content = await MossClient.get("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number);
-                chpaterDetail.content = content ? content : "";
-                adminHttpResult.jsonSuccOut(req, res, chpaterDetail);
-            } else {
-                var bookHtml = await httpGateway.htmlStartReq(chapter.domain + chapter.txt);
-                var $ = cheerio.load(bookHtml, {
-                    decodeEntities: false
-                });
-                $("#chaptercontent").children().last().remove();
-                var content = $("#chaptercontent").html();
-                chpaterDetail.content = content;
-                adminHttpResult.jsonSuccOut(req, res, chpaterDetail);
-                var result = await MossClient.put("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number, content);
-                if (result) {
-                    chapter.set("local", 1);
-                    chapter.set("txt", null);
-                    chapter.set("domain", null);
-                    chapter.save();
-                }
-                checkSiblingsChapters(body.bookId, body.number);
-            }
-        } else if (chpaterDetail.type == "picture") {
-            chpaterDetail.content = chapter.pics;
-            chpaterDetail.domain = chapter.domain;
-            adminHttpResult.jsonSuccOut(req, res, chpaterDetail);
-        } else adminHttpResult.jsonSuccOut(req, res, chpaterDetail);
+        adminHttpResult.jsonSuccOut(req, res, chapter);
+    } catch (err) {
+        errHandler.setHttpError(req.originalUrl, req.body, err);
+        adminHttpResult.jsonFailOut(req, res, "SERVICE_INVALID", null, err);
+        return;
+    }
+}
 
+exports.delete = async function(req, res) {
+    try {
+        var currentUser = req.currentUser;
+        var body = req.params;
+        if (!body || !body.chapterId) {
+            adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
+            return;
+        }
+        var chapter = await bookChapterSequelize.findByPk(body.chapterId);
+        if (!chapter || chapter.branchId != currentUser.branchId) {
+            adminHttpResult.jsonFailOut(req, res, "BOOK_CHAPTER_ERROR", "book chapter不存在");
+            return;
+        }
+        chapter.set("statusId", 0);
+        await chapter.save();
+        adminHttpResult.jsonSuccOut(req, res, true);
     } catch (err) {
         errHandler.setHttpError(req.originalUrl, req.body, err);
         adminHttpResult.jsonFailOut(req, res, "SERVICE_INVALID", null, err);
@@ -72,7 +131,7 @@ exports.detail = async function(req, res) {
 
 exports.list = async function(req, res) {
     try {
-        var currentUser = req.currentUser;
+        // var currentUser = req.currentUser;
         var body = req.body;
         if (!body || !body.bookId) {
             adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
@@ -99,41 +158,4 @@ exports.list = async function(req, res) {
         adminHttpResult.jsonFailOut(req, res, "SERVICE_INVALID", null, err);
         return;
     }
-}
-
-
-async function checkSiblingsChapters(bookId, number) {
-    try {
-        var numbers = [number + 1, number + 2, number + 3, number + 4, number + 5];
-        var chapters = await bookChapterSequelize.findAll({
-            number: {
-                [Op.in]: numbers
-            },
-            bookId: bookId
-        });
-        _.forEach(chapters, async function(chapter) {
-            if (!chapter.local) {
-                {
-                    var bookHtml = await httpGateway.htmlStartReq(chapter.domain + chapter.txt);
-                    var $ = cheerio.load(bookHtml, {
-                        decodeEntities: false
-                    });
-                    $("#chaptercontent").children().last().remove();
-                    var content = $("#chaptercontent").html();
-                    chpaterDetail.content = content;
-                    adminHttpResult.jsonSuccOut(req, res, chpaterDetail);
-                    var result = await MossClient.put("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number, content);
-                    if (result) {
-                        chapter.set("local", 1);
-                        chapter.set("txt", null);
-                        chapter.set("domain", null);
-                        chapter.save();
-                    }
-                }
-            }
-        })
-    } catch (err) {
-        console.log(err);
-    }
-
 }
