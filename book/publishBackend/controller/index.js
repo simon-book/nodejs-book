@@ -36,7 +36,7 @@ router.get('/list_page_block', pageBlockController.list);
 
 router.post('/add_books_to_block', pageBlockController.addBooks);
 router.post('/delete_books_from_block', pageBlockController.deleteBooks);
-router.post('/list_books_of_block/:blockId', pageBlockController.listBooks);
+router.post('/list_books_of_block', pageBlockController.listBooks);
 router.post('/update_book_order_in_block', pageBlockController.orderBooks);
 
 router.post('/create_book', bookController.create);
@@ -50,8 +50,8 @@ router.post('/get_book_chapter_detail', bookChapterController.detail);
 router.post('/list_book_chapter', bookChapterController.list);
 
 
-router.get('/copy_35xiaoshuo_book', function(req, res) {
-    copy35xsController.copy_book();
+router.post('/copy_35xiaoshuo_book', function(req, res) {
+    copy35xsController.copy_book(req.body.categoryId, req.body.categoryPageIndex);
     res.send(true);
 })
 

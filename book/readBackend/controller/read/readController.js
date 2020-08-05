@@ -92,9 +92,12 @@ exports.chapterDetail = async function(req, res) {
             type: chapter.type == 1 ? "text" : "picture"
         }
         if (chpaterDetail.type == "text") {
-            if (chapter.local) {
-                var content = await MossClient.get("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number);
+            if (chapter.local == 1) {
+                var content = await MossClient.get("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number + ".txt");
                 chpaterDetail.content = content ? content : "";
+                adminHttpResult.jsonSuccOut(req, res, chpaterDetail);
+            } else if (chapter.local == 2) {
+                chpaterDetail.content = chapter.txt;
                 adminHttpResult.jsonSuccOut(req, res, chpaterDetail);
             } else {
                 var bookHtml = await httpGateway.htmlStartReq(chapter.domain + chapter.txt);
@@ -105,7 +108,7 @@ exports.chapterDetail = async function(req, res) {
                 var content = $("#chaptercontent").html();
                 chpaterDetail.content = content;
                 adminHttpResult.jsonSuccOut(req, res, chpaterDetail);
-                var result = await MossClient.put("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number, content);
+                var result = await MossClient.put("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number + ".txt", content);
                 if (result) {
                     chapter.set("local", 1);
                     chapter.set("txt", null);

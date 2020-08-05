@@ -13,10 +13,12 @@ var bookChapterSequelize = require('../../data/sequelize/book/bookChapterSequeli
 //抓取m.35xs.co的小说
 var branch = branchMap["m.35xs.co"];
 
-exports.copy_book = async function() {
+exports.copy_book = async function(categoryId, categoryPageIndex) {
     try {
         for (var category in branch.category) {
-            var index = 1;
+            if (categoryId && categoryId > branch.category[category][0]) continue;
+            if (categoryId && categoryId == branch.category[category][0]) var index = categoryPageIndex;
+            else var index = 1;
             do {
                 var uri = branch.copyUrl + "/cate/" + branch.category[category][0] + "/" + index + "/";
                 console.log(uri);
@@ -31,12 +33,13 @@ exports.copy_book = async function() {
                             originId: bookHref.split("/")[2]
                         })
                         if (savedBook) {
-                            await update_book(savedBook);
+                            var result = await update_book(savedBook);
                         } else {
-                            await create_book(bookHref);
+                            var result = await create_book(bookHref);
                         }
+                        if (!result) throw new Error("save book error.")
                     } catch (err) {
-                        console.log(index, i);
+                        console.log(category, branch.category[category][0], index, i);
                         console.log(err);
                     }
                 }
@@ -64,7 +67,9 @@ async function create_book(bookHref) {
             recommend: 60 + parseInt(40 * Math.random()),
             chapters: []
         }
+        console.log(bookHref, 1);
         var bookHtml = await httpGateway.htmlStartReq(branch.copyUrl + book.copyInfo.a);
+        console.log(bookHref, 2);
         var $ = cheerio.load(bookHtml);
         book.title = $("header .title").text();
         console.log(book.title);
@@ -82,9 +87,10 @@ async function create_book(bookHref) {
             title: book.title,
             writer: book.writer
         })
-        if (sameBook) return;
-
+        if (sameBook) return true;
+        console.log(bookHref, 3);
         var muluHtml = await httpGateway.htmlStartReq(branch.copyUrl + book.copyInfo.m);
+        console.log(bookHref, 4);
         var $ = cheerio.load(muluHtml);
         var chapters = $("#chapterlist").children();
         book.chapterCount = chapters.length - 1;
@@ -99,15 +105,17 @@ async function create_book(bookHref) {
                 txt: $(a).attr("href")
             });
         }
-        if (!book.chapters.length) return;
+        if (!book.chapters.length) return true;
         var count = await bookSequelize.countBooks({
             branchId: branch.branchId
         });
         book.sn = util.prefixInteger(count + 1, 8);
         // console.log(book);
         await bookSequelize.create(book);
+        return true;
     } catch (err) {
         console.log(err);
+        return false;
     }
 }
 
@@ -140,7 +148,9 @@ async function update_book(savedBook) {
             // console.log(savedBook, newChapters);
             await bookSequelize.update(savedBook, newChapters);
         }
+        return true;
     } catch (err) {
         console.log(err);
+        return false;
     }
 }

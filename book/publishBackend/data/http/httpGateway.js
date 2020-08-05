@@ -1,15 +1,18 @@
-var request = require('request')
+var http = require('http')
+var https = require('https')
 
 exports.htmlStartReq = function(uri) {
+    var _http = http;
+    if (/^(https)/.test(uri)) _http = https;
     return new Promise(function(resolve, reject) {
-        request({
-            uri: uri,
-            method: 'GET'
-        }, (err, response, body) => {
-            if (err) {
-                console.log(err)
-            }
-            resolve(body)
-        })
+        _http.get(uri, (res) => {
+            let rawData = '';
+            res.on('data', (chunk) => { rawData += chunk; });
+            res.on('end', () => {
+                resolve(rawData);
+            });
+        }).on('error', (e) => {
+            reject(e);
+        });
     })
 }
