@@ -20,34 +20,37 @@ exports.copy_book = async function(categoryId, categoryPageIndex) {
             if (categoryId && categoryId == branch.category[category][0]) var index = categoryPageIndex;
             else var index = 1;
             do {
-                var uri = branch.copyUrl + "/cate/" + branch.category[category][0] + "/" + index + "/";
-                console.log(uri);
-                var html = await httpGateway.htmlStartReq(uri);
-                var $ = cheerio.load(html);
-                var targetItems = $("#main").children(".hot_sale");
-                for (var i = 0; i < targetItems.length; i++) {
-                    try {
-                        var item = targetItems[i];
-                        var bookHref = $(item).find("a").attr("href");
-                        var savedBook = await bookSequelize.findOneBook({
-                            originId: bookHref.split("/")[2]
-                        })
-                        if (savedBook) {
-                            var result = await update_book(savedBook);
-                        } else {
-                            var result = await create_book(bookHref);
+                try {
+                    var path = "/cate/" + branch.category[category][0] + "/" + index + "/";
+                    console.log(path);
+                    var html = await httpGateway.htmlStartReq(branch.copyUrl, path);
+                    var $ = cheerio.load(html);
+                    var targetItems = $("#main").children(".hot_sale");
+                    for (var i = 0; i < targetItems.length; i++) {
+                        try {
+                            var item = targetItems[i];
+                            var bookHref = $(item).find("a").attr("href");
+                            var savedBook = await bookSequelize.findOneBook({
+                                originId: bookHref.split("/")[2]
+                            })
+                            if (savedBook) {
+                                var result = await update_book(savedBook);
+                            } else {
+                                var result = await create_book(bookHref);
+                            }
+                            if (!result) throw new Error("save book error.")
+                        } catch (err) {
+                            console.log(category, branch.category[category][0], index, i);
+                            console.log(err);
                         }
-                        if (!result) throw new Error("save book error.")
-                    } catch (err) {
-                        console.log(category, branch.category[category][0], index, i);
-                        console.log(err);
                     }
+                    index++;
+                } catch (err) {
+                    console.log(category, branch.category[category][0], index);
+                    console.log(err);
                 }
-                index++;
             } while (index < 3)
         }
-
-
     } catch (err) {
         console.log(err);
     }
@@ -67,9 +70,7 @@ async function create_book(bookHref) {
             recommend: 60 + parseInt(40 * Math.random()),
             chapters: []
         }
-        console.log(bookHref, 1);
-        var bookHtml = await httpGateway.htmlStartReq(branch.copyUrl + book.copyInfo.a);
-        console.log(bookHref, 2);
+        var bookHtml = await httpGateway.htmlStartReq(branch.copyUrl, book.copyInfo.a);
         var $ = cheerio.load(bookHtml);
         book.title = $("header .title").text();
         console.log(book.title);
@@ -88,9 +89,7 @@ async function create_book(bookHref) {
             writer: book.writer
         })
         if (sameBook) return true;
-        console.log(bookHref, 3);
-        var muluHtml = await httpGateway.htmlStartReq(branch.copyUrl + book.copyInfo.m);
-        console.log(bookHref, 4);
+        var muluHtml = await httpGateway.htmlStartReq(branch.copyUrl, book.copyInfo.m);
         var $ = cheerio.load(muluHtml);
         var chapters = $("#chapterlist").children();
         book.chapterCount = chapters.length - 1;
@@ -121,7 +120,7 @@ async function create_book(bookHref) {
 
 async function update_book(savedBook) {
     try {
-        var bookHtml = await httpGateway.htmlStartReq(branch.copyUrl + savedBook.copyInfo.a);
+        var bookHtml = await httpGateway.htmlStartReq(branch.copyUrl, savedBook.copyInfo.a);
         var $ = cheerio.load(bookHtml);
         var lastUpdatedAt = new Date($($(".recommend h2 a")[0]).text().split("：")[1]);
         if (Math.abs(lastUpdatedAt.getTime() - new Date(savedBook.lastUpdatedAt).getTime()) > 10000) {
@@ -130,7 +129,7 @@ async function update_book(savedBook) {
             savedBook.set("publishStatus", branch.publishStatus[$(liItems[2]).text().slice(3)]);
 
             var newChapters = [];
-            var muluHtml = await httpGateway.htmlStartReq(branch.copyUrl + savedBook.copyInfo.m);
+            var muluHtml = await httpGateway.htmlStartReq(branch.copyUrl, savedBook.copyInfo.m);
             var $ = cheerio.load(muluHtml);
             var chapters = $("#chapterlist").children();
             for (var j = savedBook.chapterCount + 1; j < chapters.length; j++) {
