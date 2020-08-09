@@ -66,6 +66,8 @@ var Book = sequelize.define('book', {
         fields: ['title']
     }, {
         fields: ['writer']
+    }, {
+        fields: ['last_updated_at']
     }]
 });
 

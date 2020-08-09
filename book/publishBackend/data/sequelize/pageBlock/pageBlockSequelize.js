@@ -63,7 +63,8 @@ exports.findBlockBooks = function(blockId, limit, offset) {
             limit: limit || 100000,
             offset: offset || 0,
             order: [
-                ['orderIndex', 'DESC']
+                ['orderIndex', 'DESC'],
+                ['bookId', 'DESC']
             ],
             attributes: ["id"],
             include: [{

@@ -15,31 +15,17 @@ var BookChapter = sequelize.define('book_chapter', {
         unique: true,
         autoIncrement: true
     },
-    number: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-    },
-    title: {
-        type: Sequelize.TEXT,
-        allowNull: false
-    },
-    cover: Sequelize.TEXT, //竖向封面
-    price: {
-        type: Sequelize.DECIMAL(21, 2),
-        defaultValue: 0
-    }, //本章价格
-    contentFormat: {
-        type: Sequelize.ENUM("text", "picture"),
-        allowNull: false
-    },
-    contentText: Sequelize.TEXT,
-    contentFormatedText: Sequelize.TEXT,
-    contentPictures: Sequelize.JSONB,
-    wordsCount: {
+    number: Sequelize.INTEGER,
+    title: Sequelize.TEXT,
+    cover: Sequelize.TEXT,
+    type: Sequelize.INTEGER, //1："text",2:"picture"
+    txt: Sequelize.TEXT,
+    pics: Sequelize.JSONB, //图片地址数组
+    domain: Sequelize.TEXT, //来源域名
+    local: { //是否本地存储，0否，1本地OSS存储，2本地数据库存储；
         type: Sequelize.INTEGER,
         defaultValue: 0
-    }, //字数
-    sourceDomain: Sequelize.TEXT,
+    },
     bookId: {
         type: Sequelize.BIGINT,
         references: {
@@ -57,21 +43,17 @@ var BookChapter = sequelize.define('book_chapter', {
             deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
         },
         allowNull: false
-    },
-    statusId: {
-        type: Sequelize.INTEGER,
-        defaultValue: 1
     }
 }, {
     schema: __PGSQL__.schemas.book_publisher,
     tableName: 'book_chapter',
-    defaultScope: {
-        where: {
-            statusId: {
-                [Op.ne]: 0
-            }
-        }
-    }
+    timestamps: false,
+    underscored: true,
+    indexes: [{
+        fields: ['book_id']
+    }, {
+        fields: ['number']
+    }]
 });
 
 

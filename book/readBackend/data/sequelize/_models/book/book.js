@@ -19,49 +19,15 @@ var Book = sequelize.define('book', {
         type: Sequelize.TEXT,
         allowNull: false
     },
-    // subtitle: {
-    //     type: Sequelize.TEXT,
-    //     allowNull: false
-    // },
     sn: Sequelize.TEXT, //编码
-    keywords: Sequelize.TEXT,
+    // keywords: Sequelize.TEXT,
     writer: Sequelize.TEXT,
     cover: Sequelize.TEXT, //竖向封面
     horiCover: Sequelize.TEXT, //横向封面
     abstractContent: Sequelize.TEXT, //摘要
-    chapterCount: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0
-    }, //章节数
-    // lastChapterId: Sequelize.BIGINT, //最后一章Id
-    // lastChapterNumber: { //最后一章number
-    //     type: Sequelize.INTEGER,
-    //     defaultValue: 0
-    // },
-    recommend: {
-        type: Sequelize.INTEGER,
-        defaultValue: 99
-    }, //推荐指数
-    coinCount: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0
-    }, //已兑换金币数
-    readCount: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0
-    }, //阅读数
-    wordsCount: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0
-    }, //字数
-    bookPrice: {
-        type: Sequelize.DECIMAL(21, 2),
-        defaultValue: 0
-    }, //整本书价格
-    chapterPrice: {
-        type: Sequelize.DECIMAL(21, 2),
-        defaultValue: 0
-    }, //单章价格
+    chapterCount: Sequelize.INTEGER, //章节数
+    recommend: Sequelize.INTEGER, //推荐指数
+    readCount: Sequelize.INTEGER, //阅读数
     categoryId: { //主分类
         type: Sequelize.BIGINT,
         references: {
@@ -71,28 +37,15 @@ var Book = sequelize.define('book', {
         },
         allowNull: false
     },
-    freeChapters: {
+    bookType: { //1:"novel", 2:"cartoon", 3:"photo", 4:"video"
         type: Sequelize.INTEGER,
-        defaultValue: 2
-    },
-    bookType: {
-        type: Sequelize.ENUM("novel", "cartoon", "photo"),
-        allowNull: false
-    },
-    publishStatus: {
-        type: Sequelize.ENUM("serialize", "finish"),
         allowNull: false,
-        defaultValue: "serialize"
+        defaultValue: 1
     },
-    vipOnly: {
-        type: Sequelize.BOOLEAN,
-        allowNull: false
-    },
-    chargeType: {
-        type: Sequelize.ENUM("vip_free", "all_free", "none_free"),
-        allowNull: false,
-        defaultValue: "vip_free"
-    },
+    publishStatus: Sequelize.INTEGER, //1:"serialize", 2:"finish"
+    lastUpdatedAt: Sequelize.DATE, //最近更新时间
+    copyInfo: Sequelize.JSONB, //复制来源相关信息
+    originId: Sequelize.TEXT, //复制原始ID
     branchId: {
         type: Sequelize.BIGINT,
         references: {
@@ -101,24 +54,27 @@ var Book = sequelize.define('book', {
             deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
         },
         allowNull: false
-    },
-    statusId: {
-        type: Sequelize.INTEGER,
-        defaultValue: 1
     }
 }, {
     schema: __PGSQL__.schemas.book_publisher,
     tableName: 'book',
     timestamps: true,
     underscored: true,
-    defaultScope: {
-        where: {
-            statusId: {
-                [Op.ne]: 0
-            }
-        }
-    }
+    indexes: [{
+        fields: ['branch_id']
+    }, {
+        fields: ['title']
+    }, {
+        fields: ['writer']
+    }, {
+        fields: ['last_updated_at']
+    }]
 });
+
+Book.belongsTo(BookCategory, {
+    as: "category",
+    foreignKey: 'categoryId'
+})
 
 
 module.exports = Book;

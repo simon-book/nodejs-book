@@ -24,6 +24,7 @@ var PageBlock = sequelize.define('page_block', {
     //     img: "http://img.xjdcyw.com/img/5e7d5ac9fc31a30d57b92f2f.img_500_0.img",
     //     url: "https://m.hzjmmm.com/#/book/1388",
     // }]
+    moreLink: Sequelize.TEXT,
     orderIndex: {
         type: Sequelize.BIGINT,
         defaultValue: function() {
@@ -49,13 +50,16 @@ var PageBlock = sequelize.define('page_block', {
     tableName: 'page_block',
     timestamps: true,
     underscored: true,
-    defaultScope: {
-        where: {
-            statusId: {
-                [Op.ne]: 0
-            }
-        }
-    }
+    indexes: [{
+        fields: ['branch_id']
+    }],
+    // defaultScope: {
+    //     where: {
+    //         statusId: {
+    //             [Op.ne]: 0
+    //         }
+    //     }
+    // }
 });
 
 

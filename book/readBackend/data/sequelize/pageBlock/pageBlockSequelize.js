@@ -15,6 +15,7 @@ exports.findAll = function(where, offset, limit, order) {
             where: where,
             limit: limit || 10000,
             offset: offset || 0,
+            raw: true,
             order: order || [
                 ['orderIndex', 'ASC']
             ],
@@ -50,8 +51,9 @@ exports.findIndexBlocksBooks = function(blocks, offset, limit) {
                     include: [{
                         model: Book,
                         as: 'book',
+                        raw: true,
                         required: true,
-                        attributes: ["bookId", "title", "cover", "horiCover", "abstractContent", "chapterCount", "recommend", "readCount", "publishStatus", "chargeType", "updatedAt"]
+                        attributes: ["bookId", "title", "cover", "horiCover", "abstractContent", "chapterCount", "recommend", "readCount", "publishStatus", "lastUpdatedAt"]
                     }]
                 }));
             })
@@ -72,6 +74,7 @@ exports.findBlockBooks = function(blockId, offset, limit) {
             },
             limit: limit || 100000,
             offset: offset || 0,
+            raw: true,
             order: [
                 ['orderIndex', 'DESC']
             ],
@@ -80,7 +83,7 @@ exports.findBlockBooks = function(blockId, offset, limit) {
                 model: Book,
                 as: 'book',
                 required: true,
-                attributes: ["bookId", "title", "cover", "horiCover", "abstractContent", "chapterCount", "recommend", "readCount", "publishStatus", "chargeType", "updatedAt"]
+                attributes: ["bookId", "title", "cover", "horiCover", "abstractContent", "chapterCount", "recommend", "readCount", "publishStatus", "lastUpdatedAt"]
             }]
         }).then(function(results) {
             resolve(results);

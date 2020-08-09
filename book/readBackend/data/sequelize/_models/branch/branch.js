@@ -29,16 +29,18 @@ var Branch = sequelize.define('branch', {
     //     allowNull: false
     // },
     // email: Sequelize.TEXT,
-    ServicePhone: Sequelize.TEXT,
-    ServiceEmail: Sequelize.TEXT,
-    ServiceOnline: Sequelize.TEXT,
-    domainName: Sequelize.TEXT,
-    branchType: { //主master，副agency
-        type: Sequelize.TEXT,
-        allowNull: false,
-        defaultValue: "master"
-    },
-    masterBranchId: Sequelize.BIGINT,
+    // logo: Sequelize.TEXT,
+    // ServicePhone: Sequelize.TEXT,
+    // ServiceEmail: Sequelize.TEXT,
+    // ServiceOnline: Sequelize.TEXT,
+    // domainName: Sequelize.TEXT,
+    // branchType: { //主master，副agency
+    //     type: Sequelize.TEXT,
+    //     allowNull: false,
+    //     defaultValue: "master"
+    // },
+    // masterBranchId: Sequelize.BIGINT,
+    copySrc: Sequelize.TEXT,
     remark: Sequelize.TEXT,
     statusId: {
         type: Sequelize.INTEGER,
@@ -47,6 +49,11 @@ var Branch = sequelize.define('branch', {
 }, {
     schema: __PGSQL__.schemas.book_publisher,
     tableName: 'branch',
+    timestamps: true,
+    underscored: true,
+    indexes: [{
+        fields: ['name']
+    }],
     defaultScope: {
         where: {
             statusId: {

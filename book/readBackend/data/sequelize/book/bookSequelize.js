@@ -8,14 +8,10 @@ var Tag = require('../_models/book/tag.js')
 var BookCategory = require('../_models/book/bookCategory.js')
 var bookChapter = require('../_models/book/bookChapter.js')
 
-Book.belongsTo(BookCategory, {
-    as: "category",
-    foreignKey: 'categoryId'
-})
-
 exports.findByPk = function(id) {
     return new Promise(function(resolve, reject) {
         Book.findByPk(id, {
+            raw: true,
             attributes: {
                 exclude: ["coinCount", "branchId", "statusId", "createdAt", "updatedAt"]
             },
@@ -71,11 +67,12 @@ exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
                 where: where,
                 limit: limit || 10000,
                 offset: offset || 0,
+                raw: true,
                 order: order || [
                     ['bookId', 'DESC']
                 ],
                 transaction: t,
-                attributes: ["bookId", "title", "cover", "horiCover", "categoryId", "abstractContent", "chapterCount", "recommend", "readCount", "publishStatus", "chargeType", "updatedAt"],
+                attributes: ["bookId", "title", "cover", "horiCover", "categoryId", "abstractContent", "chapterCount", "recommend", "readCount", "publishStatus", "lastUpdatedAt"],
                 include: include
             }));
             return Promise.all(all);

@@ -34,7 +34,7 @@ var PageBlockBooks = sequelize.define('page_block_books', {
     orderIndex: {
         type: Sequelize.BIGINT,
         defaultValue: function() {
-            return new Date().getTime() + Math.ceil(Math.random() * 100000);
+            return new Date().getTime();
         }
     }
 }, {

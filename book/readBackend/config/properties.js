@@ -24,7 +24,7 @@ module.exports = function() {
             host: "localhost",
             user: "postgres",
             password: "58585858",
-            database: "book_platform",
+            database: "book",
             port: "5432",
             timezone: "Asia/Shanghai",
             schemas: {

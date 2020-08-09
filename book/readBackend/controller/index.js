@@ -1,17 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var userController = require('./user/userController.js');
 var homeController = require('./read/homeController.js');
 var bookController = require('./read/bookController.js');
 var readController = require('./read/readController.js');
-var chargeController = require('./read/chargeController.js');
-
-// router.get('/user/register', userController.register);
-// router.get('/user/login', userController.login);
-
-// router.use(userController.isLogin);
-// router.get('/user/logout', userController.logout);
-// router.get('/:branchId/user/info', userController.getUserInfo);
+// var chargeController = require('./read/chargeController.js');
 
 router.get('/:branchId/home/index', homeController.index);
 router.get('/:branchId/blockBooks', homeController.blockBooks);
@@ -26,7 +18,6 @@ router.get('/:branchId/book', bookController.listBook);
 router.get('/:branchId/book/:bookId/detail', readController.bookDeail);
 router.get('/:branchId/book/:bookId/chapters', readController.bookChapters);
 router.get('/:branchId/chapter/:chapterId/detail', readController.chapterDetail);
-
 
 // router.get('/:branchId/chargeItems', chargeController.listChargeItems);
 // router.get('/:branchId/user/chargePay', chargeController.chargePay);

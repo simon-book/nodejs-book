@@ -32,7 +32,7 @@ exports.index = async function(req, res) {
         });
         var list = await pageBlockSequelize.findIndexBlocksBooks(blocks);
         _.forEach(blocks, function(block, index) {
-            block = block.get();
+            // block = block.get();
             block.books = _.map(list[index], "book");
         })
         adminHttpResult.jsonSuccOut(req, res, blocks);
