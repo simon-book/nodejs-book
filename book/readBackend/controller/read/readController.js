@@ -25,7 +25,7 @@ exports.bookDeail = async function(req, res) {
         book.categoryName = book.category ? book.category.name : "";
         delete book.category;
         book.tags = _.map(book.tags, function(tag) {
-            tag = tag.get();
+            // tag = tag.get();
             delete tag.book_tags;
             return tag;
         })
@@ -75,11 +75,13 @@ exports.bookChapters = async function(req, res) {
 
 exports.chapterDetail = async function(req, res) {
     try {
-        var body = req.body;
+        var body = req.params;
         if (!body || !body.number || !body.bookId) {
             adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
             return;
         }
+        body.number = parseInt(body.number);
+        body.bookId = parseInt(body.bookId);
         var chapter = await bookChapterSequelize.findOne({
             number: body.number,
             bookId: body.bookId
@@ -139,7 +141,8 @@ async function checkSiblingsChapters(bookId, number) {
             },
             bookId: bookId
         });
-        _.forEach(chapters, async function(chapter) {
+        for (var i = 0; i < chapters.length; i++) {
+            var chapter = chapters[i];
             if (!chapter.local) {
                 {
                     var bookHtml = await httpGateway.htmlStartReq(chapter.domain + chapter.txt);
@@ -148,9 +151,7 @@ async function checkSiblingsChapters(bookId, number) {
                     });
                     $("#chaptercontent").children().last().remove();
                     var content = $("#chaptercontent").html();
-                    chpaterDetail.content = content;
-                    adminHttpResult.jsonSuccOut(req, res, chpaterDetail);
-                    var result = await MossClient.put("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number, content);
+                    var result = await MossClient.put("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number + ".txt", content);
                     if (result) {
                         chapter.set("local", 1);
                         chapter.set("txt", null);
@@ -159,7 +160,7 @@ async function checkSiblingsChapters(bookId, number) {
                     }
                 }
             }
-        })
+        }
     } catch (err) {
         console.log(err);
     }

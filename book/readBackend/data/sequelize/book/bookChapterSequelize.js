@@ -20,9 +20,6 @@ exports.findOne = function(where, order) {
     return new Promise(function(resolve, reject) {
         BookChapter.findOne({
             where: where,
-            attributes: {
-                exclude: ["contentText", "contentFormatedText", "contentPictures", "createdAt", "sourceDomain", "contentFormat", "branchId", "statusId"]
-            },
             order: order || [
                 ['number', 'desc']
             ]
@@ -43,10 +40,24 @@ exports.findAndCountAll = function(where, offset, limit, order) {
             raw: true,
             order: order || [
                 ['number', 'asc']
-            ],
-            attributes: {
-                exclude: ["contentText", "contentFormatedText", "contentPictures", "createdAt", "sourceDomain", "bookId", "branchId", "statusId"]
-            }
+            ]
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
+exports.findAll = function(where, offset, limit, order) {
+    return new Promise(function(resolve, reject) {
+        BookChapter.findAll({
+            where: where,
+            limit: limit || 10000,
+            offset: offset || 0,
+            order: order || [
+                ['number', 'asc']
+            ]
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {

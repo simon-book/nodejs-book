@@ -113,7 +113,7 @@ exports.listBook = async function(req, res) {
         var list = await bookSequelize.findAndCountAll(where, offset, pageSize, null, tagWhere);
         adminHttpResult.jsonSuccOut(req, res, {
             list: _.map(list[1], function(book) {
-                book = book.get();
+                // book = book.get();
                 book.categoryName = book.category ? book.category.name : "";
                 delete book.category;
                 book.tags = _.map(book.tags, function(tag) {

@@ -17,7 +17,7 @@ router.get('/:branchId/book', bookController.listBook);
 
 router.get('/:branchId/book/:bookId/detail', readController.bookDeail);
 router.get('/:branchId/book/:bookId/chapters', readController.bookChapters);
-router.get('/:branchId/chapter/:chapterId/detail', readController.chapterDetail);
+router.get('/:branchId/book/:bookId/chapterDetail/:number', readController.chapterDetail);
 
 // router.get('/:branchId/chargeItems', chargeController.listChargeItems);
 // router.get('/:branchId/user/chargePay', chargeController.chargePay);

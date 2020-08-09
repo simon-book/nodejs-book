@@ -11,18 +11,19 @@ var bookChapter = require('../_models/book/bookChapter.js')
 exports.findByPk = function(id) {
     return new Promise(function(resolve, reject) {
         Book.findByPk(id, {
-            raw: true,
             attributes: {
                 exclude: ["coinCount", "branchId", "statusId", "createdAt", "updatedAt"]
             },
             include: [{
                 model: Tag,
                 as: 'tags',
+                raw: true,
                 required: false,
                 attributes: ["tagId", "name"]
             }, {
                 model: BookCategory,
                 as: 'category',
+                raw: true,
                 required: false,
                 attributes: ["categoryId", "name"]
             }]
