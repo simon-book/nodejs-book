@@ -1,4 +1,10 @@
+// var Sequelize = require('sequelize');
+// var Op = Sequelize.Op;
+var _ = require('lodash');
+var moment = require('moment');
+
 exports.home = async function(req, res) {
+    var branchId = req.branchId;
     res.render('home', { title: "测试" });
 };
 

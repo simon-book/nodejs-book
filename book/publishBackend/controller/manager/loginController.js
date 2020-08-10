@@ -39,11 +39,11 @@ exports.login = async function(req, res) {
 }
 
 exports.isLogin = async function(req, res, next) {
-    // var manager = await managerSequelize.findOne();
+    var manager = await managerSequelize.findOne();
     // var manager = auth.getUser(req, res);
-    var manager = {
-        branchId: __HOSTMAP__[req.hostname]
-    }
+    // var manager = {
+    //     branchId: __HOSTMAP__[req.hostname]
+    // }
     if (manager) {
         req.currentUser = manager;
         next();
