@@ -24,6 +24,7 @@ const sequelize = new Sequelize(__PGSQL__.database, __PGSQL__.user, __PGSQL__.pa
         underscored: true,
         paranoid: false
     },
+    logging: null,
     timezone: '+08:00'
 });
 

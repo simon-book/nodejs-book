@@ -1,11 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var userController = require('./user/userController.js');
 var page = require('./page/index.js');
 
 router.use(function(req, res, next) {
     // req.currentUser = manager;
-    req.branchId = __HOSTMAP__[req.hostname];
+    req.branchInfo = __HOSTMAP__[req.hostname];
     next();
 });
 

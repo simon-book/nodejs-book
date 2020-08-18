@@ -37,6 +37,14 @@ module.exports = function() {
                 book_shower: 'book_shower',
             }
         };
+        global.__HOSTMAP__ = {
+            "localhost": {
+                branchId: 1,
+                title: "测试",
+                keywords: "闪舞小说网,35xs",
+                description: "闪舞小说网致力于打造小说最全，更新最快的在线小说阅读网。"
+            },
+        };
     } else if (environment == "test") {
 
     } else if (environment == "prod") {

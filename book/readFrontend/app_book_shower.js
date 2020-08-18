@@ -38,27 +38,16 @@ app.use(session({
         maxAge: 120 * 60 * 1000
     }
 }));
+app.use('*', function(req, res, next) {
+    console.log(req.baseUrl, req.method, req.body);
+    next();
+})
 
 app.use(__G__.CONTEXT + "/static", express.static(path.join(__dirname, '/static')));
 app.use(__G__.CONTEXT + "/html", express.static(path.join(__dirname, '/html')));
 
 app.use(__G__.CONTEXT || '/', require('./controller/pageRoutes.js'));
 
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
-    });
-}
-
-// production error handler
-// no stacktraces leaked to user
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
@@ -69,8 +58,3 @@ app.use(function(err, req, res, next) {
 app.listen(app.get('port'), function() {
     console.log('Express server listening on port ' + app.get('port'));
 });
-
-//conn.connect(function(err) {
-//    if (err) throw err;
-//    console.log("Connected!");
-//});

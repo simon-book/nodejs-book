@@ -37,6 +37,7 @@ var Book = sequelize.define('book', {
         },
         allowNull: false
     },
+    categoryName: Sequelize.TEXT, //分类名称
     bookType: { //1:"novel", 2:"cartoon", 3:"photo", 4:"video"
         type: Sequelize.INTEGER,
         allowNull: false,

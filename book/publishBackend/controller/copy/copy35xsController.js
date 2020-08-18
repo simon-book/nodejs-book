@@ -77,11 +77,9 @@ async function create_book(bookHref) {
         book.cover = branch.copyUrl + $("#thumb img").attr("src");
         var liItems = $("#book_detail").children();
         book.writer = $(liItems[0]).text().slice(3);
-        book.category = $(liItems[1]).find("a").text() || "未分类";
-        // book.categoryId = branch.category[book.category];
-        book.categoryId = branch.category[book.category][1];
+        book.categoryName = $(liItems[1]).find("a").text() || "未分类";
+        book.categoryId = branch.category[book.categoryName][1];
         book.publishStatus = branch.publishStatus[$(liItems[2]).text().slice(3)];
-        // book.lastUpdatedAt = $(liItems[3]).text().slice(3);
         book.lastUpdatedAt = new Date($($(".recommend h2 a")[0]).text().split("：")[1]);
         book.abstractContent = $("p.review").text();
         var sameBook = await bookSequelize.findOneBook({

@@ -14,7 +14,7 @@ exports.readerStartReq = function(branchId, action) {
             timeout: 30000
         });
         try {
-            server.request({});
+            server.request("");
             server.completed(function(result) {
                 if (result.rtnCode && result.rtnCode == 10000) {
                     resolve(result.data);

@@ -53,7 +53,7 @@ exports.findIndexBlocksBooks = function(blocks, offset, limit) {
                         as: 'book',
                         raw: true,
                         required: true,
-                        attributes: ["bookId", "title", "cover", "horiCover", "abstractContent", "chapterCount", "recommend", "readCount", "publishStatus", "lastUpdatedAt"]
+                        attributes: ["bookId", "title", "writer", "cover", "horiCover", "abstractContent", "chapterCount", "recommend", "readCount", "publishStatus", "lastUpdatedAt", "categoryId", "categoryName"]
                     }]
                 }));
             })
@@ -83,7 +83,7 @@ exports.findBlockBooks = function(blockId, offset, limit) {
                 as: 'book',
                 raw: true,
                 required: true,
-                attributes: ["bookId", "title", "cover", "horiCover", "abstractContent", "chapterCount", "recommend", "readCount", "publishStatus", "lastUpdatedAt"]
+                attributes: ["bookId", "title", "writer", "cover", "horiCover", "abstractContent", "chapterCount", "recommend", "readCount", "publishStatus", "lastUpdatedAt", "categoryId", "categoryName"]
             }]
         }).then(function(results) {
             resolve(results);

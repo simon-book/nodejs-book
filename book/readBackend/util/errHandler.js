@@ -1,18 +1,18 @@
-var logger = require("../log4js/logHelper.js").helper;
+// var logger = require("../log4js/logHelper.js").helper;
 
 function setDbError(err, sql, args) {
-    logger.writeErr(['mysql:' + sql, args, err ? (err.stack || err.message) : ""]);
-    console.error('mysql:' + sql, args, err ? (err.stack || err.message) : "");
+    // logger.writeErr(['mysql:' + sql, args, err ? (err.stack || err.message) : ""]);
+    console.error(err, sql, args);
 }
 
 function setHttpError(url, reqParams, err) {
-    logger.writeErr(['Http:' + url, "Body:" + JSON.stringify(reqParams), err ? (err.stack || err.message) : ""]);
-    console.error('Http:' + url, JSON.stringify(reqParams), err ? (err.stack || err.message) : "");
+    // logger.writeErr(['Http:' + url, "Body:" + JSON.stringify(reqParams), err ? (err.stack || err.message) : ""]);
+    console.error(url, reqParams, err);
 }
 
 function setError(args) {
-    logger.writeErr(['COMMON:' + JSON.stringify(args)]);
-    console.error('COMMON:' + JSON.stringify(args));
+    // logger.writeErr(['COMMON:' + JSON.stringify(args)]);
+    console.error(args);
 }
 
 exports.setDbError = setDbError;
