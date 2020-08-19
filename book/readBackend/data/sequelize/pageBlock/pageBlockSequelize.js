@@ -20,7 +20,7 @@ exports.findAll = function(where, offset, limit, order) {
                 ['orderIndex', 'ASC']
             ],
             attributes: {
-                exclude: ["statusId", "createdAt", "updatedAt"]
+                exclude: ["statusId", "createdAt", "updatedAt", "branchId", "orderIndex"]
             }
         }).then(function(results) {
             resolve(results);
@@ -44,7 +44,8 @@ exports.findIndexBlocksBooks = function(blocks, offset, limit) {
                     limit: limit || 10,
                     offset: offset || 0,
                     order: [
-                        ['orderIndex', 'DESC']
+                        ['orderIndex', 'DESC'],
+                        ['bookId', 'DESC']
                     ],
                     transaction: t,
                     attributes: ["id"],
@@ -75,7 +76,8 @@ exports.findBlockBooks = function(blockId, offset, limit) {
             limit: limit || 100000,
             offset: offset || 0,
             order: [
-                ['orderIndex', 'DESC']
+                ['orderIndex', 'DESC'],
+                ['bookId', 'DESC']
             ],
             attributes: ["id"],
             include: [{

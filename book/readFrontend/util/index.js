@@ -11,8 +11,17 @@ function prefixInteger(num, n) {
     return (Array(n).join(0) + num).slice(-n);
 }
 
+function generateReqQuery(queryObj) {
+    var queryArray = [];
+    for (var key in queryObj) {
+        if (queryObj[key]) queryArray.push(key + "=" + queryObj[key]);
+    }
+    return "?" + queryArray.join("&");
+}
+
 
 module.exports = {
     generateTokenSalt,
-    prefixInteger
+    prefixInteger,
+    generateReqQuery
 }

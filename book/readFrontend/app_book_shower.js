@@ -51,6 +51,9 @@ app.use(__G__.CONTEXT || '/', require('./controller/pageRoutes.js'));
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
+        title: "出错了",
+        keywords: "出错了",
+        description: "出错了",
         message: err.message,
         error: {}
     });

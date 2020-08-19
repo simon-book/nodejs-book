@@ -8,8 +8,10 @@ router.use(function(req, res, next) {
     next();
 });
 
-router.get('/home', page.home);
+router.get('/', page.home);
 router.get('/category', page.category);
+router.get('/category/:page', page.category);
+router.get('/category/:categoryId/:page', page.category);
 router.get('/quanben', page.quanben);
 router.get('/history', page.history);
 router.get('/book', page.book);
