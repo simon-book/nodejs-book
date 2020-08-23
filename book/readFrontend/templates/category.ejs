@@ -2,18 +2,7 @@
 <link rel="stylesheet" type="text/css" href="/static/src/css/common.css" />
 <link rel="stylesheet" type="text/css" href="/static/src/css/sort.css" />
 <%- include('common/pageHeader', {}); %>
-<nav class="sortChannel_nav">
-    <a href="/category/" class="sel">全部</a>
-    <a href="/category/1/">玄幻奇幻</a>
-    <a href="/category/2/">武侠仙侠</a>
-    <a href="/category/6/">科幻灵异</a>
-    <a href="/category/7/">历史军事</a>
-    <a href="/category/8/">都市言情</a>
-    <a href="/category/9/">现代言情</a>
-    <a href="/category/10/">校园言情</a>
-    <a href="/category/11/">古代言情</a>
-    <a href="/category/12/">女生频道</a>
-</nav>
+<%- include('common/categoryNav', {}); %>
 <div class="recommend">
     <% books.forEach(function(book){ %>
     <a class="hot_sale" href="/book/<%= book.bookId%>/">

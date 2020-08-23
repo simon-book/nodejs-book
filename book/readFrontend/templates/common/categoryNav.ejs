@@ -1,0 +1,7 @@
+<nav class="sortChannel_nav">
+    <a href="/category/" class="<%= !currentCategoryId?'sel':'' %>">全部</a>
+    <% categoryMap.forEach(function(category){ %>
+    <a href="/category/<%= category[1] %>/1" class="<%= currentCategoryId == category[1]?'sel':'' %>">
+        <%= category[0] %></a>
+    <% }); %>
+</nav>

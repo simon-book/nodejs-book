@@ -20,12 +20,6 @@ exports.findByPk = function(id) {
                 raw: true,
                 required: false,
                 attributes: ["tagId", "name"]
-            }, {
-                model: BookCategory,
-                as: 'category',
-                raw: true,
-                required: false,
-                attributes: ["categoryId", "name"]
             }]
         }).then(function(results) {
             resolve(results);

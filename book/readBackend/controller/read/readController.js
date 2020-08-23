@@ -22,17 +22,21 @@ exports.bookDeail = async function(req, res) {
         }
         var book = await bookSequelize.findByPk(bookId);
         book = book.get();
-        book.categoryName = book.category ? book.category.name : "";
+        // book.categoryName = book.category ? book.category.name : "";
         delete book.category;
         book.tags = _.map(book.tags, function(tag) {
             // tag = tag.get();
             delete tag.book_tags;
             return tag;
         })
-        var lastChapter = await bookChapterSequelize.findOne({});
+        var lastChapters = await bookChapterSequelize.findAll({
+            bookId: bookId
+        }, 0, 10, [
+            ["number", "desc"]
+        ]);
         adminHttpResult.jsonSuccOut(req, res, {
             book: book,
-            lastChapter: lastChapter ? lastChapter : null
+            lastChapters: lastChapters ? lastChapters : []
         });
     } catch (err) {
         errHandler.setHttpError(req.originalUrl, req.body, err);
@@ -50,6 +54,8 @@ exports.bookChapters = async function(req, res) {
             adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
             return;
         }
+        var book = await bookSequelize.findByPk(bookId);
+        book = book.get();
         body = req.query;
         var pageSize = body.pageSize || 20;
         var page = body.page || 1;
@@ -59,6 +65,7 @@ exports.bookChapters = async function(req, res) {
         }
         var list = await bookChapterSequelize.findAndCountAll(where, offset, pageSize);
         adminHttpResult.jsonSuccOut(req, res, {
+            book: book,
             list: list.rows,
             pagination: {
                 totalNum: list.count,
@@ -80,12 +87,17 @@ exports.chapterDetail = async function(req, res) {
             adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
             return;
         }
+
         body.number = parseInt(body.number);
         body.bookId = parseInt(body.bookId);
         var chapter = await bookChapterSequelize.findOne({
             number: body.number,
             bookId: body.bookId
         });
+        if (!chapter) {
+            adminHttpResult.jsonSuccOut(req, res, null);
+            return;
+        }
         var chpaterDetail = {
             chapterId: chapter.chapterId,
             number: chapter.number,

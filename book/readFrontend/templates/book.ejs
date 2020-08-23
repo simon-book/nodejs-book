@@ -6,38 +6,42 @@
     <div class="synopsisArea_detail">
         <div class="hot_sale">
             <div class="bookimg">
-                <img class="lazy" data-original="https://www.35xs.co/data/noimg.jpg" src="//files.35xs.co/m/images/defaultimg.png">
+                <img src="<%= book.cover%>">
             </div>
             <div class="bookinfo">
-                <p class="author">作者：过tt万</p>
-                <p class="author">类别：武侠仙侠</p>
-                <p class="author">状态：连载</p>
-                <p class="author">更新：2020-06-12 06:00:00</p>
+                <p class="author">作者：
+                    <%= book.writer%>
+                </p>
+                <p class="author">类别：
+                    <%= book.categoryName%>
+                </p>
+                <p class="author">状态：
+                    <%= book.publishStatus == 1?'连载':'完成'%>
+                </p>
+                <p class="author">更新：
+                    <%= book.lastUpdatedAt%>
+                </p>
             </div>
         </div>
     </div>
     <p class="btn">
-        <a href="/book/404406/mulu/">开始阅读</a>
-        <a href="javascript:BookMark(404406,0);" class="btn_toBookShelf">加入书架</a>
+        <a href="/book/<%= book.bookId%>/mulu">开始阅读</a>
+        <a href="javascript:BookMark(<%= book.bookId%>,0);" class="btn_toBookShelf">加入书架</a>
         <a href="/user/" class="btn_toMyBook">我的书架</a>
     </p>
-    <p class="review">简介：遇到一个只会嘤嘤嘤的蠢萌戏精系统怎么办？在线等……挺急的！系统不仅绑定错了人，还让自己穿越成了死人！不过……这个死人挺强的！勉强可以接受吧！陈翔很无奈的从秽土转生的棺材里面走出来！“那么，从此刻开始，我是千手柱间！”——关键词：【火影】【木叶】【爽文】【无女主】【无敌流】这是天风的第三本火影同人，品质保证。</p>
+    <p class="review">简介：
+        <%= book.abstractContent%>
+    </p>
 </div>
 <div class="recommend">
-    <h2><a>最新章节 &nbsp;&nbsp;&nbsp;&nbsp;更新：2020-6-3 22:28:08</a></h2>
+    <h2><a>最新章节</a></h2>
     <div id="chapterlist" class="directoryArea">
-        <p><a style="" href="/book/404406/116902346.html">第1443章 连死都不怕的人，还会怕什么…</a></p>
-        <p><a style="" href="/book/404406/116902345.html">第1442章 你做了什么！</a></p>
-        <p><a style="" href="/book/404406/116884384.html">第1441章 陷入了梦魇</a></p>
-        <p><a style="" href="/book/404406/116884383.html">第1440章 心被打乱</a></p>
-        <p><a style="" href="/book/404406/116884382.html">第1439章 该不该放开它们</a></p>
-        <p><a style="" href="/book/404406/116884381.html">第1438章 不放心</a></p>
-        <p><a style="" href="/book/404406/116789781.html">第1437章 找她</a></p>
-        <p><a style="" href="/book/404406/116789780.html">第1436章 帝聿的软肋</a></p>
-        <p><a style="" href="/book/404406/116782909.html">第1435章 一口黑色的血吐出</a></p>
-        <p><a style="" href="/book/404406/116707956.html">第1434章 飞天舞再现</a></p>
+        <% lastChapters.forEach(function(chapter){ %>
+        <p><a href="/book/<%= chapter.bookId%>/<%= chapter.number%>.html">
+                <%= chapter.title%></a></p>
+        <% }); %>
     </div>
-    <h2><a href="/book/404406/mulu/">查看完整目录</a></h2>
+    <h2 class="block-nav"><a href="/book/<%= book.bookId%>/mulu">查看完整目录</a></h2>
 </div>
 <%- include('common/footer', {}); %>
 <%- include('common/bottom', {}); %>

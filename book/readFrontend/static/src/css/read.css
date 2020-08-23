@@ -95,3 +95,12 @@ body.fontMiddle #chaptercontent p {
 body.fontSmall #chaptercontent p {
     font-size: 14px !important;
 }
+
+.add-book-label {
+    width: 100%;
+    text-align: center;
+}
+
+.add-book-label a {
+    color: red;
+}
