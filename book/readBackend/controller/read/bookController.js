@@ -92,12 +92,8 @@ exports.listBook = async function(req, res) {
         if (body.bookType) where.bookType = body.bookType;
         if (body.publishStatus) where.publishStatus = body.publishStatus;
         if (body.chargeType) where.chargeType = body.chargeType;
-        if (body.searchContent) where[[Op.or]] = [{
+        if (body.searchContent) where[Op.or] = [{
             title: {
-                [Op.like]: '%' + body.searchContent + '%'
-            }
-        }, {
-            keywords: {
                 [Op.like]: '%' + body.searchContent + '%'
             }
         }, {
@@ -114,8 +110,8 @@ exports.listBook = async function(req, res) {
         adminHttpResult.jsonSuccOut(req, res, {
             list: _.map(list[1], function(book) {
                 // book = book.get();
-                book.categoryName = book.category ? book.category.name : "";
-                delete book.category;
+                // book.categoryName = book.category ? book.category.name : "";
+                // delete book.category;
                 book.tags = _.map(book.tags, function(tag) {
                     tag = tag.get();
                     delete tag.book_tags;

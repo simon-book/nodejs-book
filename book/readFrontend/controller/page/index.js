@@ -37,7 +37,6 @@ exports.category = async function(req, res) {
             query.page = parseInt(req.params.page);
         }
         var result = await httpGateway.readerStartReq(branchInfo.branchId, "book" + util.generateReqQuery(query));
-        var books = result.list;
         var currentPage = parseInt(result.pagination.page);
         var totalPage = Math.ceil(result.pagination.totalNum / result.pagination.pageSize);
         var prevPage = currentPage > 1 ? currentPage - 1 : 0;
@@ -61,7 +60,7 @@ exports.category = async function(req, res) {
             pagination: {
                 currentPage: currentPage,
                 totalPage: totalPage,
-                href: href,
+                href: href + "/",
                 prevPage: prevPage ? href + "/" + prevPage : null,
                 nextPage: nextPage ? href + "/" + nextPage : null
             }
@@ -131,7 +130,7 @@ exports.mulu = async function(req, res) {
             pagination: {
                 currentPage: currentPage,
                 totalPage: totalPage,
-                href: href,
+                href: href + "/",
                 prevPage: prevPage ? href + "/" + prevPage : null,
                 nextPage: nextPage ? href + "/" + nextPage : null
             }
@@ -169,7 +168,52 @@ exports.chapter = async function(req, res) {
 };
 
 exports.search = async function(req, res) {
-    res.render('search', {
-        title: "测试"
-    });
+    try {
+        var branchInfo = req.branchInfo;
+        if (!req.query.keyword) {
+            res.render('search', {
+                title: "搜索  输入书名•作者  小说 " + branchInfo.title,
+                keywords: "",
+                description: "",
+                pageTitle: "搜索  输入书名•作者  小说",
+                books: [],
+                errorMsg: "指定关键字没有匹配到任何内容！",
+                pagination: null
+            });
+            return;
+        }
+        var href = "/search";
+        var query = {};
+        query.searchContent = encodeURIComponent(req.query.keyword);
+        href += "?searchContent=" + req.query.keyword;
+        if (req.query.page) {
+            query.page = parseInt(req.query.page);
+        }
+        var result = await httpGateway.readerStartReq(branchInfo.branchId, "book" + util.generateReqQuery(query));
+        var currentPage = parseInt(result.pagination.page);
+        var totalPage = Math.ceil(result.pagination.totalNum / result.pagination.pageSize);
+        var prevPage = currentPage > 1 ? currentPage - 1 : 0;
+        var nextPage = currentPage < totalPage ? currentPage + 1 : 0;
+        res.render('search', {
+            title: "搜索 " + req.query.keyword + " " + branchInfo.title,
+            keywords: "",
+            description: "",
+            pageTitle: "搜索 " + req.query.keyword,
+            books: result.list,
+            errorMsg: result.list.length ? null : "指定关键字没有匹配到任何内容！",
+            pagination: result.list.length ? {
+                currentPage: currentPage,
+                totalPage: totalPage,
+                href: href + "&page=",
+                prevPage: prevPage ? href + "&page=" + prevPage : null,
+                nextPage: nextPage ? href + "&page=" + nextPage : null
+            } : null
+        });
+    } catch (err) {
+        console.log(err);
+        res.render('error', {
+            message: "请求错误！",
+            error: err ? JSON.stringify(err) : ""
+        });
+    }
 };

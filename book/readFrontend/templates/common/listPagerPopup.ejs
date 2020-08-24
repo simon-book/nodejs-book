@@ -1,3 +1,4 @@
+<%  if(pagination && pagination.totalPage && pagination.totalPage>1){ %>
 <div class="page">
     <%  if(pagination.prevPage){ %>
     <a href="<%= pagination.prevPage %>">上一页</a>
@@ -7,7 +8,7 @@
     <select class="pageSelecter" onchange="self.location.href=options[selectedIndex].value">
         <% var i = 1; while(i<=pagination.totalPage){ %>
         <option <%=pagination.currentPage==i?'selected':'' %> value="
-            <%= pagination.href + '/' + i %>">第
+            <%= pagination.href + i %>">第
             <%= i %>页</option>
         <% i++ } %>
     </select>
@@ -17,3 +18,4 @@
     <a class="disabled" href="javascript:void(0);">下一页</a>
     <% } %>
 </div>
+<% } %>

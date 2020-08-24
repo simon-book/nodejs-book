@@ -308,3 +308,9 @@ footer .channel a {
     outline: none;
     background-color: #fff;
 }
+
+.errorMsg {
+    margin: 0 10px;
+    font-size: 14px;
+    color: red;
+}

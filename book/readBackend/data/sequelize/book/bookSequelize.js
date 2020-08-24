@@ -30,12 +30,13 @@ exports.findByPk = function(id) {
 }
 
 exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
-    var include = [{
-        model: BookCategory,
-        as: 'category',
-        required: false,
-        attributes: ["categoryId", "name"]
-    }]
+    // var include = [{
+    //     model: BookCategory,
+    //     as: 'category',
+    //     required: false,
+    //     attributes: ["categoryId", "name"]
+    // }]
+    var include = [];
     if (tagWhere) include.push({
         model: Tag,
         as: 'tags',
@@ -67,7 +68,7 @@ exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
                     ['bookId', 'DESC']
                 ],
                 transaction: t,
-                attributes: ["bookId", "title", "cover", "horiCover", "categoryId", "abstractContent", "chapterCount", "recommend", "readCount", "publishStatus", "lastUpdatedAt"],
+                attributes: ["bookId", "title", "cover", "horiCover", "writer", "categoryId", "categoryName", "abstractContent", "chapterCount", "recommend", "readCount", "publishStatus", "lastUpdatedAt"],
                 include: include
             }));
             return Promise.all(all);
