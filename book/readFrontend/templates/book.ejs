@@ -1,47 +1,48 @@
 <%- include('common/top', {}); %>
 <link rel="stylesheet" href="/static/src/css/common.css" />
-<link rel="stylesheet" href="/static/src/css/bookinfo.css" />
 <%- include('common/pageHeader', {}); %>
-<div class="synopsisArea">
-    <div class="synopsisArea_detail">
-        <div class="hot_sale">
-            <div class="bookimg">
-                <img src="<%= book.cover%>">
-            </div>
-            <div class="bookinfo">
-                <p class="author">作者：
-                    <%= book.writer%>
-                </p>
-                <p class="author">类别：
-                    <%= book.categoryName%>
-                </p>
-                <p class="author">状态：
-                    <%= book.publishStatus == 1?'连载':'完成'%>
-                </p>
-                <p class="author">更新：
-                    <%= book.lastUpdatedAt%>
-                </p>
-            </div>
+<div class="">
+    <div class="hot_sale">
+        <div class="bookimg">
+            <img src="<%= book.cover%>">
+        </div>
+        <div class="bookinfo">
+            <p class="author">作者：
+                <%= book.writer%>
+            </p>
+            <p class="author">类别：
+                <%= book.categoryName%>
+            </p>
+            <p class="author">状态：
+                <%= book.publishStatus == 1?'连载中':'完成'%>
+            </p>
+            <p class="author">更新：
+                <%= book.lastUpdatedAt%>
+            </p>
         </div>
     </div>
-    <p class="btn">
-        <a href="/book/<%= book.bookId%>/mulu">开始阅读</a>
-        <a href="javascript:BookMark(<%= book.bookId%>,0);" class="btn_toBookShelf">加入书架</a>
-        <a href="/user/" class="btn_toMyBook">我的书架</a>
+    <div class="synopsisArea">
+        <a href="/book/<%= book.bookId%>/1">开始阅读</a>
+        <a href="/book/<%= book.bookId%>/mulu" class="btn_toBookShelf">完整目录</a>
+        <a href="/" class="btn_toMyBook">TXT下载</a>
+    </div>
+    <% if(book.abstractContent.replace(/\s/g,"")){ %>
+    <p class="book_detail_review">
+        <%= '简介：'+book.abstractContent%>
     </p>
-    <p class="review">简介：
-        <%= book.abstractContent%>
-    </p>
+    <% } %>
 </div>
 <div class="recommend">
-    <h2><a>最新章节</a></h2>
+    <div class="tab-nav">
+        <a class="tab-nav-cur">最新章节</a>
+    </div>
     <div id="chapterlist" class="directoryArea">
         <% lastChapters.forEach(function(chapter){ %>
-        <p><a href="/book/<%= chapter.bookId%>/<%= chapter.number%>.html">
-                <%= chapter.title%></a></p>
+        <a class="chapter" href="/book/<%= chapter.bookId%>/<%= chapter.number%>">
+            <%= chapter.title%></a>
         <% }); %>
     </div>
-    <h2 class="block-nav"><a href="/book/<%= book.bookId%>/mulu">查看完整目录</a></h2>
+    <!-- <h2 class="block-nav"><a href="/book/<%= book.bookId%>/mulu">查看完整目录</a></h2> -->
 </div>
 <%- include('common/footer', {}); %>
 <%- include('common/bottom', {}); %>

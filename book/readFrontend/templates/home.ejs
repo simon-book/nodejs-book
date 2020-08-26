@@ -1,6 +1,5 @@
 <%- include('common/top', {}); %>
 <link rel="stylesheet" type="text/css" href="/static/src/css/common.css" />
-<link rel="stylesheet" type="text/css" href="/static/src/css/index.css" />
 <%- include('common/mainHeader', {}); %>
 <nav class="smallNav">
     <a href="/home" class="sel">龙虎榜</a>
@@ -15,28 +14,24 @@
             <%= firstBlock.name%></a>
     </div>
     <div class="slide">
-        <div class="slide-con4">
-            <div class="slide-item">
-                <% firstBlock.books.forEach(function(book){ %>
-                <a class="hot_sale" href="/book/<%= book.bookId%>/">
-                    <div class="bookimg">
-                        <img src="<%= book.cover%>">
-                    </div>
-                    <div class="bookinfo">
-                        <p class="title">
-                            <%= book.title%>
-                        </p>
-                        <p class="author">作者：
-                            <%= book.writer%>
-                        </p>
-                        <p class="review">简介：
-                            <%= book.abstractContent%>
-                        </p>
-                    </div>
-                </a>
-                <% }); %>
+        <% firstBlock.books.forEach(function(book){ %>
+        <a class="hot_sale" href="/book/<%= book.bookId%>/">
+            <div class="bookimg">
+                <img src="<%= book.cover%>">
             </div>
-        </div>
+            <div class="bookinfo">
+                <p class="title">
+                    <%= book.title%>
+                </p>
+                <p class="author">作者：
+                    <%= book.writer%>
+                </p>
+                <p class="review">
+                    <%= book.abstractContent?'简介：'+book.abstractContent:''%>
+                </p>
+            </div>
+        </a>
+        <% }); %>
     </div>
 </div>
 <% otherBlocks.forEach(function(block){ %>
@@ -46,21 +41,16 @@
                 <%= block.name%></a></h2>
     </div>
     <div class="slide">
-        <div class="slide-con4">
-            <div class="slide-item">
-                <% block.books.forEach(function(book){ %>
-                <a href="/book/<%= book.bookId%>/">
-                    <p>
-                        <span class="sort">[
-                            <%= book.categoryName%>]</span>
-                        <span class="title">
-                            <%= book.title%> /<small>
-                                <%= book.writer%></small></span>
-                    </p>
-                </a>
-                <% }); %>
-            </div>
-        </div>
+        <% block.books.forEach(function(book){ %>
+        <a class="common_sale" href="/book/
+            <%= book.bookId%>/">
+            <span class="sort">
+                <%= '['+book.categoryName+']'%></span>
+            <span class="title">
+                <%= book.title%></span> /<span class="writer">
+                <%= book.writer%></span>
+        </a>
+        <% }); %>
     </div>
 </div>
 <% }); %>

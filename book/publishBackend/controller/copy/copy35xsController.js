@@ -81,7 +81,7 @@ async function create_book(bookHref) {
         book.categoryId = branch.category[book.categoryName][1];
         book.publishStatus = branch.publishStatus[$(liItems[2]).text().slice(3)];
         book.lastUpdatedAt = new Date($($(".recommend h2 a")[0]).text().split("：")[1]);
-        book.abstractContent = $("p.review").text();
+        book.abstractContent = $("p.review").text().replace(/\s/g, "");
         var sameBook = await bookSequelize.findOneBook({
             title: book.title,
             writer: book.writer

@@ -81,9 +81,13 @@ exports.quanben = async function(req, res) {
 };
 
 exports.history = async function(req, res) {
+    var branchInfo = req.branchInfo;
     res.render('history', {
-        title: "测试"
-    });
+        title: "阅读记录 " + branchInfo.title,
+        keywords: "",
+        description: "",
+        pageTitle: "阅读记录"
+    })
 };
 
 exports.book = async function(req, res) {
