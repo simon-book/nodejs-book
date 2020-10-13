@@ -1,8 +1,7 @@
 <%- include('common/top', {}); %>
-<link rel="stylesheet" type="text/css" href="/static/src/css/common.css" />
 <%- include('common/pageHeader', {}); %>
-<%- include('common/searchForm', {}); %>
 <%- include('common/categoryNav', {}); %>
+<%- include('common/searchForm', {}); %>
 <div class="recommend">
     <% books.forEach(function(book){ %>
     <a class="common_sale" href="/book/<%= book.bookId%>/">

@@ -1,7 +1,9 @@
 <nav class="sortChannel_nav">
-    <a href="/category/" class="<%= !currentCategoryId?'sel':'' %>">全部</a>
-    <% categoryMap.forEach(function(category){ %>
-    <a href="/category/<%= category[1] %>/1" class="<%= currentCategoryId == category[1]?'sel':'' %>">
-        <%= category[0] %></a>
-    <% }); %>
+    <ul>
+        <li><a href="/category/" class="<%= !currentCategoryId?'sel':'' %>">&nbsp;全&nbsp;&nbsp;部&nbsp;</a></li>
+        <% categoryMap.forEach(function(category){ %>
+        <li><a href="/category/<%= category[1] %>/1" class="<%= currentCategoryId == category[1]?'sel':'' %>">
+                <%= category[0] %></a></li>
+        <% }); %>
+    </ul>
 </nav>

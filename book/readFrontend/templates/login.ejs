@@ -1,5 +1,4 @@
 <%- include('common/top', {}); %>
-<link rel="stylesheet" type="text/css" href="/static/src/css/common.css" />
 <link rel="stylesheet" type="text/css" href="/static/src/css/login.css" />
 <%- include('common/pageHeader', {}); %>
 <div class="login_box">
@@ -13,7 +12,7 @@
             <input type="text" class="name login_psw" name="password" placeholder="请输入密码">
         </div>
         <div class="submit_btn">
-            <input type="button" class="reg_bto login_in register_in" value="立即登录">
+            <input type="button" class="reg_bto login_in register_in" onclick="login()" value="立即登录">
         </div>
         <!-- <input name="__RequestVerificationToken" type="hidden" value="Nc76lIvSh47SCFmTLE6dwYRgrtmRSIi7IGdhWjwKMaSZOSpEP-sjJtn1_hQ3Gic7zGPkhEck7Ziz3vmZUwGUpDwZbfbmPzAgpNxhu0NzpOs1" /> -->
     </form>

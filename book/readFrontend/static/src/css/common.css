@@ -37,7 +37,7 @@ footer {
     padding: 15px 10px;
     text-align: center;
     line-height: 33px;
-    background: #68aac2;
+    background: #efefef;
     position: relative;
     font-size: 14px;
 }
@@ -50,8 +50,8 @@ footer .backTop img {
 }
 footer .channel a {
     margin: 0 5px;
-    color: #c5d7df;
-    text-shadow: 1px 1px #3e86a8;
+    color: #68aac2;
+    /*text-shadow: 1px 1px #3e86a8;*/
 }
 
 header {
@@ -128,9 +128,7 @@ header span.logo {
     font-size: 16px;
     color: #fff;
     background-color: #68aac2;
-    border-top: 1px #8ec5d9 solid;
     overflow: hidden;
-    padding: 0;
 }
 .channelHeader .iconback {
     float: left;
@@ -138,21 +136,9 @@ header span.logo {
 .channelHeader .iconhome {
     float: right;
 }
-.channelHeader .iconback, .channelHeader .iconhome {
-    margin-top: 3px;
-    font-size: 12px;
-    text-align: center;
-    color: #fff;
-    line-height: 40px;
-    width: 40px;
-    height: 40px;
-}
 .channelHeader .iconback img, .channelHeader .iconhome img {
-    width: 40px;
-    height: 40px;
-    font-size: 12px;
-    text-align: center;
-    line-height: 40px;
+    height: 20px;
+    margin: 13px 8px;
 }
 
 /*搜索框*/
@@ -246,18 +232,26 @@ header span.logo {
 /*分类项*/
 .sortChannel_nav {
     overflow: hidden;
-    margin: 10px 0;
+    margin: 10px 4px;
 }
-.sortChannel_nav a {
-    display: block;
+.sortChannel_nav li {
+    list-style: none;
     float: left;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    border: 1px #d6d6d6 solid;
+    /*height: 40px;*/
+    /*line-height: 40px;*/
     background: #fff;
     width: 25%;
     box-sizing: border-box;
+    padding: 4px;
+}
+.sortChannel_nav a {
+    display: block;
+    text-align: center;
+    border: 1px #d6d6d6 solid;
+    height: 28px;
+    line-height: 28px;
+    border-radius: 1px;
+    background: #efefef;
 }
 .sortChannel_nav a.sel {
     background: #4baacd;
@@ -334,7 +328,7 @@ header span.logo {
     text-align: center;
     font-size: 16px;
     border-radius: 5px;
-    margin: 0 3px;
+    /*margin: 0 3px;*/
 }
 .synopsisArea .btn_toBookShelf {
     background: #f0962a;

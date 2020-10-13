@@ -10,6 +10,8 @@ router.use(function(req, res, next) {
 });
 
 router.get('/', page.home);
+router.get('/login', page.login);
+router.get('/register', page.register);
 router.get('/category', page.category);
 router.get('/category/:page', page.category);
 router.get('/category/:categoryId/:page', page.category);
@@ -23,5 +25,8 @@ router.get('/book/:bookId/mulu/:page', page.mulu);
 router.get('/book/:bookId/:number', page.chapter);
 
 router.get('/search', page.search);
+
+router.post('/login', page.login);
+router.post('/register', page.register);
 
 module.exports = router;

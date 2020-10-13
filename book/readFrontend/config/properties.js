@@ -28,16 +28,20 @@ module.exports = function() {
             host: "localhost",
             user: "postgres",
             password: "58585858",
-            database: "book_platform",
+            database: "book",
             port: "5432",
             timezone: "Asia/Shanghai",
             schemas: {
-                book_publisher: 'book_publisher',
-                book_reader: 'book_reader',
-                book_shower: 'book_shower',
+                book_publisher: 'book_publisher'
             }
         };
-
+        global.__MOSS__ = {
+            endPoint: "127.0.0.1",
+            port: 9000,
+            useSSL: false,
+            accessKey: "minioadmin",
+            secretKey: "minioadmin"
+        };
     } else if (environment == "test") {
 
     } else if (environment == "prod") {

@@ -3,11 +3,36 @@ var moment = require('moment');
 var util = require("../../util/index.js");
 var branchMap = require('../common/branchMap.js');
 var httpGateway = require("../../data/http/httpGateway.js");
+var homeController = require("../read/homeController.js");
+var bookController = require("../read/bookController.js");
+var readController = require("../read/readController.js");
+var chargeController = require("../read/chargeController.js");
+
+exports.login = async function(req, res) {
+    var branchInfo = req.branchInfo;
+    res.render('login', {
+        title: "登录 " + branchInfo.title,
+        keywords: "",
+        description: "",
+        pageTitle: "登录"
+    })
+};
+
+exports.register = async function(req, res) {
+    var branchInfo = req.branchInfo;
+    res.render('register', {
+        title: "注册 " + branchInfo.title,
+        keywords: "",
+        description: "",
+        pageTitle: "注册"
+    })
+};
 
 exports.home = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
-        var blocks = await httpGateway.readerStartReq(branchInfo.branchId, "home/index");
+        // var blocks = await httpGateway.readerStartReq(branchInfo.branchId, "home/index");
+        var blocks = await homeController.index(branchInfo.branchId);
         res.render('home', {
             title: "首页 " + branchInfo.title,
             keywords: branchInfo.keywords,
@@ -28,7 +53,9 @@ exports.category = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
         var href = "/category";
-        var query = {};
+        var query = {
+            branchId: branchInfo.branchId
+        };
         if (req.params.categoryId) {
             query.categoryId = parseInt(req.params.categoryId);
             href += "/" + req.params.categoryId;
@@ -36,7 +63,8 @@ exports.category = async function(req, res) {
         if (req.params.page) {
             query.page = parseInt(req.params.page);
         }
-        var result = await httpGateway.readerStartReq(branchInfo.branchId, "book" + util.generateReqQuery(query));
+        // var result = await httpGateway.readerStartReq(branchInfo.branchId, "book" + util.generateReqQuery(query));
+        var result = await bookController.listBook(query);
         var currentPage = parseInt(result.pagination.page);
         var totalPage = Math.ceil(result.pagination.totalNum / result.pagination.pageSize);
         var prevPage = currentPage > 1 ? currentPage - 1 : 0;
