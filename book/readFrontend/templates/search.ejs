@@ -1,27 +1,16 @@
 <%- include('common/top', {}); %>
 <%- include('common/pageHeader', {}); %>
-<%- include('common/searchForm', {}); %>
-<div class="historyArea">
+<div class="searchArea">
+    <h2 class="areaTitle">搜索<font color="red">
+            <%= keyword%>
+        </font>结果</h2>
     <% books.forEach(function(book, i){ %>
-    <div class="historyItem">
-        <span class="num">
-            <%= i+1 %></span>
-        <div class="info">
-            <div class="title">
-                <a href="/book/<%= book.bookId%>/">
-                    <%= book.title %></a>
-            </div>
-            <div class="otherInfo">
-                <p>
-                    <%= book.categoryName %> &nbsp;|&nbsp; 作者:
-                    <%= book.writer %> &nbsp;|&nbsp;
-                    <%= book.publishStatus == 1?'连载':'完成'%>
-                </p>
-                <p>
-                    最近更新：<a href="/book/<%= book.bookId%>/<%= book.chapterCount%>" target="_blank">第一章:谁敢动我妹!</a></p>
-            </div>
-        </div>
-    </div>
+    <a class="common_sale" href="/book/
+            <%= book.bookId%>/">
+        <span class="title">
+            <%= book.title%></span>（<span class="writer">
+            <%= book.writer%></span>）
+    </a>
     <% }); %>
 </div>
 <% if(errorMsg){ %>
@@ -30,5 +19,6 @@
 </h2>
 <% } %>
 <%- include('common/listPagerPopup', {}); %>
+<%- include('common/searchForm', {}); %>
 <%- include('common/footer', {}); %>
 <%- include('common/bottom', {}); %>

@@ -104,7 +104,7 @@ header span.logo {
 .tab-nav {
     font-size: 16px;
     background: #68aac2;
-    padding: 0 0 0 15px;
+    padding: 0 0 0 10px;
     color: #fff;
     height: 40px;
     line-height: 40px;
@@ -117,7 +117,15 @@ header span.logo {
 .tab-nav .tab-nav-more {
     float: right;
     margin-right: 10px;
-    /*color: red;*/
+}
+.rankArea .tab-nav {
+    font-size: 16px;
+    background: #F6F6F6;
+    border-top: 1px solid #D7D7D7;
+    border-bottom: 1px solid #D7D7D7;
+}
+.rankArea .tab-nav a {
+    color: #666;
 }
 
 /*子页面头部*/
@@ -222,11 +230,32 @@ header span.logo {
 }
 .common_sale {
     display: block;
-    font-size: 16px;
-    padding: 8px 10px;
+    font-size: 14px;
+    padding: 10px 0px;
+    margin: 0 10px;
+    overflow: hidden;
+}
+.common_sale .num {
+    display: inline-block;
+    background: #B0B0B0;
+    color: #eee;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    line-height: 20px;
+    border-radius: 50%;
+}
+.common_sale .num.top {
+    background: #FA744E;
 }
 .common_sale .sort, .common_sale .writer {
     color: #777;
+}
+.rankArea .common_sale {
+    border-bottom: 1px dashed #CCC;
+}
+.rankArea .common_sale .writer {
+    float: right;
 }
 
 /*分类项*/
@@ -237,8 +266,6 @@ header span.logo {
 .sortChannel_nav li {
     list-style: none;
     float: left;
-    /*height: 40px;*/
-    /*line-height: 40px;*/
     background: #fff;
     width: 25%;
     box-sizing: border-box;
@@ -253,21 +280,73 @@ header span.logo {
     border-radius: 1px;
     background: #efefef;
 }
+/*不带边框样式*/
+/*.sortChannel_nav li {
+    list-style: none;
+    float: left;
+    margin: 2px;
+}
+.sortChannel_nav a {
+    display: block;
+    text-align: center;
+    border-radius: 3px;
+    padding: 6px;
+}*/
 .sortChannel_nav a.sel {
     background: #4baacd;
     color: #fff;
 }
+.areaTitle {
+    font-weight: 500;
+    line-height: 40px;
+    font-size: 16px;
+    background: #F6F6F6;
+    border-top: 1px solid #D7D7D7;
+    border-bottom: 1px solid #D7D7D7;
+    padding: 0 10px;
+    overflow: hidden;
+}
+.areaTitle .itemDel {
+    color: red;
+    float: right;
+}
+.searchArea .common_sale {
+    border-bottom: 1px solid #ddd;
+}
 
 /*阅读记录*/
 .historyArea .historyItem {
-    background: #edfaff;
     padding: 10px;
+    border: 1px solid #d7d7d7;
+    margin: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
 }
-.historyArea .historyItem:nth-child(2n) {
-    background: #fff;
+.historyArea .historyItem .itemNum, .historyArea .historyItem .itemContent {
+    float: left;
+}
+.historyArea .historyItem .itemNum {
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    background: #68aac2;
+    color: #fff;
+    border-radius: 2px;
+    margin-right: 8px;
+    line-height: 20px;
+}
+.historyArea .historyItem .itemDel {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: #FF4643;
+    border: 1px solid #FF4643;
+    padding: 2px 5px;
+    border-radius: 2px;
 }
 .historyArea .historyItem .title {
-    font-size: 16px;
+    font-weight: bold;
 }
 .historyArea .historyItem .otherInfo {
     font-size: 12px;
@@ -279,9 +358,6 @@ header span.logo {
 .historyArea .historyItem .otherInfo p:last-child {
     margin: 0;
 }
-/*.historyArea .historyItem .lastReaded {
-    color: red;
-}*/
 
 .page {
     background: #68aac2;
@@ -310,7 +386,7 @@ header span.logo {
 }
 
 .errorMsg {
-    margin: 0 10px;
+    margin: 10px;
     font-size: 14px;
     color: red;
 }

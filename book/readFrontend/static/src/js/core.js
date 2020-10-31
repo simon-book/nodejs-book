@@ -2,34 +2,8 @@
 
 })();
 
-var cookieDo = {
-    setCookie: function(c_name, value, expiredays) {
-        var exdate = new Date()
-        exdate.setDate(exdate.getDate() + 365)
-        document.cookie = c_name + "=" + escape(value) + ";expires=" + exdate.toGMTString() + ";path=/";
-    },
-    getCookie: function(c_name) {
-        if (document.cookie.length > 0) {
-            c_start = document.cookie.indexOf(c_name + "=");
-            if (c_start != -1) {
-                c_start = c_start + c_name.length + 1;
-                c_end = document.cookie.indexOf(";", c_start);
-                if (c_end == -1) c_end = document.cookie.length;
-                return unescape(document.cookie.substring(c_start, c_end));
-            }
-        }
-        return "";
-    },
-    delCookie: function(name) {
-        var exp = new Date();
-        exp.setTime(exp.getTime() - 1);
-        var cval = getCookie(name);
-        document.cookie = name + "=;expires=" + exp.toGMTString();
-    }
-}
-
 var ajaxDo = {
-    get: function(url, body, callback) {
+    get: function(url, body, callback, errorCallBack) {
         $.ajax({
             type: 'GET',
             url: url,
@@ -41,11 +15,12 @@ var ajaxDo = {
                 callback ? callback(data) : null;
             },
             error: function(xhr, type) {
-                alert('请求出错!')
+                if (xhr.status == 400) errorCallBack ? errorCallBack(JSON.parse(xhr.response)) : null;
+                else alert("服务错误！")
             }
         })
     },
-    post: function(url, body, callback) {
+    post: function(url, body, callback, errorCallBack) {
         $.ajax({
             type: 'POST',
             url: url,
@@ -54,11 +29,128 @@ var ajaxDo = {
             contentType: 'application/json',
             timeout: 10000,
             success: function(data) {
-                callback ? callback(data) : null;
+                callback ? callback(JSON.parse(data)) : null;
             },
             error: function(xhr, type) {
-                alert('请求出错!')
+                if (xhr.status == 400) errorCallBack ? errorCallBack(JSON.parse(xhr.response)) : null;
+                else alert("服务错误！")
             }
         })
     }
 }
+
+function parseLocationSearch() {
+    var search = location.search;
+    var result = {};
+    if (!search) return result;
+    search = search.slice(1);
+    var searchArray = search.split("&");
+    for (var i = 0; i < searchArray.length; i++) {
+        var params = searchArray[i].split("=");
+        result[params[0]] = params[1];
+    }
+    return result;
+}
+
+function LastRead() {
+    this.bookList = "bookList";
+    this.set = function(bid, tid, title, texttitle, author, sortname) { //保存book阅读记录并更新book列表
+        if (!(bid && tid && title && texttitle && author && sortname)) return;
+        var v = bid + '#' + tid + '#' + title + '#' + texttitle + '#' + author + '#' + sortname;
+        this.setItem(bid, v);
+        this.setBook(bid)
+    };
+    this.get = function(k) { //获取book阅读记录
+        return this.getItem(k) ? this.getItem(k).split("#") : "";
+    };
+    this.remove = function(k) { //将book从阅读记录中删除
+        this.removeItem(k);
+        this.removeBook(k)
+    };
+    this.setBook = function(v) {
+        var reg = new RegExp("(^|#)" + v);
+        var books = this.getItem(this.bookList);
+        if (books == "") {
+            books = v
+        } else {
+            if (books.search(reg) == -1) {
+                books += "#" + v
+            } else {
+                books.replace(reg, "#" + v)
+            }
+        }
+        this.setItem(this.bookList, books)
+    };
+    this.getBook = function() { //获取阅读记录中的book列表
+        var v = this.getItem(this.bookList) ? this.getItem(this.bookList).split("#") : Array();
+        var books = Array();
+        if (v.length) {
+            for (var i = 0; i < v.length; i++) {
+                var tem = this.getItem(v[i]).split('#');
+                if (tem.length > 3) books.push(tem);
+            }
+        }
+        return books
+    };
+    this.removeBook = function(v) {
+        var reg = new RegExp("(^|#)" + v);
+        var books = this.getItem(this.bookList);
+        if (!books) {
+            books = ""
+        } else {
+            if (books.search(reg) != -1) {
+                books = books.replace(reg, "")
+            }
+        }
+        this.setItem(this.bookList, books)
+    };
+    this.setItem = function(k, v) {
+        if (!!window.localStorage) {
+            localStorage.setItem(k, v);
+        } else {
+            var expireDate = new Date();
+            var EXPIR_MONTH = 365 * 24 * 3600 * 1000;
+            expireDate.setTime(expireDate.getTime() + 12 * EXPIR_MONTH)
+            document.cookie = k + "=" + escape(v) + ";expires=" + expireDate.toGMTString() + "; path=/";
+        }
+    };
+    this.getItem = function(k) {
+        var value = ""
+        var result = ""
+        if (!!window.localStorage) {
+            result = window.localStorage.getItem(k);
+            value = result || "";
+        } else {
+            var reg = new RegExp("(^| )" + k + "=([^;]*)(;|\x24)");
+            var result = reg.exec(document.cookie);
+            if (result) {
+                value = unescape(result[2]) || ""
+            }
+        }
+        return value
+    };
+    this.removeItem = function(k) {
+        if (!!window.localStorage) {
+            window.localStorage.removeItem(k);
+        } else {
+            var expireDate = new Date();
+            expireDate.setTime(expireDate.getTime() - 1000)
+            document.cookie = k + "= " + ";expires=" + expireDate.toGMTString()
+        }
+    };
+    this.removeAll = function() { //清空阅读记录
+        if (!!window.localStorage) {
+            window.localStorage.clear();
+        } else {
+            var v = this.getItem(this.bookList) ? this.getItem(this.bookList).split("#") : Array();
+            var books = Array();
+            if (v.length) {
+                for (i in v) {
+                    var tem = this.removeItem(v[k])
+                }
+            }
+            this.removeItem(this.bookList)
+        }
+    }
+}
+window.lastread = new LastRead();

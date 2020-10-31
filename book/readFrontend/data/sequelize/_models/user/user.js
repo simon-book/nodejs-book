@@ -12,7 +12,7 @@ var User = sequelize.define('user', {
         unique: true,
         autoIncrement: true
     },
-    account: {
+    username: {
         type: Sequelize.TEXT,
         allowNull: false
     },
@@ -42,14 +42,14 @@ var User = sequelize.define('user', {
         defaultValue: 1
     }
 }, {
-    schema: __PGSQL__.schemas.book_shower,
+    schema: __PGSQL__.schemas.book_publisher,
     tableName: 'user',
     timestamps: true,
     underscored: true,
     indexes: [{
         fields: ['branch_id']
     }, {
-        fields: ['account']
+        fields: ['username']
     }],
     defaultScope: {
         where: {

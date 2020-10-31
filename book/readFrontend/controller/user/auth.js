@@ -37,7 +37,7 @@ function logout(req, res) {
 
 function getUser(req, res) {
     var user = req.session[LOGIN_SUCCESS_USER]
-    if (user && user.managerId) {
+    if (user && user.userId) {
         return user;
     }
     return null;

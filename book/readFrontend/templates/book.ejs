@@ -23,7 +23,7 @@
     <div class="synopsisArea">
         <a href="/book/<%= book.bookId%>/1">开始阅读</a>
         <a href="/book/<%= book.bookId%>/mulu" class="btn_toBookShelf">完整目录</a>
-        <a href="/" class="btn_toMyBook">TXT下载</a>
+        <a href="/bookshelf" class="btn_toMyBook">我的书架</a>
     </div>
     <% if(book.abstractContent.replace(/\s/g,"")){ %>
     <p class="book_detail_review">

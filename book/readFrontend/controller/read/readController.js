@@ -14,7 +14,7 @@ exports.bookDeail = async function(bookId) {
         var book = await bookSequelize.findByPk(bookId);
         book = book.get();
         // book.categoryName = book.category ? book.category.name : "";
-        delete book.category;
+        // delete book.category;
         book.tags = _.map(book.tags, function(tag) {
             // tag = tag.get();
             delete tag.book_tags;
@@ -37,14 +37,14 @@ exports.bookDeail = async function(bookId) {
 
 exports.bookChapters = async function(body) {
     try {
-        if (!body || !body.blockId) throw new Error("缺少blockId");
+        if (!body || !body.bookId) throw new Error("缺少bookId");
         var book = await bookSequelize.findByPk(body.bookId);
         book = book.get();
         var pageSize = body.pageSize || 20;
         var page = body.page || 1;
         var offset = pageSize * (page - 1);
         var where = {
-            bookId: bookId
+            bookId: body.bookId
         }
         var list = await bookChapterSequelize.findAndCountAll(where, offset, pageSize);
         return {
@@ -66,6 +66,8 @@ exports.chapterDetail = async function(bookId, number) {
     try {
         number = parseInt(number);
         bookId = parseInt(bookId);
+        var book = await bookSequelize.findSimpleByPk(bookId);
+        book = book.get();
         var chapter = await bookChapterSequelize.findOne({
             number: number,
             bookId: bookId
@@ -75,12 +77,14 @@ exports.chapterDetail = async function(bookId, number) {
             return;
         }
         var chapterDetail = {
+            book: book,
             chapterId: chapter.chapterId,
             number: chapter.number,
             title: chapter.title,
             bookId: chapter.bookId,
             type: chapter.type == 1 ? "text" : "picture"
         }
+        // return chapterDetail;
         if (chapterDetail.type == "text") {
             if (chapter.local == 1) {
                 var content = await MossClient.get("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number + ".txt");

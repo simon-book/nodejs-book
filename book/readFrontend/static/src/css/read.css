@@ -3,7 +3,7 @@
     line-height: 35px;
     color: #68aac2;
     overflow: hidden;
-    margin: 15px 15px 0 15px;
+    margin: 15px;
     border: 1px solid #68aac2;
     border-radius: 3px;
 }
@@ -68,19 +68,22 @@
     text-indent: 2em;
 }
 
-body.default {
+body footer {
+    background: rgba(0, 0, 0, 0);
+}
+body.lightDefault {
     background: #efefef;
 }
 
-body.huyan {
+body.lightHuyan {
     background: #bed5c5;
 }
 
-body.yejian {
+body.lightYejian {
     background: #333;
 }
 
-body.yejian * {
+body.lightYejian * {
     color: #aaa !important;
 }
 
@@ -96,11 +99,13 @@ body.fontSmall #chaptercontent p {
     font-size: 14px !important;
 }
 
-.add-book-label {
+.Readarea .add-book-label {
     width: 100%;
     text-align: center;
+    text-indent: 0;
+    margin: 0;
 }
 
-.add-book-label a {
-    color: red;
+.Readarea .add-book-label a {
+    color: red !important;
 }

@@ -1,10 +1,10 @@
 <%- include('common/top', {}); %>
 <%- include('common/mainHeader', {}); %>
 <nav class="smallNav">
-    <a href="/home" class="sel">龙虎榜</a>
+    <a href="/rank" class="sel">龙虎榜</a>
     <a href="/category">分类</a>
     <a href="/quanben"">全本</a>
-    <a href="/history">轨迹 </a> <!-- <a href="/user/" style="width:14%">书架</a> -->
+    <a href="/history">轨迹 </a> <a href="/bookshelf">书架</a>
 </nav>
 <%- include('common/searchForm', {}); %>
 <div class="tabArea">
@@ -41,13 +41,12 @@
     </div>
     <div class="slide">
         <% block.books.forEach(function(book){ %>
-        <a class="common_sale" href="/book/
-            <%= book.bookId%>/">
-            <span class="sort">
-                <%= '['+book.categoryName+']'%></span>
+        <a class="common_sale" href="/book/<%= book.bookId%>/">
+            <!-- <span class="sort">
+                <%= '['+book.categoryName+']'%></span> -->
             <span class="title">
-                <%= book.title%></span> /<span class="writer">
-                <%= book.writer%></span>
+                <%= book.title%></span><span class="writer">（
+                <%= book.writer%>）</span>
         </a>
         <% }); %>
     </div>

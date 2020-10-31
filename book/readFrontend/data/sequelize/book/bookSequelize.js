@@ -29,6 +29,32 @@ exports.findByPk = function(id) {
     })
 }
 
+exports.findSimpleByPk = function(id) {
+    return new Promise(function(resolve, reject) {
+        Book.findByPk(id, {
+            attributes: ["bookId", "title", "writer", "categoryName"]
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
+exports.findAll = function(where, raw) {
+    return new Promise(function(resolve, reject) {
+        Book.findAll({
+            where: where,
+            raw: raw || false,
+            attributes: ["bookId", "title", "writer", "categoryName"]
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
 exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
     // var include = [{
     //     model: BookCategory,

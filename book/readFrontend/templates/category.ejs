@@ -8,8 +8,8 @@
         <span class="sort">
             <%= '['+book.categoryName+']'%></span>
         <span class="title">
-            <%= book.title%></span> /<span class="writer">
-            <%= book.writer%></span>
+            <%= book.title%></span>（<span class="writer">
+            <%= book.writer%></span>）
     </a>
     <% }); %>
     <%- include('common/listPagerPopup', {}); %>

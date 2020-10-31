@@ -6,13 +6,29 @@ var bookCategoryController = require('./book/bookCategoryController.js');
 var bookController = require('./book/bookController.js');
 var tagController = require('./book/tagController.js');
 var pageBlockController = require('./pageBlock/pageBlockController.js');
+var rankController = require('./rank/rankController.js');
 var bookChapterController = require('./book/bookChapterController.js');
-var copy35xsController = require('./copy/copy35xsController.js');
+var copy35wxController = require('./copy/copy35wxController.js');
 
 var MossClient = require('../service/mossConn.js');
 
 router.post('/create_brand', branchController.createBranch);
 router.post('/update_brand', branchController.updateBranch);
+
+router.post('/copy_35xiaoshuo_book', function(req, res) {
+    copy35wxController.copy_book(req.body.categoryId, req.body.categoryPageIndex);
+    res.send(true);
+})
+
+router.post('/moss/put', async function(req, res) {
+    var result = await MossClient.put("test", "1/t-" + new Date().getTime(), req.body.content);
+    res.send(result);
+})
+
+router.get('/moss/get', async function(req, res) {
+    var result = await MossClient.get("test", req.query.key);
+    res.send(result);
+})
 
 router.post('/login', loginController.login);
 router.use(loginController.isLogin);
@@ -49,21 +65,13 @@ router.post('/update_book_chapter', bookChapterController.update);
 router.post('/get_book_chapter_detail', bookChapterController.detail);
 router.post('/list_book_chapter', bookChapterController.list);
 
+router.post('/create_rank', rankController.create);
+router.post('/update_rank', rankController.update);
+router.get('/delete_rank/:rankId', rankController.delete);
+router.get('/list_rank', rankController.list);
 
-router.post('/copy_35xiaoshuo_book', function(req, res) {
-    copy35xsController.copy_book(req.body.categoryId, req.body.categoryPageIndex);
-    res.send(true);
-})
 
-router.post('/moss/put', async function(req, res) {
-    var result = await MossClient.put("test", "1/t-" + new Date().getTime(), req.body.content);
-    res.send(result);
-})
 
-router.get('/moss/get', async function(req, res) {
-    var result = await MossClient.get("test", req.query.key);
-    res.send(result);
-})
 
 
 module.exports = router;

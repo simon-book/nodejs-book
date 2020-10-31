@@ -1,0 +1,60 @@
+<%- include('common/top', {}); %>
+<%- include('common/pageHeader', {}); %>
+<div class="historyArea">
+    <%  if(!bookMarks.length){ %>
+    <div style="height:100px;line-height:100px; text-align:center">还木有任何书籍( ˙﹏˙ )</div>
+    <% }else{ %>
+    <h2 class="areaTitle"><a href="javascript:void(0);" class="itemDel" onclick="deleteAllBookMarks()">清空</a></h2>
+    <% bookMarks.forEach(function(bookMark, i){ %>
+    <div class="historyItem">
+        <div class="itemNum">
+            <%= i+1%>
+        </div>
+        <div class="itemContent">
+            <div class="title">
+                <a href="/book/<%= bookMark.bookId%>/">
+                    <%= bookMark.book.title%></a>
+            </div>
+            <div class="otherInfo">
+                <p>分类：
+                    <%= bookMark.book.categoryName%>
+                </p>
+                <p>作者：
+                    <%= bookMark.book.writer%>
+                </p>
+                <p>已读到：<a class="lastReaded" href="/book/<%= bookMark.bookId%>/<%= bookMark.chapter.number%>">
+                        <%= bookMark.chapter.title%></a></p>
+            </div>
+        </div>
+        <a href="javascript:void(0);" class="itemDel" onclick="deleteBookMark('<%= bookMark.id%>')">删除</a>
+    </div>
+    <% })} %>
+</div>
+<%- include('common/searchForm', {}); %>
+<%- include('common/footer', {}); %>
+<script language="javascript" type="text/javascript">
+function deleteBookMark(id) {
+    ajaxDo.get("/deleteBookMark", { id: id }, function(data) {
+        location.reload();
+    }, function(err) {
+        if (err.rtnCode == 10004) {
+            location.href = "/login?o=" + location.pathname;
+        } else if (err.rtnMsg) {
+            alert(err.rtnMsg);
+        }
+    })
+}
+
+function deleteAllBookMarks(id) {
+    ajaxDo.get("/deleteAllBookMark", {}, function(data) {
+        location.reload();
+    }, function(err) {
+        if (err.rtnCode == 10004) {
+            location.href = "/login?o=" + location.pathname;
+        } else if (err.rtnMsg) {
+            alert(err.rtnMsg);
+        }
+    })
+}
+</script>
+<%- include('common/bottom', {}); %>

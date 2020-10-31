@@ -1,8 +1,8 @@
 <nav class="sortChannel_nav">
     <ul>
-        <li><a href="/category/" class="<%= !currentCategoryId?'sel':'' %>">&nbsp;全&nbsp;&nbsp;部&nbsp;</a></li>
+        <li><a href="/<%= pageIndex %>/" class="<%= !currentCategoryId?'sel':'' %>">&nbsp;全&nbsp;&nbsp;部&nbsp;</a></li>
         <% categoryMap.forEach(function(category){ %>
-        <li><a href="/category/<%= category[1] %>/1" class="<%= currentCategoryId == category[1]?'sel':'' %>">
+        <li><a href="/<%= pageIndex %>/<%= category[1] %>/1" class="<%= currentCategoryId == category[1]?'sel':'' %>">
                 <%= category[0] %></a></li>
         <% }); %>
     </ul>

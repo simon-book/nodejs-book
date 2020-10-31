@@ -2,6 +2,8 @@ var https = require('https');
 var _ = require('lodash');
 var cryptogram = require("../../util/cryptogram.js");
 var Platserver = require('../../service/platServer.js');
+var request = require('request')
+var iconv = require('iconv-lite')
 
 exports.readerStartReq = function(branchId, action) {
     return new Promise(function(resolve, reject) {
@@ -28,5 +30,21 @@ exports.readerStartReq = function(branchId, action) {
         } catch (err) {
             reject(err)
         }
+    })
+}
+
+
+
+exports.htmlStartReq = function(uri) {
+    return new Promise(function(resolve, reject) {
+        request({
+            uri: uri,
+            method: 'GET'
+        }, (err, response, body) => {
+            if (err) {
+                console.log(err)
+            }
+            resolve(iconv.decode(body, 'gb2312'))
+        })
     })
 }

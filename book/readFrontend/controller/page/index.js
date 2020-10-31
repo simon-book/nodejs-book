@@ -6,7 +6,10 @@ var httpGateway = require("../../data/http/httpGateway.js");
 var homeController = require("../read/homeController.js");
 var bookController = require("../read/bookController.js");
 var readController = require("../read/readController.js");
+var rankController = require("../read/rankController.js");
 var chargeController = require("../read/chargeController.js");
+var userController = require("../user/userController.js");
+var auth = require('../user/auth.js');
 
 exports.login = async function(req, res) {
     var branchInfo = req.branchInfo;
@@ -28,10 +31,27 @@ exports.register = async function(req, res) {
     })
 };
 
+exports.bookshelf = async function(req, res) {
+    var branchInfo = req.branchInfo;
+    var user = auth.getUser(req, res);
+    if (user) {
+        var bookMarks = await userController.getUserBookMarks(user.userId);
+        res.render('bookshelf', {
+            title: "我的书架 " + branchInfo.title,
+            keywords: "",
+            description: "",
+            pageTitle: "我的书架",
+            bookMarks: bookMarks
+        })
+    } else {
+        res.redirect("/login?o=/bookshelf")
+    }
+
+};
+
 exports.home = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
-        // var blocks = await httpGateway.readerStartReq(branchInfo.branchId, "home/index");
         var blocks = await homeController.index(branchInfo.branchId);
         res.render('home', {
             title: "首页 " + branchInfo.title,
@@ -63,13 +83,12 @@ exports.category = async function(req, res) {
         if (req.params.page) {
             query.page = parseInt(req.params.page);
         }
-        // var result = await httpGateway.readerStartReq(branchInfo.branchId, "book" + util.generateReqQuery(query));
         var result = await bookController.listBook(query);
         var currentPage = parseInt(result.pagination.page);
         var totalPage = Math.ceil(result.pagination.totalNum / result.pagination.pageSize);
         var prevPage = currentPage > 1 ? currentPage - 1 : 0;
         var nextPage = currentPage < totalPage ? currentPage + 1 : 0;
-        var categoryMap = branchMap.categoryMap[branchInfo.branchId];
+        var categoryMap = branchMap[branchInfo.branchId];
         var currentCategory = "全部小说"
         if (query.categoryId) {
             currentCategory = _.find(categoryMap, function(category) {
@@ -85,6 +104,7 @@ exports.category = async function(req, res) {
             books: result.list,
             categoryMap: categoryMap,
             currentCategoryId: query.categoryId,
+            pageIndex: "category",
             pagination: {
                 currentPage: currentPage,
                 totalPage: totalPage,
@@ -103,9 +123,77 @@ exports.category = async function(req, res) {
 };
 
 exports.quanben = async function(req, res) {
-    res.render('quanben', {
-        title: "测试"
-    });
+    try {
+        var branchInfo = req.branchInfo;
+        var href = "/quanben";
+        var query = {
+            branchId: branchInfo.branchId,
+            publishStatus: 2
+        };
+        if (req.params.categoryId) {
+            query.categoryId = parseInt(req.params.categoryId);
+            href += "/" + req.params.categoryId;
+        }
+        if (req.params.page) {
+            query.page = parseInt(req.params.page);
+        }
+        var result = await bookController.listBook(query);
+        var currentPage = parseInt(result.pagination.page);
+        var totalPage = Math.ceil(result.pagination.totalNum / result.pagination.pageSize);
+        var prevPage = currentPage > 1 ? currentPage - 1 : 0;
+        var nextPage = currentPage < totalPage ? currentPage + 1 : 0;
+        var categoryMap = branchMap.categoryMap[branchInfo.branchId];
+        var currentCategory = "全部小说"
+        if (query.categoryId) {
+            currentCategory = _.find(categoryMap, function(category) {
+                return category[1] == query.categoryId;
+            })
+            currentCategory = currentCategory[0];
+        }
+        res.render('category', {
+            title: "已完结 " + currentCategory + " " + branchInfo.title,
+            keywords: "",
+            description: "",
+            pageTitle: "已完结 " + currentCategory,
+            books: result.list,
+            categoryMap: categoryMap,
+            currentCategoryId: query.categoryId,
+            pageIndex: "quanben",
+            pagination: {
+                currentPage: currentPage,
+                totalPage: totalPage,
+                href: href + "/",
+                prevPage: prevPage ? href + "/" + prevPage : null,
+                nextPage: nextPage ? href + "/" + nextPage : null
+            }
+        });
+    } catch (err) {
+        console.log(err);
+        res.render('error', {
+            message: "请求错误！",
+            error: err ? JSON.stringify(err) : ""
+        });
+    }
+};
+
+exports.rank = async function(req, res) {
+    try {
+        var branchInfo = req.branchInfo;
+        var ranks = await rankController.listRank(branchInfo.branchId);
+        res.render('rank', {
+            title: "排行 " + branchInfo.title,
+            keywords: branchInfo.keywords,
+            description: branchInfo.description,
+            pageTitle: "小说排行",
+            ranks: ranks
+        });
+    } catch (err) {
+        console.log(err);
+        res.render('error', {
+            message: "请求错误！",
+            error: err ? JSON.stringify(err) : ""
+        });
+    }
 };
 
 exports.history = async function(req, res) {
@@ -121,7 +209,7 @@ exports.history = async function(req, res) {
 exports.book = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
-        var result = await httpGateway.readerStartReq(branchInfo.branchId, "book/" + req.params.bookId + "/detail");
+        var result = await readController.bookDeail(parseInt(req.params.bookId));
         res.render('book', {
             title: result.book.title + " " + branchInfo.title,
             keywords: "",
@@ -143,11 +231,13 @@ exports.mulu = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
         var href = "/book/" + req.params.bookId + "/mulu";
-        var query = {};
+        var query = {
+            bookId: parseInt(req.params.bookId)
+        };
         if (req.params.page) query.page = parseInt(req.params.page);
         else query.page = 1
         query.pageSize = 100;
-        var result = await httpGateway.readerStartReq(branchInfo.branchId, "book/" + req.params.bookId + "/chapters" + util.generateReqQuery(query));
+        var result = await readController.bookChapters(query);
         var currentPage = parseInt(result.pagination.page);
         var totalPage = Math.ceil(result.pagination.totalNum / result.pagination.pageSize);
         var prevPage = currentPage > 1 ? currentPage - 1 : 0;
@@ -179,7 +269,7 @@ exports.mulu = async function(req, res) {
 exports.chapter = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
-        var chapter = await httpGateway.readerStartReq(branchInfo.branchId, "book/" + req.params.bookId + "/chapterDetail/" + req.params.number);
+        var chapter = await readController.chapterDetail(parseInt(req.params.bookId), parseInt(req.params.number));
         if (chapter) {
             res.render('chapter', {
                 title: chapter.title + " " + branchInfo.title,
@@ -215,13 +305,16 @@ exports.search = async function(req, res) {
             return;
         }
         var href = "/search";
-        var query = {};
-        query.searchContent = encodeURIComponent(req.query.keyword);
-        href += "?searchContent=" + req.query.keyword;
+        var query = {
+            branchId: branchInfo.branchId,
+            searchContent: req.query.keyword,
+            pageSize: 50
+        };
+        href += "?keyword=" + req.query.keyword;
         if (req.query.page) {
             query.page = parseInt(req.query.page);
         }
-        var result = await httpGateway.readerStartReq(branchInfo.branchId, "book" + util.generateReqQuery(query));
+        var result = await bookController.listBook(query);
         var currentPage = parseInt(result.pagination.page);
         var totalPage = Math.ceil(result.pagination.totalNum / result.pagination.pageSize);
         var prevPage = currentPage > 1 ? currentPage - 1 : 0;
@@ -230,7 +323,8 @@ exports.search = async function(req, res) {
             title: "搜索 " + req.query.keyword + " " + branchInfo.title,
             keywords: "",
             description: "",
-            pageTitle: "搜索 " + req.query.keyword,
+            keyword: req.query.keyword,
+            pageTitle: "搜索",
             books: result.list,
             errorMsg: result.list.length ? null : "指定关键字没有匹配到任何内容！",
             pagination: result.list.length ? {
