@@ -52,7 +52,8 @@ exports.bookshelf = async function(req, res) {
 exports.home = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
-        var blocks = await homeController.index(branchInfo.branchId);
+        // var blocks = await homeController.index(branchInfo.branchId, true);
+        var blocks = await rankController.listRank(branchInfo.branchId, true, false);
         res.render('home', {
             title: "首页 " + branchInfo.title,
             keywords: branchInfo.keywords,
@@ -88,7 +89,7 @@ exports.category = async function(req, res) {
         var totalPage = Math.ceil(result.pagination.totalNum / result.pagination.pageSize);
         var prevPage = currentPage > 1 ? currentPage - 1 : 0;
         var nextPage = currentPage < totalPage ? currentPage + 1 : 0;
-        var categoryMap = branchMap[branchInfo.branchId];
+        var categoryMap = branchMap.categoryMap[branchInfo.branchId];
         var currentCategory = "全部小说"
         if (query.categoryId) {
             currentCategory = _.find(categoryMap, function(category) {
@@ -179,7 +180,7 @@ exports.quanben = async function(req, res) {
 exports.rank = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
-        var ranks = await rankController.listRank(branchInfo.branchId);
+        var ranks = await rankController.listRank(branchInfo.branchId, false, true);
         res.render('rank', {
             title: "排行 " + branchInfo.title,
             keywords: branchInfo.keywords,

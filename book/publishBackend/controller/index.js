@@ -19,6 +19,10 @@ router.post('/copy_35xiaoshuo_book', function(req, res) {
     copy35wxController.copy_book(req.body.categoryId, req.body.categoryPageIndex);
     res.send(true);
 })
+router.post('/copy_35xiaoshuo_book_rank', function(req, res) {
+    copy35wxController.copy_rank();
+    res.send(true);
+})
 
 router.post('/moss/put', async function(req, res) {
     var result = await MossClient.put("test", "1/t-" + new Date().getTime(), req.body.content);

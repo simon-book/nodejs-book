@@ -7,17 +7,25 @@ var rankSequelize = require('../../data/sequelize/rank/rankSequelize.js');
 var bookSequelize = require('../../data/sequelize/book/bookSequelize.js');
 var bookChapterSequelize = require('../../data/sequelize/book/bookChapterSequelize.js');
 
-exports.listRank = async function(branchId) {
+exports.listRank = async function(branchId, recommend, rank) {
     try {
         var list = await rankSequelize.findAll({
             branchId: branchId
         });
         for (var i = 0; i < list.length; i++) {
-            list[i].books = await bookSequelize.findAll({
-                bookId: {
-                    [Op.in]: list[i].bookIds
-                }
-            }, true)
+            if (recommend) {
+                list[i].books = await bookSequelize.findAll({
+                    bookId: {
+                        [Op.in]: list[i].recommendBookIds
+                    }
+                }, true);
+            } else if (rank) {
+                list[i].books = await bookSequelize.findAll({
+                    bookId: {
+                        [Op.in]: list[i].rankBookIds
+                    }
+                }, true);
+            }
         }
         return list;
     } catch (err) {

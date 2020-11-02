@@ -17,13 +17,15 @@ var Rank = sequelize.define('rank', {
         type: Sequelize.TEXT,
         allowNull: false
     },
+    token: Sequelize.TEXT,
     carousel: Sequelize.JSONB,
     // [{
     //     title: "健身教练",
     //     img: "http://img.xjdcyw.com/img/5e7d5ac9fc31a30d57b92f2f.img_500_0.img",
     //     url: "https://m.hzjmmm.com/#/book/1388",
     // }]
-    bookIds: Sequelize.JSONB,
+    recommendBookIds: Sequelize.JSONB,
+    rankBookIds: Sequelize.JSONB,
     moreLink: Sequelize.TEXT,
     orderIndex: {
         type: Sequelize.INTEGER,

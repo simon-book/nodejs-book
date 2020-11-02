@@ -25,6 +25,18 @@ exports.findByPk = function(id) {
     })
 }
 
+exports.findOne = function(where) {
+    return new Promise(function(resolve, reject) {
+        Rank.findOne({
+            where: where
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
 exports.destroy = function(where) {
     return new Promise(function(resolve, reject) {
         Rank.destroy({

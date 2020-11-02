@@ -46,7 +46,7 @@ exports.findAll = function(where, raw) {
         Book.findAll({
             where: where,
             raw: raw || false,
-            attributes: ["bookId", "title", "writer", "categoryName"]
+            attributes: ["bookId", "title", "writer", "categoryName", "cover"]
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {

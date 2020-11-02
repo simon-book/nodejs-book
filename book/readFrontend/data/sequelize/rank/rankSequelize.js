@@ -5,6 +5,18 @@ var sequelize = require('../../../service/sequelizeConn.js');
 
 var Rank = require('../_models/rank/rank.js')
 
+exports.findOne = function(where) {
+    return new Promise(function(resolve, reject) {
+        Rank.findOne({
+            where: where
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
 exports.findAll = function(where, offset, limit, order) {
     return new Promise(function(resolve, reject) {
         Rank.findAll({
