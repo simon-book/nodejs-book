@@ -4,6 +4,7 @@ var Op = Sequelize.Op;
 var moment = require('moment');
 var cheerio = require('cheerio');
 
+var chapterController = require('./chapterController.js');
 var bookSequelize = require('../../data/sequelize/book/bookSequelize.js');
 var bookChapterSequelize = require('../../data/sequelize/book/bookChapterSequelize.js');
 var httpGateway = require('../../data/http/httpGateway.js')
@@ -24,10 +25,16 @@ exports.bookDeail = async function(bookId) {
             bookId: bookId
         }, 0, 10, [
             ["number", "desc"]
-        ]);
+        ], true);
+        var firstChapters = await bookChapterSequelize.findAll({
+            bookId: bookId
+        }, 0, 10, [
+            ["number", "asc"]
+        ], true);
         return {
             book: book,
-            lastChapters: lastChapters ? lastChapters : []
+            lastChapters: lastChapters ? lastChapters : [],
+            firstChapters: firstChapters ? firstChapters : []
         }
     } catch (err) {
         console.error(err);
@@ -84,38 +91,34 @@ exports.chapterDetail = async function(bookId, number) {
             bookId: chapter.bookId,
             type: chapter.type == 1 ? "text" : "picture"
         }
-        // return chapterDetail;
         if (chapterDetail.type == "text") {
-            if (chapter.local == 1) {
-                var content = await MossClient.get("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number + ".txt");
-                chapterDetail.content = content ? content : "";
-                return chapterDetail;
-            } else if (chapter.local == 2) {
+            if (chapter.local == 2) {
                 chapterDetail.content = chapter.txt;
                 return chapterDetail;
+            }
+            var content = "";
+            if (chapter.local == 1) {
+                content = await MossClient.get("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number + ".txt");
+            }
+            if (content) {
+                chapterDetail.content = content
             } else {
-                var bookHtml = await httpGateway.htmlStartReq(chapter.domain + chapter.txt);
-                var $ = cheerio.load(bookHtml, {
-                    decodeEntities: false
-                });
-                $("#chaptercontent").children().last().remove();
-                var content = $("#chaptercontent").html();
+                content = await chapterController.copyChapterContent(chapter.domain, chapter.txt);
                 chapterDetail.content = content;
-                return chapterDetail;
                 var result = await MossClient.put("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number + ".txt", content);
                 if (result) {
                     chapter.set("local", 1);
-                    chapter.set("txt", null);
-                    chapter.set("domain", null);
+                    // chapter.set("txt", null);
+                    // chapter.set("domain", null);
                     chapter.save();
                 }
-                checkSiblingsChapters(body.bookId, body.number);
+                checkSiblingsChapters(bookId, number);
             }
         } else if (chapterDetail.type == "picture") {
             chapterDetail.content = chapter.pics;
             chapterDetail.domain = chapter.domain;
-            return chapterDetail;
-        } else return chapterDetail;
+        }
+        return chapterDetail;
 
     } catch (err) {
         console.error(err);
@@ -136,17 +139,12 @@ async function checkSiblingsChapters(bookId, number) {
             var chapter = chapters[i];
             if (!chapter.local) {
                 {
-                    var bookHtml = await httpGateway.htmlStartReq(chapter.domain + chapter.txt);
-                    var $ = cheerio.load(bookHtml, {
-                        decodeEntities: false
-                    });
-                    $("#chaptercontent").children().last().remove();
-                    var content = $("#chaptercontent").html();
+                    var content = await chapterController.copyChapterContent(chapter.domain, chapter.txt);
                     var result = await MossClient.put("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number + ".txt", content);
                     if (result) {
                         chapter.set("local", 1);
-                        chapter.set("txt", null);
-                        chapter.set("domain", null);
+                        // chapter.set("txt", null);
+                        // chapter.set("domain", null);
                         chapter.save();
                     }
                 }

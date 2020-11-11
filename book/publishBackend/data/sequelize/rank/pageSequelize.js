@@ -3,12 +3,21 @@ var Op = Sequelize.Op;
 var _ = require('lodash');
 var sequelize = require('../../../service/sequelizeConn.js');
 
-var BookChapter = require('../_models/book/bookChapter.js')
-var Book = require('../_models/book/book.js')
+var Page = require('../_models/rank/page.js')
+
+exports.create = function(obj) {
+    return new Promise(function(resolve, reject) {
+        Page.create(obj).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
 
 exports.findByPk = function(id) {
     return new Promise(function(resolve, reject) {
-        BookChapter.findByPk(id).then(function(results) {
+        Page.findByPk(id).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
             reject(err);
@@ -16,13 +25,10 @@ exports.findByPk = function(id) {
     })
 }
 
-exports.findOne = function(where, order) {
+exports.findOne = function(where) {
     return new Promise(function(resolve, reject) {
-        BookChapter.findOne({
-            where: where,
-            order: order || [
-                ['number', 'desc']
-            ]
+        Page.findOne({
+            where: where
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
@@ -31,16 +37,10 @@ exports.findOne = function(where, order) {
     })
 }
 
-exports.findAndCountAll = function(where, offset, limit, order) {
+exports.destroy = function(where) {
     return new Promise(function(resolve, reject) {
-        BookChapter.findAndCountAll({
-            where: where,
-            limit: limit || 10000,
-            offset: offset || 0,
-            raw: true,
-            order: order || [
-                ['number', 'asc']
-            ]
+        Page.destroy({
+            where: where
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
@@ -49,15 +49,26 @@ exports.findAndCountAll = function(where, offset, limit, order) {
     })
 }
 
-exports.findAll = function(where, offset, limit, order, raw) {
+exports.update = function(where, content) {
     return new Promise(function(resolve, reject) {
-        BookChapter.findAll({
+        Page.update(content, {
+            where: where
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
+exports.findAll = function(where, offset, limit, order) {
+    return new Promise(function(resolve, reject) {
+        Page.findAll({
             where: where,
             limit: limit || 10000,
             offset: offset || 0,
-            raw: raw || false,
             order: order || [
-                ['number', 'asc']
+                ['orderIndex', 'ASC']
             ]
         }).then(function(results) {
             resolve(results);

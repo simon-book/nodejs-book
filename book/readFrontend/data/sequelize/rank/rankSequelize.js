@@ -23,6 +23,7 @@ exports.findAll = function(where, offset, limit, order) {
             where: where,
             limit: limit || 10000,
             offset: offset || 0,
+            raw: true,
             order: order || [
                 ['orderIndex', 'ASC']
             ]

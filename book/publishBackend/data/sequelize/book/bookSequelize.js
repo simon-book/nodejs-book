@@ -89,11 +89,6 @@ exports.findOneBook = function(where) {
                 as: 'tags',
                 required: false,
                 attributes: ["tagId", "name"]
-            }, {
-                model: BookCategory,
-                as: 'category',
-                required: false,
-                attributes: ["categoryId", "name"]
             }]
         }).then(function(results) {
             resolve(results);

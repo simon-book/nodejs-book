@@ -415,7 +415,7 @@ header span.logo {
     box-shadow: 0 2px 1px #5b80aa inset;
 }
 .book_detail_review {
-    padding: 5px 10px;
+    margin: 10px;
     line-height: 23px;
 }
 .chapter {

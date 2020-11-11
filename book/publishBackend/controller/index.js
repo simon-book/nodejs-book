@@ -7,20 +7,26 @@ var bookController = require('./book/bookController.js');
 var tagController = require('./book/tagController.js');
 var pageBlockController = require('./pageBlock/pageBlockController.js');
 var rankController = require('./rank/rankController.js');
+var pageController = require('./rank/pageController.js');
 var bookChapterController = require('./book/bookChapterController.js');
-var copy35wxController = require('./copy/copy35wxController.js');
+var copyBiqugeController = require('./copy/copyBiqugeController.js');
 
 var MossClient = require('../service/mossConn.js');
 
 router.post('/create_brand', branchController.createBranch);
 router.post('/update_brand', branchController.updateBranch);
 
-router.post('/copy_35xiaoshuo_book', function(req, res) {
-    copy35wxController.copy_book(req.body.categoryId, req.body.categoryPageIndex);
+router.post('/copy_biquge_books', function(req, res) {
+    copyBiqugeController.copy_all_books(req.body.categoryPageIndex);
     res.send(true);
 })
-router.post('/copy_35xiaoshuo_book_rank', function(req, res) {
-    copy35wxController.copy_rank();
+router.post('/copy_biquge_book', function(req, res) {
+    copyBiqugeController.create_book(req.body.originId);
+    res.send(true);
+})
+router.post('/copy_biquge_book_rank', function(req, res) {
+    copyBiqugeController.copy_page();
+    copyBiqugeController.copy_rank();
     res.send(true);
 })
 
@@ -73,6 +79,11 @@ router.post('/create_rank', rankController.create);
 router.post('/update_rank', rankController.update);
 router.get('/delete_rank/:rankId', rankController.delete);
 router.get('/list_rank', rankController.list);
+
+router.post('/create_page', pageController.create);
+router.post('/update_page', pageController.update);
+router.get('/delete_page/:pageId', pageController.delete);
+router.get('/list_page', pageController.list);
 
 
 

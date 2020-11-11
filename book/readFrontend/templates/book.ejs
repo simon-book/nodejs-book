@@ -6,6 +6,9 @@
             <img src="<%= book.cover%>">
         </div>
         <div class="bookinfo">
+            <p class="title">
+                <%= book.title%>
+            </p>
             <p class="author">作者：
                 <%= book.writer%>
             </p>
@@ -41,7 +44,23 @@
             <%= chapter.title%></a>
         <% }); %>
     </div>
-    <!-- <h2 class="block-nav"><a href="/book/<%= book.bookId%>/mulu">查看完整目录</a></h2> -->
+    <!-- <div class="tab-nav">
+        <a href="/book/<%= book.bookId%>/mulu">查看全部章节</a>
+    </div> -->
+</div>
+<div class="recommend">
+    <div class="tab-nav">
+        <a class="tab-nav-cur">前十章</a>
+    </div>
+    <div id="chapterlist" class="directoryArea">
+        <% firstChapters.forEach(function(chapter){ %>
+        <a class="chapter" href="/book/<%= chapter.bookId%>/<%= chapter.number%>">
+            <%= chapter.title%></a>
+        <% }); %>
+    </div>
+    <div class="tab-nav">
+        <a href="/book/<%= book.bookId%>/mulu">点击查看全部章节</a>
+    </div>
 </div>
 <%- include('common/footer', {}); %>
 <%- include('common/bottom', {}); %>

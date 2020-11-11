@@ -217,7 +217,8 @@ exports.book = async function(req, res) {
             description: "",
             pageTitle: result.book.title,
             book: result.book,
-            lastChapters: result.lastChapters
+            lastChapters: result.lastChapters,
+            firstChapters: result.firstChapters
         });
     } catch (err) {
         console.log(err);

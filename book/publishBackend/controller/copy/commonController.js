@@ -27,6 +27,7 @@ exports.branchMap = {
         branchId: 1,
         copyUrl: "https://m.35wx.com",
         pcCopyUrl: "https://www.35wx.com",
+        charset: "GBK",
         category: {
             "玄幻奇幻": [1, 1],
             "武侠修真": [2, 2],

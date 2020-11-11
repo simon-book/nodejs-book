@@ -28,7 +28,9 @@ const sequelize = new Sequelize(__PGSQL__.database, __PGSQL__.user, __PGSQL__.pa
     timezone: '+08:00'
 });
 
-sequelize.sync();
+sequelize.sync({
+    // force: true
+});
 
 
 var saltNums = "0123456789".split("");

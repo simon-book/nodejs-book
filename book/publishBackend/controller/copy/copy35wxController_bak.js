@@ -30,40 +30,77 @@ var branch = { //35文学网
     }
 }
 
-exports.copy_book = async function(originId) {
-    if (!originId) originId = 1;
-    do {
-        try {
-            var savedBook = await bookSequelize.findOneBook({
-                originId: originId.toString()
-            })
-            if (savedBook) {
-                if (savedBook.publishStatus == 1) await update_book(savedBook);
-            } else {
-                await create_book(originId);
+exports.copy_book = async function(categoryPageIndex) {
+    try {
+        for (var category in branch.category) {
+            var index = 1;
+            try {
+                var path = "/sort/" + branch.category[category][0] + "_1" + "/";
+                console.log(path);
+                var html = await httpGateway.htmlStartReq(branch.copyUrl, path, branch.charset);
+                var $ = cheerio.load(html, {
+                    decodeEntities: false
+                });
+                var index = $("select[name=pageselect]").children().length;
+                console.log(index);
+            } catch (err) {
+                console.log("获取分类totalPage失败", category);
             }
-        } catch (err) {
-            console.log(originId);
-            console.log(err);
+            if (categoryPageIndex && index >= categoryPageIndex) index = categoryPageIndex;
+            do {
+                try {
+                    var path = "/sort/" + branch.category[category][0] + "_" + index + "/";
+                    console.log(path);
+                    var html = await httpGateway.htmlStartReq(branch.copyUrl, path, branch.charset);
+                    var $ = cheerio.load(html, {
+                        decodeEntities: false
+                    });
+                    var targetItems = $("#main").children(".hot_sale");
+                    for (var i = targetItems.length - 1; i >= 0; i--) {
+                        try {
+                            var item = targetItems[i];
+                            var bookHref = $(item).find("a").attr("href");
+                            var originId = bookHref.split("/book/")[1].replace("\/", "");
+                            var savedBook = await bookSequelize.findOneBook({
+                                originId: originId
+                            })
+                            if (savedBook) {
+                                var result = await update_book(savedBook, branch.category[category][1], category);
+                            } else {
+                                var result = await create_book(originId, branch.category[category][1], category);
+                            }
+                            if (!result) throw new Error("save book error.")
+                        } catch (err) {
+                            console.log(category, branch.category[category][0], index, i, originId);
+                            console.log(err);
+                        }
+                    }
+                    index--;
+                } catch (err) {
+                    console.log(category, branch.category[category][0], index);
+                    console.log(err);
+                }
+            } while (index > 0)
         }
-        originId++;
-    } while (originId < 20)
+    } catch (err) {
+        console.log(err);
+    }
 }
 
-async function create_book(originId) {
+async function create_book(originId, categoryId, categoryName) {
     try {
         var bookHref = "/book/" + originId + "/";
         var book = {
             copyInfo: {
                 m: branch.copyUrl, //移动端地址
                 pc: branch.pcCopyUrl, //pc端地址
-                // book: bookHref, //book路径
-                // chapter: bookHref + "**chapter**.html"
+                book: bookHref, //book路径
+                chapter: bookHref + "**chapter**.html"
             },
             originId: originId,
             branchId: branch.branchId,
-            // categoryId: categoryId,
-            // categoryName: categoryName,
+            categoryId: categoryId,
+            categoryName: categoryName,
             bookType: 1,
             recommend: 60 + parseInt(40 * Math.random()),
             chapters: []
@@ -72,14 +109,11 @@ async function create_book(originId) {
         var $ = cheerio.load(bookHtml, {
             decodeEntities: false
         });
-
         book.cover = $("#fmimg").find("img").attr("src");
         if (!/^(http)/.test(book.cover)) book.cover = branch.pcCopyUrl + book.cover;
         var liItems = $("#info").children();
         book.title = $(liItems[0]).text();
         console.log(book.title);
-        book.categoryName = $($(".con_top a")[1]).text();
-        book.categoryId = branch.category[book.categoryName][1];
         book.writer = $(liItems[1]).text().split("：")[1];
         book.publishStatus = $(liItems[2]).text().indexOf("连载中") > -1 ? 1 : 2;
         book.lastUpdatedAt = new Date($(liItems[3]).text().split("：")[1]);
@@ -94,33 +128,25 @@ async function create_book(originId) {
         chapters = chapters.slice(dd0Index);
         book.chapterCount = chapters.length - 1;
         for (var j = 1; j < chapters.length; j++) {
-            if (chapters[j].tagName == "dt") {
-                book.chapters.push({
-                    title: $(chapters[j]).text(),
-                    number: j,
-                    type: 0,
-                    branchId: branch.branchId
-                });
-            } else if (chapters[j].tagName == "dd") {
-                var a = $(chapters[j]).children()[0];
-                var aHref = $(a).attr("href");
-                var ids = aHref.match(/\d+/g);
-                book.chapters.push({
-                    title: $(a).text(),
-                    number: j,
-                    type: 1,
-                    branchId: branch.branchId,
-                    originId: ids[ids.length - 1],
-                    // domain: branch.pcCopyUrl,
-                    txt: aHref
-                });
-            }
+            var a = $(chapters[j]).children()[0];
+            var aHref = $(a).attr("href");
+            var ids = aHref.match(/\d+/g);
+            book.chapters.push({
+                title: $(a).text(),
+                number: j,
+                type: 1,
+                branchId: branch.branchId,
+                originId: ids[ids.length - 1],
+                // domain: branch.pcCopyUrl,
+                txt: aHref
+            });
         }
         if (!book.chapters.length) return true;
         var count = await bookSequelize.countBooks({
             branchId: branch.branchId
         });
         book.sn = util.prefixInteger(count + 1, 8);
+        // console.log(book);
         var added = await bookSequelize.create(book);
         return added;
     } catch (err) {
@@ -148,29 +174,22 @@ async function update_book(savedBook) {
             var dd0Index = $(chapters).index($("#list dt")[1]);
             chapters = chapters.slice(dd0Index);
             for (var j = savedBook.chapterCount + 1; j < chapters.length; j++) {
-                if (chapters[j].tagName == "dt") {
-                    newChapters.push({
-                        title: $(chapters[j]).text(),
-                        number: j,
-                        type: 0,
-                        branchId: branch.branchId
-                    });
-                } else if (chapters[j].tagName == "dd") {
-                    var a = $(chapters[j]).children()[0];
-                    var aHref = $(a).attr("href");
-                    var ids = aHref.match(/\d+/g);
-                    newChapters.push({
-                        title: $(a).text(),
-                        number: j,
-                        type: 1,
-                        branchId: branch.branchId,
-                        originId: ids[ids.length - 1],
-                        // domain: branch.pcCopyUrl,
-                        txt: aHref
-                    });
-                }
+                var a = $(chapters[j]).children()[0];
+                var aHref = $(a).attr("href");
+                var ids = aHref.match(/\d+/g);
+                newChapters.push({
+                    title: $(a).text(),
+                    bookId: savedBook.bookId,
+                    number: j,
+                    type: 1,
+                    branchId: branch.branchId,
+                    originId: ids[ids.length - 1],
+                    // domain: branch.pcCopyUrl,
+                    txt: aHref
+                });
             }
             savedBook.set("chapterCount", chapters.length - 1)
+            // console.log(savedBook, newChapters);
             await bookSequelize.updateBookAndChapters(savedBook, newChapters);
         }
         return true;
