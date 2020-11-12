@@ -87,15 +87,15 @@ body.lightYejian * {
     color: #aaa !important;
 }
 
-body.fontBig #chaptercontent p {
+body.fontBig #chaptercontent {
     font-size: 18px !important;
 }
 
-body.fontMiddle #chaptercontent p {
+body.fontMiddle #chaptercontent {
     font-size: 16px !important;
 }
 
-body.fontSmall #chaptercontent p {
+body.fontSmall #chaptercontent {
     font-size: 14px !important;
 }
 

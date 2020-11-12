@@ -22,6 +22,7 @@ var BookChapter = sequelize.define('book_chapter', {
     txt: Sequelize.TEXT,
     pics: Sequelize.JSONB, //图片地址数组
     domain: Sequelize.TEXT, //来源域名
+    originId: Sequelize.TEXT, //原始复制chapterId
     local: { //是否本地存储，0否，1本地OSS存储，2本地数据库存储；
         type: Sequelize.INTEGER,
         defaultValue: 0

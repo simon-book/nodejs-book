@@ -13,15 +13,15 @@ var charsets = {
 
 exports.copyChapterContent = async function(host, path) {
     try {
-        if (/35wx\.com/.test(host)) {
-            var bookHtml = await httpGateway.htmlStartReq(host, path, "GBK");
-            var $ = cheerio.load(bookHtml, {
-                decodeEntities: false
-            });
-            return $("#content").html().slice(0, -40);
-        } else {
-            return "";
-        }
+        // if (/biquge\.info/.test(host)) {
+        var bookHtml = await httpGateway.htmlStartReq(host, path);
+        var $ = cheerio.load(bookHtml, {
+            decodeEntities: false
+        });
+        return $("#content").html();
+        // } else {
+        //     return "";
+        // }
     } catch (err) {
         return "";
     }

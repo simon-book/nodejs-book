@@ -32,7 +32,7 @@ exports.findByPk = function(id) {
 exports.findSimpleByPk = function(id) {
     return new Promise(function(resolve, reject) {
         Book.findByPk(id, {
-            attributes: ["bookId", "title", "writer", "categoryName"]
+            attributes: ["bookId", "title", "writer", "categoryName", "originId", "copyInfo"]
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {

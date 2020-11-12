@@ -103,16 +103,18 @@ exports.chapterDetail = async function(bookId, number) {
             if (content) {
                 chapterDetail.content = content
             } else {
-                content = await chapterController.copyChapterContent(chapter.domain, chapter.txt);
+                content = await chapterController.copyChapterContent(book.copyInfo.pc, "/" + book.originId + "/" + chapter.originId + ".html");
                 chapterDetail.content = content;
-                var result = await MossClient.put("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number + ".txt", content);
-                if (result) {
-                    chapter.set("local", 1);
-                    // chapter.set("txt", null);
-                    // chapter.set("domain", null);
-                    chapter.save();
+                if (content) {
+                    var result = await MossClient.put("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number + ".txt", content);
+                    if (result) {
+                        chapter.set("local", 1);
+                        // chapter.set("txt", null);
+                        // chapter.set("domain", null);
+                        chapter.save();
+                    }
                 }
-                checkSiblingsChapters(bookId, number);
+                checkSiblingsChapters(book, number);
             }
         } else if (chapterDetail.type == "picture") {
             chapterDetail.content = chapter.pics;
@@ -126,20 +128,21 @@ exports.chapterDetail = async function(bookId, number) {
     }
 }
 
-async function checkSiblingsChapters(bookId, number) {
+async function checkSiblingsChapters(book, number) {
     try {
         var numbers = [number + 1, number + 2, number + 3, number + 4, number + 5];
         var chapters = await bookChapterSequelize.findAll({
             number: {
                 [Op.in]: numbers
             },
-            bookId: bookId
+            bookId: book.bookId
         });
         for (var i = 0; i < chapters.length; i++) {
             var chapter = chapters[i];
             if (!chapter.local) {
                 {
-                    var content = await chapterController.copyChapterContent(chapter.domain, chapter.txt);
+                    var content = await chapterController.copyChapterContent(book.copyInfo.pc, "/" + book.originId + "/" + chapter.originId + ".html");
+                    if (!content) continue;
                     var result = await MossClient.put("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number + ".txt", content);
                     if (result) {
                         chapter.set("local", 1);

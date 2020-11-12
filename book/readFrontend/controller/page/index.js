@@ -1,7 +1,6 @@
 var _ = require('lodash');
 var moment = require('moment');
 var util = require("../../util/index.js");
-var branchMap = require('../common/branchMap.js');
 var httpGateway = require("../../data/http/httpGateway.js");
 var homeController = require("../read/homeController.js");
 var bookController = require("../read/bookController.js");
@@ -53,7 +52,7 @@ exports.home = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
         // var blocks = await homeController.index(branchInfo.branchId, true);
-        var blocks = await rankController.listRank(branchInfo.branchId, true, false);
+        var blocks = await rankController.listPage(branchInfo.branchId, true, false);
         res.render('home', {
             title: "首页 " + branchInfo.title,
             keywords: branchInfo.keywords,
@@ -89,7 +88,7 @@ exports.category = async function(req, res) {
         var totalPage = Math.ceil(result.pagination.totalNum / result.pagination.pageSize);
         var prevPage = currentPage > 1 ? currentPage - 1 : 0;
         var nextPage = currentPage < totalPage ? currentPage + 1 : 0;
-        var categoryMap = branchMap.categoryMap[branchInfo.branchId];
+        var categoryMap = branchInfo.categoryMap;
         var currentCategory = "全部小说"
         if (query.categoryId) {
             currentCategory = _.find(categoryMap, function(category) {
@@ -106,6 +105,47 @@ exports.category = async function(req, res) {
             categoryMap: categoryMap,
             currentCategoryId: query.categoryId,
             pageIndex: "category",
+            pagination: {
+                currentPage: currentPage,
+                totalPage: totalPage,
+                href: href + "/",
+                prevPage: prevPage ? href + "/" + prevPage : null,
+                nextPage: nextPage ? href + "/" + nextPage : null
+            }
+        });
+    } catch (err) {
+        console.log(err);
+        res.render('error', {
+            message: "请求错误！",
+            error: err ? JSON.stringify(err) : ""
+        });
+    }
+};
+
+exports.paihang = async function(req, res) {
+    try {
+        var branchInfo = req.branchInfo;
+        var rankMap = branchInfo.rankMap;
+        var currentRankId = req.params.rankId ? parseInt(req.params.rankId) : rankMap[0][1]
+        var href = "/rank/" + currentRankId;
+        var currentPage = req.params.page ? parseInt(req.params.page) : 1;
+        var currentRank = _.find(rankMap, function(category) {
+            return category[1] == currentRankId;
+        })
+        currentRank = currentRank[0];
+        var result = await rankController.listPaihang(currentRankId, currentPage, 20);
+        var totalPage = result.totalPage;
+        var prevPage = currentPage > 1 ? currentPage - 1 : 0;
+        var nextPage = currentPage < totalPage ? currentPage + 1 : 0;
+        res.render('paihang', {
+            title: currentRank + " " + branchInfo.title,
+            keywords: "",
+            description: "",
+            pageTitle: currentRank,
+            books: result.books,
+            rankMap: rankMap,
+            currentRankId: currentRankId,
+            pageIndex: "rank",
             pagination: {
                 currentPage: currentPage,
                 totalPage: totalPage,
@@ -143,7 +183,7 @@ exports.quanben = async function(req, res) {
         var totalPage = Math.ceil(result.pagination.totalNum / result.pagination.pageSize);
         var prevPage = currentPage > 1 ? currentPage - 1 : 0;
         var nextPage = currentPage < totalPage ? currentPage + 1 : 0;
-        var categoryMap = branchMap.categoryMap[branchInfo.branchId];
+        var categoryMap = branchInfo.categoryMap;
         var currentCategory = "全部小说"
         if (query.categoryId) {
             currentCategory = _.find(categoryMap, function(category) {

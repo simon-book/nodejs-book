@@ -5,6 +5,7 @@ var Platserver = require('../../service/platServer.js');
 var request = require('request')
 var http = require('http')
 var https = require('https')
+var zlib = require('zlib')
 var iconv = require('iconv-lite')
 
 exports.readerStartReq = function(branchId, action) {
@@ -46,37 +47,38 @@ exports.htmlStartReq = function(host, path, charset) {
             path: path,
             method: 'GET',
             headers: {
-                "Content-Type": "text/html"
+                "Content-Type": "text/html;"
             },
             timeout: 60000
         }, function(res) {
-            if (charset && charset != "utf-8" && charset != "UTF-8") {
-                var _data = [];
-                res.on('data', function(chunk) {
-                    _data.push(chunk);
-                });
-                res.on('end', function() {
-                    if (res.statusCode == 200) resolve(iconv.decode(Buffer.concat(_data), charset));
-                    else {
-                        console.log("status error", path, _data);
-                        reject("status error");
+            var contentEncoding = res.headers['content-encoding'];
+            var _data = [];
+            res.on('data', function(chunk) {
+                _data.push(chunk);
+            });
+            res.on('end', function() {
+                if (res.statusCode == 200) {
+                    try {
+                        var body = Buffer.concat(_data);
+                        if (charset && charset != "utf-8" && charset != "UTF-8") {
+                            resolve(iconv.decode(body, charset));
+                        } else {
+                            if (contentEncoding == "gzip") {
+                                body = zlib.gunzipSync(body)
+                            }
+                            resolve(body);
+                        }
+                    } catch (err) {
+                        console.log(path, err);
+                        reject(err);
                     }
-                });
-            } else {
-                var _data = '';
-                res.on('data', function(chunk) {
-                    _data += chunk;
-                });
-                res.on('end', function() {
-                    if (res.statusCode == 200) resolve(_data);
-                    else {
-                        console.log("status error", path, _data);
-                        reject("status error");
-                    }
-                });
-            }
+                } else {
+                    console.log("status error", path, _data);
+                    reject("status error");
+                }
 
 
+            });
         });
         req.on('error', function(e) {
             console.log("error", path, e);

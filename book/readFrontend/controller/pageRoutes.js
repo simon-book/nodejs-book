@@ -17,6 +17,8 @@ router.get('/category', page.category);
 router.get('/category/:page', page.category);
 router.get('/category/:categoryId/:page', page.category);
 
+
+
 router.get('/quanben', page.quanben);
 router.get('/quanben/:page', page.quanben);
 router.get('/quanben/:categoryId/:page', page.quanben);
@@ -28,7 +30,9 @@ router.get('/book/:bookId/mulu', page.mulu);
 router.get('/book/:bookId/mulu/:page', page.mulu);
 router.get('/book/:bookId/:number', page.chapter);
 
-router.get('/rank', page.rank);
+// router.get('/rank', page.rank);
+router.get('/rank', page.paihang);
+router.get('/rank/:rankId/:page', page.paihang);
 router.get('/search', page.search);
 
 router.post('/login', userController.login);
