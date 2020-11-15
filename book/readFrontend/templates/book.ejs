@@ -1,4 +1,4 @@
-<%- include('common/top', {}); %>
+<%- include('common/bookTop', {}); %>
 <%- include('common/pageHeader', {}); %>
 <div class="">
     <div class="hot_sale">
@@ -28,9 +28,9 @@
         <a href="/book/<%= book.bookId%>/mulu" class="btn_toBookShelf">完整目录</a>
         <a href="/bookshelf" class="btn_toMyBook">我的书架</a>
     </div>
-    <% if(book.abstractContent.replace(/\s/g,"")){ %>
+    <% if(abstractContent){ %>
     <p class="book_detail_review">
-        <%= '简介：'+book.abstractContent%>
+        <%= '简介：'+abstractContent%>
     </p>
     <% } %>
 </div>

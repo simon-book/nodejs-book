@@ -1,9 +1,10 @@
 exports.hostMap = {
     "localhost": {
         branchId: 1,
-        title: "测试",
-        keywords: "闪舞小说网,35xs",
-        description: "闪舞小说网致力于打造小说最全，更新最快的在线小说阅读网。",
+        title: "笔趣阁_书友最值得收藏的网络小说阅读网",
+        shorttitle: "笔趣阁",
+        keywords: "笔趣阁,网络小说,小说阅读网,免费小说,小说,biquge",
+        description: "笔趣阁是广大书友最值得收藏的网络小说阅读网，网站收录了当前最火热的网络小说，免费提供高质量的小说最新章节，是广大网络小说爱好者必备的小说阅读网。",
         categoryMap: [
             ["玄幻小说", 1],
             ["修真小说", 2],

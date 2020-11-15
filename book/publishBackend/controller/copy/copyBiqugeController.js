@@ -142,8 +142,8 @@ async function create_book(originId, categoryId, categoryName) {
         })
         if (sameBook) return true;
         var chapters = $("#list dl").children();
-        book.chapterCount = chapters.length - 1;
-        for (var j = 1; j < chapters.length; j++) {
+        book.chapterCount = chapters.length;
+        for (var j = 0; j < chapters.length; j++) {
             var a = $(chapters[j]).children()[0];
             var aHref = $(a).attr("href");
             var ids = aHref.match(/\d+/g);
@@ -186,7 +186,7 @@ async function update_book(savedBook) {
 
             var newChapters = [];
             var chapters = $("#list dl").children();
-            for (var j = savedBook.chapterCount + 1; j < chapters.length; j++) {
+            for (var j = savedBook.chapterCount; j < chapters.length; j++) {
                 var a = $(chapters[j]).children()[0];
                 var aHref = $(a).attr("href");
                 var ids = aHref.match(/\d+/g);
@@ -199,7 +199,7 @@ async function update_book(savedBook) {
                     originId: ids[ids.length - 1]
                 });
             }
-            savedBook.set("chapterCount", chapters.length - 1)
+            savedBook.set("chapterCount", chapters.length)
             await bookSequelize.updateBookAndChapters(savedBook, newChapters);
         }
         return true;

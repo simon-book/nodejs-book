@@ -5,8 +5,7 @@
             <%= keyword%>
         </font>结果</h2>
     <% books.forEach(function(book, i){ %>
-    <a class="common_sale" href="/book/
-            <%= book.bookId%>/">
+    <a class="common_sale" href="/book/<%= book.bookId%>/">
         <span class="title">
             <%= book.title%></span>（<span class="writer">
             <%= book.writer%></span>）
