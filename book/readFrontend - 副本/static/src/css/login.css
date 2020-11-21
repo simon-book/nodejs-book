@@ -1,0 +1,96 @@
+.login_box {
+    padding: 10px;
+}
+
+.login_name {
+    background: none repeat scroll 0 0 #F1F3F5;
+    border: 1px solid #C0DEEA;
+    color: #CBCFD1;
+    font-size: 14px;
+    height: 40px;
+
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.login_name .name {
+    background: none;
+    border: 0;
+    color: #000000;
+    font-size: 14px;
+    height: 38px;
+
+    width: 86%;
+}
+
+.person_bg {
+    background: url(../images/name.png) no-repeat center;
+    display: block;
+    float: left;
+    width: 40px;
+    height: 40px;
+    background-size: 50% 50%;
+}
+
+.psw_bg {
+    background: url(../images/psw.png) no-repeat center;
+    display: block;
+    float: left;
+    width: 40px;
+    height: 40px;
+    background-size: 50% 50%;
+}
+
+/*.mobile_bg {
+    background: url(../images/moblie_bg.png) no-repeat center;
+    display: block;
+    float: left;
+    width: 40px;
+    height: 40px;
+    background-size: 50% 50%;
+}*/
+
+.login_in {
+    display: block;
+    margin: 10px 0;
+    background: #eb5758;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border: 0;
+    color: #fff;
+    width: 100%;
+    border-radius: 3px;
+    font-size: 16px;
+    font-family: "hiragino Sans GB W3";
+}
+
+.tip_box {
+    border: 1px solid #C0DEEA;
+    border-radius: 5px;
+    color: #7D7B7B;
+    font-size: 12px;
+    line-height: 25px;
+    margin: 30px 0px 10px 0px;
+    padding: 10px;
+    position: relative;
+}
+
+.tip_box h2 {
+    background: none repeat scroll 0 0 #FFFFFF;
+    color: #60A1BB;
+    font-size: 16px;
+    padding: 0 5px;
+    position: absolute;
+    top: -16px;
+}
+
+.text_register {
+    margin-left: 12px;
+    color: #373738;
+    font-size: 12px;
+}
+
+.text_register a {
+    color: #60A1BB;
+}

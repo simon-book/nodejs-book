@@ -1,0 +1,40 @@
+<html>
+
+<head>
+    <title>test</title>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/1.11.1/jquery.js"></script>
+    <style type="text/css">
+    img {
+        max-width: 100%;
+    }
+    </style>
+</head>
+
+<body>
+    <div>
+        地址： <input type="text" id="address" />
+        <br />
+        张数： <input type="number" id="number" />
+        <button type="button" id="ok">Click Me!</button>
+    </div>
+    <div id="imgList">
+    </div>
+</body>
+<script type="text/javascript">
+var address = $("#address");
+var number = $("#number");
+var ok = $("#ok");
+var imgList = $("#imgList")
+ok.on("click", function() {
+    var addr = address.val().split(/\d+\.jpg/)[0];
+    var num = parseInt(number.val());
+    imgList.empty();
+    if (addr && num > 0) {
+        for (var i = 1; i <= num; i++) {
+            imgList.append('<img src="' + addr + i + '.jpg">');
+        }
+    }
+})
+</script>
+
+</html>

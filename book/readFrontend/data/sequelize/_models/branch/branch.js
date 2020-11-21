@@ -41,6 +41,7 @@ var Branch = sequelize.define('branch', {
     // },
     // masterBranchId: Sequelize.BIGINT,
     copySrc: Sequelize.TEXT,
+    copyParams: Sequelize.JSONB,
     remark: Sequelize.TEXT,
     statusId: {
         type: Sequelize.INTEGER,
