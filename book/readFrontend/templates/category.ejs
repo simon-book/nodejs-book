@@ -4,7 +4,7 @@
 <%- include('common/searchForm', {}); %>
 <div class="recommend">
     <% books.forEach(function(book){ %>
-    <a class="common_sale" href="/book/<%= book.bookId%>/">
+    <a class="common_sale" href="/book/<%= book.bookId%>/" style="white-space: nowrap;">
         <span class="sort">
             <%= '['+book.categoryName+']'%></span>
         <span class="title">

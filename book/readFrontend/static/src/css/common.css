@@ -140,9 +140,11 @@ header span.logo {
 }
 .channelHeader .iconback {
     float: left;
+    height: 100%;
 }
 .channelHeader .iconhome {
     float: right;
+    height: 100%;
 }
 .channelHeader .iconback img, .channelHeader .iconhome img {
     height: 20px;
@@ -151,35 +153,36 @@ header span.logo {
 
 /*搜索框*/
 .searchForm {
-    text-align: center;
     margin: 10px;
     position: relative;
-    clear: both;
+    border: 1px #c0deea solid;
 }
 .searchForm_input {
-    border: 1px #c0deea solid;
+    display: block;
+    border: none;
     font-size: 14px;
     background: #f8fdff;
-    padding: 0 5px;
+    text-indent: 5px;
     width: 100%;
     height: 30px;
     line-height: 30px;
     color: #cbcfd1;
     box-sizing: border-box;
+    padding-right: 60px;
+
 }
 .searchForm_btn {
     position: absolute;
     right: 0;
     top: 0;
-    padding: 0;
     height: 30px;
     width: 60px;
     color: #C0DEEA;
     padding-left: 25px;
     line-height: 30px;
-    border: none;
     background: url(../images/icon-search.gif) no-repeat 15% 50%;
     background-size: 18px;
+    border: none;
     border-left: 1px #C0DEEA solid;
 }
 
@@ -234,6 +237,7 @@ header span.logo {
     padding: 10px 0px;
     margin: 0 10px;
     overflow: hidden;
+    white-space: nowrap;
 }
 .common_sale .num {
     display: inline-block;

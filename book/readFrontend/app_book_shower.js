@@ -44,7 +44,9 @@ app.use('*', function(req, res, next) {
     next();
 })
 
-app.use(__G__.CONTEXT + "/static", express.static(path.join(__dirname, '/static')));
+app.use(__G__.CONTEXT + "/static", express.static(path.join(__dirname, '/static'), {
+    maxAge: '1d'
+}));
 app.use(__G__.CONTEXT + "/html", express.static(path.join(__dirname, '/html')));
 
 app.use(__G__.CONTEXT || '/', require('./controller/pageRoutes.js'));

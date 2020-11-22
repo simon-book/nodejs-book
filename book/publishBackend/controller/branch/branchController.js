@@ -54,6 +54,7 @@ exports.updateBranch = async function(req, res) {
         }
         if (body.name) branch.set("name", body.name);
         if (body.copySrc) branch.set("copySrc", body.copySrc);
+        if (body.copyParams) branch.set("copyParams", body.copyParams);
         if (body.remark) branch.set("remark", body.remark);
         if (body.statusId) branch.set("statusId", body.statusId);
         var added = await branch.save();

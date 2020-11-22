@@ -91,7 +91,7 @@ exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
                 offset: offset || 0,
                 raw: true,
                 order: order || [
-                    ['bookId', 'DESC']
+                    ['lastUpdatedAt', 'DESC']
                 ],
                 transaction: t,
                 attributes: ["bookId", "title", "cover", "horiCover", "writer", "categoryId", "categoryName", "abstractContent", "chapterCount", "recommend", "readCount", "publishStatus", "lastUpdatedAt"],

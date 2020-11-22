@@ -348,6 +348,7 @@ exports.search = async function(req, res) {
                 title: "搜索_输入书名•作者_小说_" + branchInfo.title,
                 keywords: branchInfo.keywords,
                 description: branchInfo.description,
+                keyword: "",
                 pageTitle: "搜索 输入书名•作者 小说",
                 books: [],
                 errorMsg: "指定关键字没有匹配到任何内容！",

@@ -196,7 +196,7 @@ exports.copy_all_books = async function(categoryPageIndex) {
                     console.log(category, branch.category[category][0], index);
                     console.log(err);
                 }
-            } while (index <= branch.categoryPage);
+            } while (index <= branch.categoryPage && index <= totalPage);
         }
     } catch (err) {
         console.log(err);
@@ -320,6 +320,7 @@ exports.copy_page = async function() {
             var recommendBookIds = [];
             var rankBookIds = [];
             var allRecommendOriginIds = {};
+            console.log("homepage page");
             var html = await httpGateway.htmlStartReq(branch.pcCopyUrl, path, branch.charset);
             var $ = cheerio.load(html, {
                 decodeEntities: false
@@ -459,7 +460,7 @@ exports.copy_page = async function() {
                 if (!rankBookIds.length || !recommendBookIds.length) continue;
                 var savedRank = await pageSequelize.findOne({
                     branchId: branch.branchId,
-                    token: branch.category[category][2]
+                    token: branch.category[category][2].toString()
                 })
                 if (savedRank) {
                     savedRank.set("recommendBookIds", recommendBookIds);

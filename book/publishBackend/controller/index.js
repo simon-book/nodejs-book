@@ -17,12 +17,13 @@ router.post('/create_brand', branchController.createBranch);
 router.post('/update_brand', branchController.updateBranch);
 
 router.post('/copy_biquge_books', async function(req, res) {
-    // await copyBiqugeController.copy_book_category();
-    // await copyBiqugeController.copy_book_rank_category();
     await copyBiqugeController.queryBranchInfo();
-    // await copyBiqugeController.copy_all_books(req.body.categoryPageIndex);
-    // await copyBiqugeController.copy_page();
+    await copyBiqugeController.copy_book_category();
+    await copyBiqugeController.copy_book_rank_category();
+    await copyBiqugeController.queryBranchInfo();
+    await copyBiqugeController.copy_page();
     await copyBiqugeController.copy_rank();
+    await copyBiqugeController.copy_all_books(req.body.categoryPageIndex);
     res.send(true);
 })
 router.post('/copy_biquge_book', function(req, res) {
