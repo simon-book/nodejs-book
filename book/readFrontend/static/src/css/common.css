@@ -138,6 +138,13 @@ header span.logo {
     background-color: #68aac2;
     overflow: hidden;
 }
+.channelHeader .channelHeaderTitle {
+    overflow: hidden;
+    margin: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 15px;
+}
 .channelHeader .iconback {
     float: left;
     height: 100%;
@@ -424,7 +431,9 @@ header span.logo {
 }
 .chapter {
     display: block;
-    padding: 0 10px;
+    padding: 7px 10px;
     line-height: 40px;
     font-size: 16px;
+    /* white-space: nowrap; */
+    line-height: 26px;
 }

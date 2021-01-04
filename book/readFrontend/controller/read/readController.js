@@ -114,7 +114,7 @@ exports.chapterDetail = async function(bookId, number) {
                         chapter.save();
                     }
                 }
-                checkSiblingsChapters(book, number);
+                // checkSiblingsChapters(book, number);
             }
         } else if (chapterDetail.type == "picture") {
             chapterDetail.content = chapter.pics;

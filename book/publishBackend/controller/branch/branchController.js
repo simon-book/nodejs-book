@@ -65,3 +65,23 @@ exports.updateBranch = async function(req, res) {
         return;
     }
 }
+
+exports.getBranch = async function(req, res) {
+    try {
+        var body = req.body;
+        if (!body.branchId) {
+            adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
+            return;
+        }
+        var branch = await branchSequelize.findOneById(body.branchId);
+        if (!branch) {
+            adminHttpResult.jsonFailOut(req, res, "BRANCH_ERROR", "branch不存在！");
+            return;
+        }
+        adminHttpResult.jsonSuccOut(req, res, branch);
+    } catch (err) {
+        errHandler.setHttpError(req.originalUrl, req.body, err);
+        adminHttpResult.jsonFailOut(req, res, "SERVICE_INVALID", null, err);
+        return;
+    }
+}

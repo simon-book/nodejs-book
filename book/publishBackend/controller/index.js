@@ -15,6 +15,7 @@ var MossClient = require('../service/mossConn.js');
 
 router.post('/create_brand', branchController.createBranch);
 router.post('/update_brand', branchController.updateBranch);
+router.post('/get_brand', branchController.getBranch);
 
 router.post('/copy_biquge_books', async function(req, res) {
     await copyBiqugeController.queryBranchInfo();
@@ -22,12 +23,13 @@ router.post('/copy_biquge_books', async function(req, res) {
     await copyBiqugeController.copy_book_rank_category();
     await copyBiqugeController.queryBranchInfo();
     await copyBiqugeController.copy_page();
-    await copyBiqugeController.copy_rank();
+    // await copyBiqugeController.copy_rank();
     await copyBiqugeController.copy_all_books(req.body.categoryPageIndex);
     res.send(true);
 })
-router.post('/copy_biquge_book', function(req, res) {
-    copyBiqugeController.create_book(req.body.originId);
+router.post('/copy_biquge_book', async function(req, res) {
+    await copyBiqugeController.queryBranchInfo();
+    await copyBiqugeController.create_book(req.body.originId);
     res.send(true);
 })
 

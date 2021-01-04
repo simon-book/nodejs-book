@@ -11,18 +11,44 @@ var charsets = {
     "www.35wx.com": "GBK"
 }
 
-exports.copyChapterContent = async function(host, path) {
+async function copyBiqugeInfoChapterContent(host, path) {
     try {
-        // if (/biquge\.info/.test(host)) {
         var bookHtml = await httpGateway.htmlStartReq(host, path);
         var $ = cheerio.load(bookHtml, {
             decodeEntities: false
         });
-        return $("#content").html();
-        // } else {
-        //     return "";
-        // }
+        var content = $("#content").html();
+        if (!content) {
+            var a = $("a")[0];
+            if (a && /如果您的页面没有自动跳转，请点击这里/.test($(a).text())) {
+                var bookHtml = await httpGateway.htmlStartReq(host, $(a).attr("href"));
+                var $ = cheerio.load(bookHtml, {
+                    decodeEntities: false
+                });
+                var content = $("#content").html();
+            }
+        }
+        return content;
     } catch (err) {
+        console.log(err);
+        return "";
+    }
+}
+
+exports.copyChapterContent = async function(host, path) {
+    try {
+        if (/biquge\.info/.test(host)) {
+            var content = await copyBiqugeInfoChapterContent(host, path);
+            if (!content) var content = await copyBiqugeInfoChapterContent(host, path);
+            if (!content) var content = await copyBiqugeInfoChapterContent(host, path);
+            if (!content) var content = await copyBiqugeInfoChapterContent(host, path);
+            if (!content) var content = await copyBiqugeInfoChapterContent(host, path);
+            return content;
+        } else {
+            return "";
+        }
+    } catch (err) {
+        console.log(err);
         return "";
     }
 }

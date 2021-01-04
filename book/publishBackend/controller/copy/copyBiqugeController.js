@@ -146,58 +146,67 @@ exports.copy_book_rank_category = async function() {
 exports.copy_all_books = async function(categoryPageIndex) {
     try {
         for (var category in branch.category) {
-            var index = 1;
-            var totalPage = 1;
+            copy_category_books(category, categoryPageIndex);
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+
+async function copy_category_books(category, categoryPageIndex) {
+    try {
+        var index = 1;
+        var totalPage = 1;
+        try {
+            var path = "/list/" + branch.category[category][0] + "_1" + ".html";
+            console.log(path);
+            var html = await httpGateway.htmlStartReq(branch.copyUrl, path, branch.charset);
+            var $ = cheerio.load(html, {
+                decodeEntities: false
+            });
+            var pages = $(".page2").text().match(/\d+/g);
+            if (pages[1]) totalPage = parseInt(pages[1]);
+            console.log(totalPage);
+        } catch (err) {
+            console.log("获取分类totalPage失败", category);
+        }
+        if (categoryPageIndex && totalPage >= categoryPageIndex) index = categoryPageIndex;
+        do {
             try {
-                var path = "/list/" + branch.category[category][0] + "_1" + ".html";
+                var path = "/list/" + branch.category[category][0] + "_" + index + ".html";
                 console.log(path);
                 var html = await httpGateway.htmlStartReq(branch.copyUrl, path, branch.charset);
                 var $ = cheerio.load(html, {
                     decodeEntities: false
                 });
-                var pages = $(".page2").text().match(/\d+/g);
-                if (pages[1]) totalPage = parseInt(pages[1]);
-                console.log(totalPage);
-            } catch (err) {
-                console.log("获取分类totalPage失败", category);
-            }
-            if (categoryPageIndex && totalPage >= categoryPageIndex) index = categoryPageIndex;
-            do {
-                try {
-                    var path = "/list/" + branch.category[category][0] + "_" + index + ".html";
-                    console.log(path);
-                    var html = await httpGateway.htmlStartReq(branch.copyUrl, path, branch.charset);
-                    var $ = cheerio.load(html, {
-                        decodeEntities: false
-                    });
-                    var targetItems = $(".list.fk").children("ul");
-                    for (var i = 0; i < targetItems.length; i++) {
-                        try {
-                            var item = targetItems[i];
-                            var bookHref = $(item).find("a").attr("href");
-                            var originId = bookHref.replace(/\//g, "");
-                            var savedBook = await bookSequelize.findOneBook({
-                                branchId: branch.branchId,
-                                originId: originId
-                            })
-                            if (savedBook) {
-                                var result = await update_book(savedBook);
-                            } else {
-                                var result = await create_book(originId, branch.category[category][1], category);
-                            }
-                            if (!result) throw new Error("save book error.")
-                        } catch (err) {
-                            console.log(category, branch.category[category][0], index, i, originId);
-                            console.log(err);
+                var targetItems = $(".list.fk").children("ul");
+                for (var i = 0; i < targetItems.length; i++) {
+                    try {
+                        var item = targetItems[i];
+                        var bookHref = $(item).find("a").attr("href");
+                        var originId = bookHref.replace(/\//g, "");
+                        var savedBook = await bookSequelize.findOneBook({
+                            branchId: branch.branchId,
+                            originId: originId
+                        })
+                        if (savedBook) {
+                            var result = await update_book(savedBook);
+                        } else {
+                            var result = await create_book(originId, branch.category[category][1], category);
                         }
+                        if (!result) throw new Error("save book error.")
+                    } catch (err) {
+                        console.log(category, branch.category[category][0], index, i, originId);
+                        console.log(err);
                     }
-                    index++;
-                } catch (err) {
-                    console.log(category, branch.category[category][0], index);
-                    console.log(err);
                 }
-            } while (index <= branch.categoryPage && index <= totalPage);
-        }
+                index++;
+            } catch (err) {
+                console.log(category, branch.category[category][0], index);
+                console.log(err);
+            }
+        } while (index <= branch.categoryPage && index <= totalPage);
     } catch (err) {
         console.log(err);
     }
@@ -265,7 +274,7 @@ async function create_book(originId, categoryId, categoryName) {
         var added = await bookSequelize.create(book);
         return added;
     } catch (err) {
-        console.log(err);
+        console.log(err, book);
         return false;
     }
 }

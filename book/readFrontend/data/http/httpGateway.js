@@ -63,7 +63,7 @@ exports.htmlStartReq = function(host, path, charset) {
                         if (charset && charset != "utf-8" && charset != "UTF-8") {
                             resolve(iconv.decode(body, charset));
                         } else {
-                            if (contentEncoding == "gzip") {
+                            if (contentEncoding && contentEncoding == "gzip") {
                                 body = zlib.gunzipSync(body)
                             }
                             resolve(body);
