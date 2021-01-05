@@ -26,7 +26,7 @@
                     <%= book.writer%>
                 </p>
                 <p class="review">
-                    <%= book.abstractContent?'简介：'+book.abstractContent:''%>
+                    <%= book.abstractContent?'简介：'+book.abstractContent.replace(/\\n/g, '').replace(/\s+/g, ''):''%>
                 </p>
             </div>
         </a>
