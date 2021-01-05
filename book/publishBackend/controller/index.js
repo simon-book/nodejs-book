@@ -23,7 +23,7 @@ router.post('/copy_biquge_books', async function(req, res) {
     await copyBiqugeController.copy_book_rank_category();
     await copyBiqugeController.queryBranchInfo();
     await copyBiqugeController.copy_page();
-    // await copyBiqugeController.copy_rank();
+    await copyBiqugeController.copy_rank();
     await copyBiqugeController.copy_all_books(req.body.categoryPageIndex);
     res.send(true);
 })
@@ -87,8 +87,6 @@ router.post('/create_page', pageController.create);
 router.post('/update_page', pageController.update);
 router.get('/delete_page/:pageId', pageController.delete);
 router.get('/list_page', pageController.list);
-
-
 
 
 

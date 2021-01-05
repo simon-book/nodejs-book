@@ -146,7 +146,7 @@ exports.copy_book_rank_category = async function() {
 exports.copy_all_books = async function(categoryPageIndex) {
     try {
         for (var category in branch.category) {
-            copy_category_books(category, categoryPageIndex);
+            await copy_category_books(category, categoryPageIndex);
         }
     } catch (err) {
         console.log(err);
@@ -169,7 +169,7 @@ async function copy_category_books(category, categoryPageIndex) {
             if (pages[1]) totalPage = parseInt(pages[1]);
             console.log(totalPage);
         } catch (err) {
-            console.log("获取分类totalPage失败", category);
+            console.log("获取分类totalPage失败", category, err);
         }
         if (categoryPageIndex && totalPage >= categoryPageIndex) index = categoryPageIndex;
         do {
@@ -230,7 +230,7 @@ async function create_book(originId, categoryId, categoryName) {
             recommend: 60 + parseInt(40 * Math.random()),
             chapters: []
         }
-        console.log(bookHref);
+        // console.log(bookHref);
         var bookHtml = await httpGateway.htmlStartReq(branch.pcCopyUrl, bookHref, branch.charset);
         var $ = cheerio.load(bookHtml, {
             decodeEntities: false
@@ -239,7 +239,7 @@ async function create_book(originId, categoryId, categoryName) {
         if (!/^(http)/.test(book.cover)) book.cover = branch.pcCopyUrl + book.cover;
         var liItems = $("#info").children();
         book.title = $(liItems[0]).text();
-        console.log(book.title);
+        // console.log(book.title);
         book.writer = $(liItems[1]).text().split(":")[1];
         if (!book.categoryName) book.categoryName = $(liItems[2]).text().split(":")[1];
         if (!book.categoryId) book.categoryId = branch.category[book.categoryName] ? branch.category[book.categoryName][1] : 7
@@ -289,7 +289,7 @@ async function update_book(savedBook) {
             decodeEntities: false
         });
         var liItems = $("#info").children();
-        console.log($(liItems[0]).text());
+        // console.log($(liItems[0]).text());
         var lastUpdatedAt = new Date($(liItems[3]).text().split(/\s+\:/)[1]);
         if (Math.abs(lastUpdatedAt.getTime() - new Date(savedBook.lastUpdatedAt).getTime()) > 10000) {
             savedBook.set("lastUpdatedAt", lastUpdatedAt);
