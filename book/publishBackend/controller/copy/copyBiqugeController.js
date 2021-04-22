@@ -5,7 +5,7 @@ var moment = require('moment');
 var cheerio = require('cheerio');
 var util = require('../../util/index.js');
 var httpGateway = require('../../data/http/httpGateway.js')
-// var branchMap = require('./commonController.js').branchMap
+var commonController = require('./commonController.js')
 var branchSequelize = require('../../data/sequelize/branch/branchSequelize.js');
 var bookCategorySequelize = require('../../data/sequelize/book/bookCategorySequelize.js');
 var tagSequelize = require('../../data/sequelize/book/tagSequelize.js');
@@ -81,10 +81,11 @@ exports.copy_book_category = async function() {
     try {
         var path = "/sort.html";
         console.log(path);
-        var html = await httpGateway.htmlStartReq(branch.copyUrl, path, branch.charset);
-        var $ = cheerio.load(html, {
-            decodeEntities: false
-        });
+        // var html = await httpGateway.htmlStartReq(branch.copyUrl, path, branch.charset);
+        // var $ = cheerio.load(html, {
+        //     decodeEntities: false
+        // });
+        var $ = await commonController.copyHtml(branch.copyUrl, path, branch.charset);
         var targetItems = $(".sorttop").find("a");
         for (var i = 0; i < targetItems.length; i++) {
             try {
@@ -114,10 +115,11 @@ exports.copy_book_rank_category = async function() {
     try {
         var path = "/top.html";
         console.log(path);
-        var html = await httpGateway.htmlStartReq(branch.copyUrl, path, branch.charset);
-        var $ = cheerio.load(html, {
-            decodeEntities: false
-        });
+        // var html = await httpGateway.htmlStartReq(branch.copyUrl, path, branch.charset);
+        // var $ = cheerio.load(html, {
+        //     decodeEntities: false
+        // });
+        var $ = await commonController.copyHtml(branch.copyUrl, path, branch.charset);
         var targetItems = $(".sorttop").find("a");
         for (var i = 0; i < targetItems.length; i++) {
             try {
@@ -161,10 +163,11 @@ async function copy_category_books(category, categoryPageIndex) {
         try {
             var path = "/list/" + branch.category[category][0] + "_1" + ".html";
             console.log(path);
-            var html = await httpGateway.htmlStartReq(branch.copyUrl, path, branch.charset);
-            var $ = cheerio.load(html, {
-                decodeEntities: false
-            });
+            // var html = await httpGateway.htmlStartReq(branch.copyUrl, path, branch.charset);
+            // var $ = cheerio.load(html, {
+            //     decodeEntities: false
+            // });
+            var $ = await commonController.copyHtml(branch.copyUrl, path, branch.charset);
             var pages = $(".page2").text().match(/\d+/g);
             if (pages[1]) totalPage = parseInt(pages[1]);
             console.log(totalPage);
@@ -176,10 +179,11 @@ async function copy_category_books(category, categoryPageIndex) {
             try {
                 var path = "/list/" + branch.category[category][0] + "_" + index + ".html";
                 console.log(path);
-                var html = await httpGateway.htmlStartReq(branch.copyUrl, path, branch.charset);
-                var $ = cheerio.load(html, {
-                    decodeEntities: false
-                });
+                // var html = await httpGateway.htmlStartReq(branch.copyUrl, path, branch.charset);
+                // var $ = cheerio.load(html, {
+                //     decodeEntities: false
+                // });
+                var $ = await commonController.copyHtml(branch.copyUrl, path, branch.charset);
                 var targetItems = $(".list.fk").children("ul");
                 for (var i = 0; i < targetItems.length; i++) {
                     try {
@@ -231,10 +235,11 @@ async function create_book(originId, categoryId, categoryName) {
             chapters: []
         }
         // console.log(bookHref);
-        var bookHtml = await httpGateway.htmlStartReq(branch.pcCopyUrl, bookHref, branch.charset);
-        var $ = cheerio.load(bookHtml, {
-            decodeEntities: false
-        });
+        // var bookHtml = await httpGateway.htmlStartReq(branch.pcCopyUrl, bookHref, branch.charset);
+        // var $ = cheerio.load(bookHtml, {
+        //     decodeEntities: false
+        // });
+        var $ = await commonController.copyHtml(branch.pcCopyUrl, bookHref, branch.charset);
         book.cover = $("#fmimg").find("img").attr("src");
         if (!/^(http)/.test(book.cover)) book.cover = branch.pcCopyUrl + book.cover;
         var liItems = $("#info").children();
@@ -284,10 +289,11 @@ exports.create_book = create_book;
 async function update_book(savedBook) {
     try {
         var bookHref = "/" + savedBook.originId + "/";
-        var bookHtml = await httpGateway.htmlStartReq(branch.pcCopyUrl, bookHref, branch.charset);
-        var $ = cheerio.load(bookHtml, {
-            decodeEntities: false
-        });
+        // var bookHtml = await httpGateway.htmlStartReq(branch.pcCopyUrl, bookHref, branch.charset);
+        // var $ = cheerio.load(bookHtml, {
+        //     decodeEntities: false
+        // });
+        var $ = await commonController.copyHtml(branch.pcCopyUrl, bookHref, branch.charset);
         var liItems = $("#info").children();
         // console.log($(liItems[0]).text());
         var lastUpdatedAt = new Date($(liItems[3]).text().split(/\s+\:/)[1]);
@@ -330,10 +336,11 @@ exports.copy_page = async function() {
             var rankBookIds = [];
             var allRecommendOriginIds = {};
             console.log("homepage page");
-            var html = await httpGateway.htmlStartReq(branch.pcCopyUrl, path, branch.charset);
-            var $ = cheerio.load(html, {
-                decodeEntities: false
-            });
+            // var html = await httpGateway.htmlStartReq(branch.pcCopyUrl, path, branch.charset);
+            // var $ = cheerio.load(html, {
+            //     decodeEntities: false
+            // });
+            var $ = await commonController.copyHtml(branch.pcCopyUrl, path, branch.charset);
             var targetItems = $("#hotcontent").find(".item");
             for (var i = 0; i < targetItems.length; i++) {
                 try {
@@ -420,11 +427,11 @@ exports.copy_page = async function() {
                 console.log(path);
                 var recommendBookIds = [];
                 var rankBookIds = [];
-                var html = await httpGateway.htmlStartReq(branch.pcCopyUrl, path, branch.charset);
-                var $ = cheerio.load(html, {
-                    decodeEntities: false
-                });
-
+                // var html = await httpGateway.htmlStartReq(branch.pcCopyUrl, path, branch.charset);
+                // var $ = cheerio.load(html, {
+                //     decodeEntities: false
+                // });
+                var $ = await commonController.copyHtml(branch.pcCopyUrl, path, branch.charset);
                 if (allRecommendOriginIds[category] && allRecommendOriginIds[category].length) {
                     for (var i = 0; i < allRecommendOriginIds[category].length; i++) {
                         try {
@@ -508,10 +515,11 @@ exports.copy_rank = async function() {
                     console.log(path);
                     // var recommendBookIds = [];
                     try {
-                        var html = await httpGateway.htmlStartReq(branch.copyUrl, path, branch.charset);
-                        var $ = cheerio.load(html, {
-                            decodeEntities: false
-                        });
+                        // var html = await httpGateway.htmlStartReq(branch.copyUrl, path, branch.charset);
+                        // var $ = cheerio.load(html, {
+                        //     decodeEntities: false
+                        // });
+                        var $ = await commonController.copyHtml(branch.copyUrl, path, branch.charset);
                         var targetItems = $(".list").find(".tjimg");
                         for (var i = 0; i < targetItems.length; i++) {
                             try {

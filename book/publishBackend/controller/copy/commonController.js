@@ -1,3 +1,10 @@
+var Sequelize = require('sequelize');
+var _ = require('lodash');
+var Op = Sequelize.Op;
+var moment = require('moment');
+var cheerio = require('cheerio');
+var httpGateway = require('../../data/http/httpGateway.js')
+
 exports.branchMap = {
     // "m.35xs.co": { //35小说网
     //     branchId: 1,
@@ -41,5 +48,38 @@ exports.branchMap = {
             "连载中": 1,
             "已完结": 2
         }
+    }
+}
+
+async function reqHtmlContent(host, path, charset) {
+    try {
+        var html = await httpGateway.htmlStartReq(host, path, charset);
+        var $ = cheerio.load(html, {
+            decodeEntities: false
+        });
+        var metas = $('meta[name="keywords"]');
+        if (metas && metas.length) return $;
+        else {
+            console.log(html);
+            return null;
+        }
+    } catch (err) {
+        console.log(err, host + path);
+        return null;
+    }
+}
+
+exports.copyHtml = async function(host, path, charset) {
+    try {
+        var result = await reqHtmlContent(host, path, charset);
+        if (!result) var result = await reqHtmlContent(host, path, charset);
+        if (!result) var result = await reqHtmlContent(host, path, charset);
+        if (!result) var result = await reqHtmlContent(host, path, charset);
+        if (!result) var result = await reqHtmlContent(host, path, charset);
+        if (result) return result;
+        else throw new Error("5次请求html失败");
+    } catch (err) {
+        console.log("5次请求html失败:", path);
+        throw err;
     }
 }
