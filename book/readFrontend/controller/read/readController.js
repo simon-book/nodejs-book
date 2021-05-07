@@ -80,8 +80,7 @@ exports.chapterDetail = async function(bookId, number) {
             bookId: bookId
         });
         if (!chapter) {
-            adminHttpResult.jsonSuccOut(req, res, null);
-            return;
+            return null;
         }
         var chapterDetail = {
             book: book,
@@ -124,7 +123,7 @@ exports.chapterDetail = async function(bookId, number) {
 
     } catch (err) {
         console.error(err);
-        return [];
+        return null;
     }
 }
 
