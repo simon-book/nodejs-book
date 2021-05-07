@@ -37,16 +37,16 @@ async function copyBiqugeInfoChapterContent(host, path) {
 
 exports.copyChapterContent = async function(host, path) {
     try {
-        if (/biquge\.info/.test(host)) {
-            var content = await copyBiqugeInfoChapterContent(host, path);
-            if (!content) var content = await copyBiqugeInfoChapterContent(host, path);
-            if (!content) var content = await copyBiqugeInfoChapterContent(host, path);
-            if (!content) var content = await copyBiqugeInfoChapterContent(host, path);
-            if (!content) var content = await copyBiqugeInfoChapterContent(host, path);
-            return content;
-        } else {
-            return "";
-        }
+        // if (/biquge\.info/.test(host)) {
+        var content = await copyBiqugeInfoChapterContent(host, path);
+        if (!content) var content = await copyBiqugeInfoChapterContent(host, path);
+        if (!content) var content = await copyBiqugeInfoChapterContent(host, path);
+        if (!content) var content = await copyBiqugeInfoChapterContent(host, path);
+        if (!content) var content = await copyBiqugeInfoChapterContent(host, path);
+        return content;
+        // } else {
+        //     return "";
+        // }
     } catch (err) {
         console.log(err);
         return "";

@@ -76,8 +76,10 @@ exports.copyHtml = async function(host, path, charset) {
         if (!result) var result = await reqHtmlContent(host, path, charset);
         if (!result) var result = await reqHtmlContent(host, path, charset);
         if (!result) var result = await reqHtmlContent(host, path, charset);
-        if (result) return result;
-        else throw new Error("5次请求html失败");
+        if (result) {
+            console.log("success:" + host + path)
+            return result;
+        } else throw new Error("5次请求html失败");
     } catch (err) {
         console.log("5次请求html失败:", path);
         throw err;
