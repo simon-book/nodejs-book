@@ -3,7 +3,10 @@ var _ = require('lodash');
 var Op = Sequelize.Op;
 var moment = require('moment');
 var cheerio = require('cheerio');
-var httpGateway = require('../../data/http/httpGateway.js')
+var httpGateway = require('../../data/http/httpGateway.js');
+
+var bookSequelize = require('../../data/sequelize/book/bookSequelize.js');
+var bookChapterSequelize = require('../../data/sequelize/book/bookChapterSequelize.js');
 
 exports.branchMap = {
     // "m.35xs.co": { //35小说网
@@ -83,5 +86,26 @@ exports.copyHtml = async function(host, path, charset) {
     } catch (err) {
         console.log("5次请求html失败:", path);
         throw err;
+    }
+}
+
+
+exports.updateBookLastChapterId = async function() {
+    try {
+        var books = await bookSequelize.findAll(null, ["bookId", "lastChapterId", "chapterCount"]);
+        for (var i = 0; i < books.length; i++) {
+            var book = books[i];
+            if (book.lastChapterId || !book.chapterCount) continue;
+            var lastChapter = await bookChapterSequelize.findOne({
+                bookId: book.bookId,
+                number: book.chapterCount
+            }, ["chapterId"]);
+            if (lastChapter) {
+                book.set("lastChapterId", lastChapter.chapterId);
+                await book.save();
+            }
+        }
+    } catch (err) {
+        console.log(err);
     }
 }

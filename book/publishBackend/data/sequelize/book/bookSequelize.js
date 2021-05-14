@@ -9,26 +9,9 @@ var Tag = require('../_models/book/tag.js')
 var BookCategory = require('../_models/book/bookCategory.js')
 var BookTag = require('../_models/book/bookTag.js')
 
-var Book_Chapter = Book.hasMany(BookChapter, {
-    as: 'chapters',
-    foreignKey: 'bookId'
-})
-
-var Chapter_Book = BookChapter.belongsTo(Book, {
-    as: 'book',
-    foreignKey: 'bookId'
-})
-
 exports.create = function(obj) {
     return new Promise(function(resolve, reject) {
-        Book.create(obj
-            /*, {
-                include: [{
-                    association: Book_Chapter,
-                    as: 'chapters'
-                }]
-            }*/
-        ).then(function(results) {
+        Book.create(obj).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
             reject(err);
@@ -92,6 +75,19 @@ exports.findOneBook = function(where) {
                 required: false,
                 attributes: ["tagId", "name"]
             }]
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
+exports.findAll = function(where, attributes) {
+    return new Promise(function(resolve, reject) {
+        Book.findAll({
+            where: where,
+            attributes: attributes
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {

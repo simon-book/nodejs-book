@@ -46,7 +46,13 @@ exports.findAll = function(where, raw) {
         Book.findAll({
             where: where,
             raw: raw || false,
-            attributes: ["bookId", "title", "writer", "categoryName", "cover", "abstractContent"]
+            attributes: ["bookId", "title", "writer", "categoryName", "cover", "abstractContent"],
+            include: [{
+                model: BookChapter,
+                as: 'lastChapter',
+                raw: true,
+                attributes: ["chapterId", "title", "number"]
+            }]
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
@@ -64,9 +70,9 @@ exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
     // }]
     var include = [{
         model: BookChapter,
-        as: 'chapters',
-        limit: 1,
-        attributes: ["chapterId", "name", "number"]
+        as: 'lastChapter',
+        raw: true,
+        attributes: ["chapterId", "title", "number"]
     }];
     if (tagWhere) include.push({
         model: Tag,
@@ -94,7 +100,7 @@ exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
                 where: where,
                 limit: limit || 10000,
                 offset: offset || 0,
-                raw: true,
+                // raw: true,
                 order: order || [
                     ['lastUpdatedAt', 'DESC']
                 ],

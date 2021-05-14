@@ -124,12 +124,13 @@
                         <span class="book-category">[
                             <%= book.categoryName%>]</span>
                         <span class="book-title">
-                            <a href="/html/565/565171/">
+                            <a href="/book/<%= book.bookId%>">
                                 <%= book.title%></a>
                         </span>
                     </div>
                     <div class="col-md-5 hidden-xs hidden-sm">
-                        <span class="book-new-chapter"><a href="/html/565/565171/6305027.html">第一千零二十八章 劝说劝说劝说劝说劝说劝说劝说劝说劝说劝说劝说劝说劝说劝说</a></span>
+                        <span class="book-new-chapter"><a href="/book/<%= book.bookId%>/<%= book.lastChapter.number%>">
+                                <%= book.lastChapter.title%></a></span>
                     </div>
                     <div class="col-xs-3 col-md-3">
                         <span class="book-updated hidden-xs hidden-sm">

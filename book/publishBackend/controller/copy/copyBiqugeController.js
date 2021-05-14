@@ -73,6 +73,10 @@ exports.queryBranchInfo = async function() {
                 // branch.rank[item.name] = item.token;
                 branch.rank[item.name] = item;
             })
+            var count = await bookSequelize.countBooks({
+                branchId: branch.branchId
+            });
+            branch.bookCount = count || 0;
         }
     } catch (err) {
         console.log(err);
@@ -244,28 +248,39 @@ async function create_book(originId, categoryId, categoryName) {
             writer: book.writer
         })
         if (sameBook) return true;
-        var bookChapters = [];
+        branch.bookCount++;
+        book.sn = util.prefixInteger(branch.bookCount, 8);
+        var savedBook = await bookSequelize.create(book);
+        var start = 0;
+        var newChapters = [];
+        var lastChapter = null;
         var chapters = $("#list dl").children();
-        book.chapterCount = chapters.length;
-        for (var j = 0; j < chapters.length; j++) {
+        for (var j = start; j < chapters.length; j++) {
             var a = $(chapters[j]).children()[0];
             var aHref = $(a).attr("href");
             var ids = aHref.match(/\d+/g);
-            book.chapters.push({
+            var newChapter = {
                 title: $(a).text(),
                 number: j + 1,
                 type: 1,
+                bookId: savedBook.bookId,
                 branchId: branch.branchId,
                 originId: ids[ids.length - 1]
-            });
+            };
+            if (j < chapters.length - 1) {
+                newChapters.push(newChapter);
+            } else if (j == chapters.length - 1) {
+                lastChapter = newChapter;
+            }
         }
-        if (!book.chapters.length) return true;
-        var count = await bookSequelize.countBooks({
-            branchId: branch.branchId
-        });
-        book.sn = util.prefixInteger(count + 1, 8);
-        var added = await bookSequelize.create(book);
-        return added;
+        if (newChapters.length) var added = await bookChapterSequelize.bulkCreate(newChapters);
+        if (lastChapter) {
+            var added = await bookChapterSequelize.create(lastChapter);
+            savedBook.set("lastChapterId", added.chapterId);
+        }
+        savedBook.set("chapterCount", chapters.length);
+        await savedBook.save();
+        return savedBook;
     } catch (err) {
         console.log(err, book);
         return false;
@@ -281,27 +296,38 @@ async function update_book(savedBook) {
         var liItems = $("#info").children();
         // console.log($(liItems[0]).text());
         var lastUpdatedAt = new Date($(liItems[3]).text().split(/\s+\:/)[1]);
-        if (Math.abs(lastUpdatedAt.getTime() - new Date(savedBook.lastUpdatedAt).getTime()) > 10000) {
+        if (!savedBook.lastChapterId || Math.abs(lastUpdatedAt.getTime() - new Date(savedBook.lastUpdatedAt).getTime()) > 10000) {
             savedBook.set("lastUpdatedAt", lastUpdatedAt);
             savedBook.set("publishStatus", $('meta[property="og:novel:status"]').attr("content").indexOf("连载") > -1 ? 1 : 2);
-
+            var start = savedBook.chapterCount || 0;
             var newChapters = [];
+            var lastChapter = null;
             var chapters = $("#list dl").children();
-            for (var j = savedBook.chapterCount; j < chapters.length; j++) {
+            for (var j = start; j < chapters.length; j++) {
                 var a = $(chapters[j]).children()[0];
                 var aHref = $(a).attr("href");
                 var ids = aHref.match(/\d+/g);
-                newChapters.push({
+                var newChapter = {
                     title: $(a).text(),
-                    bookId: savedBook.bookId,
                     number: j + 1,
                     type: 1,
+                    bookId: savedBook.bookId,
                     branchId: branch.branchId,
                     originId: ids[ids.length - 1]
-                });
+                };
+                if (j < chapters.length - 1) {
+                    newChapters.push(newChapter);
+                } else if (j == chapters.length - 1) {
+                    lastChapter = newChapter;
+                }
             }
-            savedBook.set("chapterCount", chapters.length)
-            await bookSequelize.updateBookAndChapters(savedBook, newChapters);
+            if (newChapters.length) var added = await bookChapterSequelize.bulkCreate(newChapters);
+            if (lastChapter) {
+                var added = await bookChapterSequelize.create(lastChapter);
+                savedBook.set("lastChapterId", added.chapterId);
+            }
+            savedBook.set("chapterCount", chapters.length);
+            await savedBook.save();
         }
         return true;
     } catch (err) {

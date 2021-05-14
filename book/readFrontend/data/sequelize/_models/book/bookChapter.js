@@ -5,7 +5,6 @@ var moment = require('moment');
 var sequelize = require("../../../../service/sequelizeConn.js");
 
 var Branch = require("../branch/branch.js");
-var Book = require("./book.js");
 
 var BookChapter = sequelize.define('book_chapter', {
     chapterId: {
@@ -27,24 +26,8 @@ var BookChapter = sequelize.define('book_chapter', {
         type: Sequelize.INTEGER,
         defaultValue: 0
     },
-    bookId: {
-        type: Sequelize.BIGINT,
-        references: {
-            model: Book,
-            key: 'book_id',
-            deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
-        },
-        allowNull: false
-    },
-    branchId: {
-        type: Sequelize.BIGINT,
-        references: {
-            model: Branch,
-            key: 'branch_id',
-            deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
-        },
-        allowNull: false
-    }
+    bookId: Sequelize.BIGINT,
+    branchId: Sequelize.BIGINT
 }, {
     schema: __PGSQL__.schemas.book_publisher,
     tableName: 'book_chapter',
@@ -56,11 +39,5 @@ var BookChapter = sequelize.define('book_chapter', {
         fields: ['number']
     }]
 });
-
-Book.hasOne(BookChapter, {
-    as: "lastChapter",
-    foreignKey: "number",
-    sourceKey: 'chapterCount'
-})
 
 module.exports = BookChapter;

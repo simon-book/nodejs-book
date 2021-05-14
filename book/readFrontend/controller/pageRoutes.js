@@ -13,8 +13,8 @@ router.use(function(req, res, next) {
 router.get('/', page.home);
 router.get('/login', page.login);
 router.get('/register', page.register);
-router.get('/category', page.category);
-router.get('/category/:page', page.category);
+// router.get('/category', page.category);
+// router.get('/category/:page', page.category);
 router.get('/category/:categoryId/:page', page.category);
 
 

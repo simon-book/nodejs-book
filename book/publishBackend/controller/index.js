@@ -10,6 +10,7 @@ var rankController = require('./rank/rankController.js');
 var pageController = require('./rank/pageController.js');
 var bookChapterController = require('./book/bookChapterController.js');
 var copyBiqugeController = require('./copy/copyBiqugeController.js');
+var commonController = require('./copy/commonController.js');
 
 var MossClient = require('../service/mossConn.js');
 
@@ -37,6 +38,11 @@ router.post('/copy_biquge_page_and_rank', async function(req, res) {
 router.post('/copy_biquge_book', async function(req, res) {
     await copyBiqugeController.queryBranchInfo();
     await copyBiqugeController.create_book(req.body.originId);
+    res.send(true);
+})
+
+router.post('/updateBookLastChapterId', async function(req, res) {
+    await commonController.updateBookLastChapterId();
     res.send(true);
 })
 
