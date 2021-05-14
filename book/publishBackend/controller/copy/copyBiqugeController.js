@@ -244,6 +244,7 @@ async function create_book(originId, categoryId, categoryName) {
             writer: book.writer
         })
         if (sameBook) return true;
+        var bookChapters = [];
         var chapters = $("#list dl").children();
         book.chapterCount = chapters.length;
         for (var j = 0; j < chapters.length; j++) {

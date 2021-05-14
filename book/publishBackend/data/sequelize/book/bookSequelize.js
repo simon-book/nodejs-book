@@ -21,12 +21,14 @@ var Chapter_Book = BookChapter.belongsTo(Book, {
 
 exports.create = function(obj) {
     return new Promise(function(resolve, reject) {
-        Book.create(obj, {
-            include: [{
-                association: Book_Chapter,
-                as: 'chapters'
-            }]
-        }).then(function(results) {
+        Book.create(obj
+            /*, {
+                include: [{
+                    association: Book_Chapter,
+                    as: 'chapters'
+                }]
+            }*/
+        ).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
             reject(err);

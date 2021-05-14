@@ -3,7 +3,7 @@
 <nav class="smallNav">
     <a href="/rank" class="sel">龙虎榜</a>
     <a href="/category">分类</a>
-    <a href="/quanben"">全本</a>
+    <a href="/quanben">全本</a>
     <a href="/history">轨迹 </a> <a href="/bookshelf">书架</a>
 </nav>
 <%- include('common/searchForm', {}); %>
@@ -37,14 +37,16 @@
 <div class="tabArea bannerLink">
     <div class="tab-nav">
         <a class="tab-nav-cur">
-                <%= block.name%></a>
+            <%= block.name%></a>
     </div>
     <div class="slide">
         <% block.books.forEach(function(book){ %>
         <a class="common_sale" href="/book/<%= book.bookId%>/">
             <!-- <span class="sort">
                 <%= '['+book.categoryName+']'%></span> -->
-            <span class="title"><%= book.title%></span><span class="writer">（<%= book.writer%>）</span>
+            <span class="title">
+                <%= book.title%></span><span class="writer">（
+                <%= book.writer%>）</span>
         </a>
         <% }); %>
     </div>

@@ -57,5 +57,4 @@ var BookChapter = sequelize.define('book_chapter', {
     }]
 });
 
-
 module.exports = BookChapter;

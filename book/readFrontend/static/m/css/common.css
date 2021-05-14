@@ -1,0 +1,509 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    color: #4c6978;
+    font: 14px 'microsoft yahei', Arial, Helvetica, sans-serif;
+}
+
+img {
+    border: none;
+}
+
+a {
+    color: #4c6978;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.clearfix {
+    display: block;
+}
+
+.clearfix:after {
+    clear: both;
+    content: "";
+    display: block;
+}
+
+/*底部*/
+footer {
+    padding: 15px 10px;
+    text-align: center;
+    line-height: 33px;
+    background: #efefef;
+    position: relative;
+    font-size: 14px;
+}
+
+footer .backTop img {
+    position: absolute;
+    right: 25px;
+    top: 15px;
+    cursor: pointer;
+    width: 31px;
+}
+
+footer .channel a {
+    margin: 0 5px;
+    color: #68aac2;
+    /*text-shadow: 1px 1px #3e86a8;*/
+}
+
+header {
+    height: 54px;
+    background: #4baacd;
+    line-height: 54px;
+    border-bottom: 1px #4399b8 solid;
+}
+
+header span.logo {
+    float: left;
+    width: 142px;
+    height: 54px;
+    font-size: 24px;
+    color: #fff;
+    padding-left: 12px;
+}
+
+/*header a.login {
+    width: 25px;
+    height: 54px;
+    float: right;
+    margin: 0 6px;
+    font-size: 12px;
+    color: #C5F1FF;
+    line-height: 80px;
+    background: url(../images/icon-login.gif);
+    background-repeat: no-repeat;
+    background-position: 50% 30%;
+    background-size: 18px 19px;
+}*/
+
+.smallNav {
+    height: 40px;
+    background: #4baacd;
+    line-height: 40px;
+    text-align: center;
+    border-bottom: 1px #4399b8 solid;
+    font-size: 14px;
+    padding: 0 10px;
+    border-top: 1px #5db3d2 solid;
+}
+
+.smallNav a {
+    color: #fff;
+    float: left;
+    width: 16%;
+}
+
+.smallNav .sel {
+    font-weight: bold;
+}
+
+.tab-nav {
+    font-size: 16px;
+    background: #68aac2;
+    padding: 0 0 0 10px;
+    color: #fff;
+    height: 40px;
+    line-height: 40px;
+    overflow: hidden;
+}
+
+.tab-nav a {
+    color: #fff;
+    cursor: pointer;
+}
+
+.tab-nav .tab-nav-more {
+    float: right;
+    margin-right: 10px;
+}
+
+.rankArea .tab-nav {
+    font-size: 16px;
+    background: #F6F6F6;
+    border-top: 1px solid #D7D7D7;
+    border-bottom: 1px solid #D7D7D7;
+}
+
+.rankArea .tab-nav a {
+    color: #666;
+}
+
+/*子页面头部*/
+.channelHeader {
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    font-size: 16px;
+    color: #fff;
+    background-color: #68aac2;
+    overflow: hidden;
+}
+
+.channelHeader .channelHeaderTitle {
+    overflow: hidden;
+    margin: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 0 15px;
+}
+
+.channelHeader .iconback {
+    float: left;
+    height: 100%;
+}
+
+.channelHeader .iconhome {
+    float: right;
+    height: 100%;
+}
+
+.channelHeader .iconback img,
+.channelHeader .iconhome img {
+    height: 20px;
+    margin: 13px 8px;
+}
+
+/*搜索框*/
+.searchForm {
+    margin: 10px;
+    position: relative;
+    border: 1px #c0deea solid;
+}
+
+.searchForm_input {
+    display: block;
+    border: none;
+    font-size: 14px;
+    background: #f8fdff;
+    text-indent: 5px;
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    color: #cbcfd1;
+    box-sizing: border-box;
+    padding-right: 60px;
+
+}
+
+.searchForm_btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 30px;
+    width: 60px;
+    color: #C0DEEA;
+    padding-left: 25px;
+    line-height: 30px;
+    background: url(../images/icon-search.gif) no-repeat 15% 50%;
+    background-size: 18px;
+    border: none;
+    border-left: 1px #C0DEEA solid;
+}
+
+/*列表项*/
+.hot_sale {
+    display: block;
+    position: relative;
+    padding: 10px 5px 10px 0;
+    overflow: hidden;
+    background: #edfaff;
+    border: none;
+}
+
+.hot_sale .bookimg {
+    float: left;
+    width: 110px;
+    height: 120px;
+    text-align: center;
+}
+
+.hot_sale .bookimg img {
+    border: 1px #b4dae8 solid;
+    width: 90px;
+    height: 120px;
+}
+
+.hot_sale .bookinfo {
+    overflow: hidden;
+}
+
+.hot_sale .title {
+    color: #375868;
+    font-size: 16px;
+    /*height: 20px;*/
+    overflow: hidden;
+}
+
+.hot_sale .author {
+    font-size: 14px;
+    color: #7f9ba8;
+    /*height: 24px;*/
+    /*line-height: 24px;*/
+}
+
+.hot_sale .review {
+    font-size: 14px;
+    color: #7f9ba8;
+    line-height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}
+
+.common_sale {
+    display: block;
+    font-size: 14px;
+    padding: 10px 0px;
+    margin: 0 10px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.common_sale .num {
+    display: inline-block;
+    background: #B0B0B0;
+    color: #eee;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    line-height: 20px;
+    border-radius: 50%;
+}
+
+.common_sale .num.top {
+    background: #FA744E;
+}
+
+.common_sale .sort,
+.common_sale .writer {
+    color: #777;
+}
+
+.rankArea .common_sale {
+    border-bottom: 1px dashed #CCC;
+}
+
+.rankArea .common_sale .writer {
+    float: right;
+}
+
+/*分类项*/
+.sortChannel_nav {
+    overflow: hidden;
+    margin: 10px 4px;
+}
+
+.sortChannel_nav li {
+    list-style: none;
+    float: left;
+    background: #fff;
+    width: 25%;
+    box-sizing: border-box;
+    padding: 4px;
+}
+
+.sortChannel_nav a {
+    display: block;
+    text-align: center;
+    border: 1px #d6d6d6 solid;
+    height: 28px;
+    line-height: 28px;
+    border-radius: 1px;
+    background: #efefef;
+}
+
+/*不带边框样式*/
+/*.sortChannel_nav li {
+    list-style: none;
+    float: left;
+    margin: 2px;
+}
+.sortChannel_nav a {
+    display: block;
+    text-align: center;
+    border-radius: 3px;
+    padding: 6px;
+}*/
+.sortChannel_nav a.sel {
+    background: #4baacd;
+    color: #fff;
+}
+
+.areaTitle {
+    font-weight: 500;
+    line-height: 40px;
+    font-size: 16px;
+    background: #F6F6F6;
+    border-top: 1px solid #D7D7D7;
+    border-bottom: 1px solid #D7D7D7;
+    padding: 0 10px;
+    overflow: hidden;
+}
+
+.areaTitle .itemDel {
+    color: red;
+    float: right;
+}
+
+.searchArea .common_sale {
+    border-bottom: 1px solid #ddd;
+}
+
+/*阅读记录*/
+.historyArea .historyItem {
+    padding: 10px;
+    border: 1px solid #d7d7d7;
+    margin: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+}
+
+.historyArea .historyItem .itemNum,
+.historyArea .historyItem .itemContent {
+    float: left;
+}
+
+.historyArea .historyItem .itemNum {
+    height: 20px;
+    width: 20px;
+    text-align: center;
+    background: #68aac2;
+    color: #fff;
+    border-radius: 2px;
+    margin-right: 8px;
+    line-height: 20px;
+}
+
+.historyArea .historyItem .itemDel {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: #FF4643;
+    border: 1px solid #FF4643;
+    padding: 2px 5px;
+    border-radius: 2px;
+}
+
+.historyArea .historyItem .title {
+    font-weight: bold;
+}
+
+.historyArea .historyItem .otherInfo {
+    font-size: 12px;
+    color: #7f9ba8;
+}
+
+.historyArea .historyItem .otherInfo p {
+    margin: 4px 0;
+}
+
+.historyArea .historyItem .otherInfo p:last-child {
+    margin: 0;
+}
+
+.page {
+    background: #68aac2;
+    padding: 0 10px;
+    color: #c5d7df;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+}
+
+.page a {
+    color: #fff;
+    margin: 0 4px;
+}
+
+.page a.disabled {
+    color: #ddd;
+}
+
+.page a.disabled {
+    color: #c5d7df;
+}
+
+.page .pageSelecter {
+    width: 100px;
+    height: 24px;
+    border-radius: 2px;
+    outline: none;
+    background-color: #fff;
+}
+
+.errorMsg {
+    margin: 10px;
+    font-size: 14px;
+    color: red;
+}
+
+/*book详情和目录*/
+.synopsisArea {
+    margin: 10px 0;
+    text-align: center;
+}
+
+.synopsisArea a {
+    display: inline-block;
+    padding: 5px 18px 5px 18px;
+    background: #eb2650;
+    color: #fff;
+    text-align: center;
+    font-size: 16px;
+    border-radius: 5px;
+    /*margin: 0 3px;*/
+}
+
+.synopsisArea .btn_toBookShelf {
+    background: #f0962a;
+    box-shadow: 0 2px 1px #d88726 inset;
+}
+
+.synopsisArea .btn_toMyBook {
+    background: #658fbd;
+    box-shadow: 0 2px 1px #5b80aa inset;
+}
+
+.book_detail_review {
+    padding: 10px;
+    line-height: 23px;
+    text-align: center;
+    /*解决uc浏览器下文本莫名其妙换行的问题*/
+    text-align-last: left;
+    word-break: break-all;
+}
+
+.chapter {
+    display: block;
+    padding: 7px 10px;
+    line-height: 40px;
+    font-size: 16px;
+    line-height: 26px;
+    text-align: center;
+    text-align-last: left;
+    word-break: break-all;
+}

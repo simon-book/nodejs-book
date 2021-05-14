@@ -57,5 +57,10 @@ var BookChapter = sequelize.define('book_chapter', {
     }]
 });
 
+Book.hasOne(BookChapter, {
+    as: "lastChapter",
+    foreignKey: "number",
+    sourceKey: 'chapterCount'
+})
 
 module.exports = BookChapter;

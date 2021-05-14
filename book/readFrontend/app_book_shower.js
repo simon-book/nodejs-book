@@ -17,8 +17,8 @@ process.env.NODE_ENV = __G__.NODE_ENV;
 
 var app = express();
 // all environments
-app.set('port', process.env.PORT || 4000);
-app.set('views', path.join(__dirname, 'templates'));
+app.set('port', process.env.PORT || 4100);
+app.set('views', path.join(__dirname, 'templates/pc'));
 app.set('view engine', 'ejs');
 app.set('view options');
 app.use(favicon(path.join(__dirname, 'static/src/images/favicon.ico')));

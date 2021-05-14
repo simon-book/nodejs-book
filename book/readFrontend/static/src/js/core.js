@@ -15,7 +15,7 @@ var ajaxDo = {
                 callback ? callback(data) : null;
             },
             error: function(xhr, type) {
-                if (xhr.status == 400) errorCallBack ? errorCallBack(JSON.parse(xhr.response)) : null;
+                if (xhr.status == 400) errorCallBack ? errorCallBack(JSON.parse(xhr.responseText)) : null;
                 else alert("服务错误！")
             }
         })
@@ -29,10 +29,10 @@ var ajaxDo = {
             contentType: 'application/json',
             timeout: 10000,
             success: function(data) {
-                callback ? callback(JSON.parse(data)) : null;
+                callback ? callback(data) : null;
             },
             error: function(xhr, type) {
-                if (xhr.status == 400) errorCallBack ? errorCallBack(JSON.parse(xhr.response)) : null;
+                if (xhr.status == 400) errorCallBack ? errorCallBack(JSON.parse(xhr.responseText)) : null;
                 else alert("服务错误！")
             }
         })

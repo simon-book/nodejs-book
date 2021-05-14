@@ -1,0 +1,162 @@
+<%- include('common/top', {}); %>
+<%- include('common/mainHeader', {}); %>
+<div class="container">
+    <div class="row ">
+        <div class="col-md-9 border book-list-box home-banner-box" style="padding: 5px;">
+            <div class="row">
+                <% firstBlock.recommendBooks.forEach(function(book){ %>
+                <div class="col-xs-12 col-sm-6 book-item-1">
+                    <div class="book-image">
+                        <a href="/book/<%= book.bookId%>">
+                            <img onerror="src='/images/nopic.gif'" src="<%= book.cover%>" alt="<%= book.title%>"></a>
+                    </div>
+                    <dl>
+                        <dt>
+                            <span class="book-author">
+                                <%= book.writer%> </span>
+                            <a class="book-title" href="/book/<%= book.bookId%>">
+                                <%= book.title%> </a>
+                        </dt>
+                        <dd class="book-abstract">
+                            <a href="/book/<%= book.bookId%>">
+                                <%= book.abstractContent?book.abstractContent.replace(/\\n/g, '').replace(/\s+/g, ''):''%></a>
+                        </dd>
+                    </dl>
+                </div>
+                <% }); %>
+            </div>
+        </div>
+        <div class="col-md-3 border book-list-box">
+            <h2 class="book-list-title">经典推荐</h2>
+            <ul class="book-list">
+                <li class="book-item-2">
+                    <span class="book-category">[女生频道]</span>
+                    <span class="book-author">吱吱</span>
+                    <span class="book-title"><a href="/html/192/192329/">慕南枝</a></span>
+                </li>
+                <li class="book-item-2">
+                    <span class="book-category">[女生频道]</span>
+                    <span class="book-author">吱吱</span>
+                    <span class="book-title"><a href="/html/192/192329/">慕南枝</a></span>
+                </li>
+                <li class="book-item-2">
+                    <span class="book-category">[女生频道]</span>
+                    <span class="book-author">吱吱</span>
+                    <span class="book-title"><a href="/html/192/192329/">慕南枝</a></span>
+                </li>
+                <li class="book-item-2">
+                    <span class="book-category">[女生频道]</span>
+                    <span class="book-author">吱吱</span>
+                    <span class="book-title"><a href="/html/192/192329/">慕南枝</a></span>
+                </li>
+                <li class="book-item-2">
+                    <span class="book-category">[女生频道]</span>
+                    <span class="book-author">吱吱吱吱吱</span>
+                    <span class="book-title"><a href="/html/192/192329/">慕南枝慕南枝慕南枝慕南枝</a></span>
+                </li>
+                <li class="book-item-2">
+                    <span class="book-category">[女生频道]</span>
+                    <span class="book-author">吱吱</span>
+                    <span class="book-title"><a href="/html/192/192329/">慕南枝</a></span>
+                </li>
+                <li class="book-item-2">
+                    <span class="book-category">[女生频道]</span>
+                    <span class="book-author">吱吱</span>
+                    <span class="book-title"><a href="/html/192/192329/">慕南枝</a></span>
+                </li>
+                <li class="book-item-2">
+                    <span class="book-category">[女生频道]</span>
+                    <span class="book-author">吱吱</span>
+                    <span class="book-title"><a href="/html/192/192329/">慕南枝</a></span>
+                </li>
+                <li class="book-item-2">
+                    <span class="book-category">[女生频道]</span>
+                    <span class="book-author">吱吱</span>
+                    <span class="book-title"><a href="/html/192/192329/">慕南枝</a></span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-12 border book-list-box" style="padding-bottom: 0;">
+            <div class="row">
+                <% otherBlocks.forEach(function(block){ %>
+                <div class="col-md-4 padding-0 book-list-box-decoration">
+                    <h2 class="book-list-title">
+                        <%= block.name%>
+                    </h2>
+                    <% var book=block.recommendBooks[0] %>
+                    <div class="book-item-3">
+                        <div class="book-image">
+                            <a href="/book/<%= book.bookId%>">
+                                <img onerror="src='/images/nopic.gif'" src="<%= book.cover%>" alt="重返1988"></a>
+                        </div>
+                        <dl>
+                            <dt>
+                                <a class="book-title" href="/book/<%= book.bookId%>">
+                                    <%= book.title%> </a>
+                                <span class="book-author">/
+                                    <%= book.writer%></span>
+                            </dt>
+                            <dd class="book-abstract">
+                                <a href="/book/<%= book.bookId%>">
+                                    <%= book.abstractContent?book.abstractContent.replace(/\\n/g, '').replace(/\s+/g, ''):''%></a>
+                            </dd>
+                        </dl>
+                    </div>
+                    <% var books=block.recommendBooks.slice(1) %>
+                    <ul class="book-list">
+                        <% books.forEach(function(book){ %>
+                        <li class="book-item-4"><a href="/book/<%= book.bookId%>">
+                                <%= book.title%></a>/
+                            <%= book.writer%>
+                        </li>
+                        <% }); %>
+                    </ul>
+                </div>
+                <% }); %>
+            </div>
+        </div>
+        <div class="col-md-9 border book-list-box home-banner-box">
+            <h2 class="book-list-title">最近更新小说列表</h2>
+            <ul class="book-list">
+                <% lastUpdatedBooks.forEach(function(book){ %>
+                <li class="book-item-5 row">
+                    <div class="col-xs-9 col-md-4">
+                        <span class="book-category">[
+                            <%= book.categoryName%>]</span>
+                        <span class="book-title">
+                            <a href="/html/565/565171/">
+                                <%= book.title%></a>
+                        </span>
+                    </div>
+                    <div class="col-md-5 hidden-xs hidden-sm">
+                        <span class="book-new-chapter"><a href="/html/565/565171/6305027.html">第一千零二十八章 劝说劝说劝说劝说劝说劝说劝说劝说劝说劝说劝说劝说劝说劝说</a></span>
+                    </div>
+                    <div class="col-xs-3 col-md-3">
+                        <span class="book-updated hidden-xs hidden-sm">
+                            <%= book.lastUpdatedAt.split(" ")[0]%></span>
+                        <span class="book-author text-right">
+                            <%= book.writer%></span>
+                    </div>
+                </li>
+                <% }); %>
+            </ul>
+        </div>
+        <div class="col-md-3 border book-list-box">
+            <h2 class="book-list-title">最新入库小说</h2>
+            <ul class="book-list">
+                <% firstBlock.rankBooks.forEach(function(book){ %>
+                <li class="book-item-2">
+                    <span class="book-category">[
+                        <%= book.categoryName%>]</span>
+                    <span class="book-author">
+                        <%= book.writer%></span>
+                    <span class="book-title"><a href="/book/<%= book.bookId%>">
+                            <%= book.title%></a></span>
+                </li>
+                <% }); %>
+            </ul>
+        </div>
+    </div>
+</div>
+<%- include('common/footer', {}); %>
+<%- include('common/bottom', {}); %>
