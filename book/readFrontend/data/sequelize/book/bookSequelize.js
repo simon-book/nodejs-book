@@ -6,7 +6,7 @@ var sequelize = require('../../../service/sequelizeConn.js');
 var Book = require('../_models/book/book.js')
 var Tag = require('../_models/book/tag.js')
 var BookCategory = require('../_models/book/bookCategory.js')
-var bookChapter = require('../_models/book/bookChapter.js')
+var BookChapter = require('../_models/book/bookChapter.js')
 
 exports.findByPk = function(id) {
     return new Promise(function(resolve, reject) {
@@ -46,7 +46,13 @@ exports.findAll = function(where, raw) {
         Book.findAll({
             where: where,
             raw: raw || false,
-            attributes: ["bookId", "title", "writer", "categoryName", "cover", "abstractContent"]
+            attributes: ["bookId", "title", "writer", "categoryName", "cover", "abstractContent"],
+            include: [{
+                model: BookChapter,
+                as: 'lastChapter',
+                raw: true,
+                attributes: ["chapterId", "title", "number"]
+            }]
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
@@ -62,13 +68,18 @@ exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
     //     required: false,
     //     attributes: ["categoryId", "name"]
     // }]
-    var include = [];
+    var include = [{
+        model: BookChapter,
+        as: 'lastChapter',
+        raw: true,
+        attributes: ["chapterId", "title", "number"]
+    }];
     if (tagWhere) include.push({
         model: Tag,
         as: 'tags',
         required: true,
         where: tagWhere,
-        attributes: ["tagId", "name"]
+        attributes: ["tagId", "title"]
     })
     return new Promise(function(resolve, reject) {
         sequelize.transaction({
@@ -89,7 +100,7 @@ exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
                 where: where,
                 limit: limit || 10000,
                 offset: offset || 0,
-                raw: true,
+                // raw: true,
                 order: order || [
                     ['lastUpdatedAt', 'DESC']
                 ],

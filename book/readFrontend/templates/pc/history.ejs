@@ -1,0 +1,107 @@
+<%- include('common/top', {}); %>
+<%- include('common/mainHeader', {}); %>
+<div class="container">
+    <div class="row ">
+        <div class="col-md-12 border book-list-box">
+            <h2 class="book-list-title">临时书架 - 浏览过的小说会自动保存到书架中（限同一电脑）</h2>
+            <ul class="book-list">
+                <li class="book-item-5 row">
+                    <div class="col-xs-12 col-md-3">
+                        <span class="book-number">1</span>
+                        <a class="book-delete hidden-md hidden-lg" href="javascript:void(0)" onclick="removebook()">删除</a>
+                        <span class="book-title">
+                            <a href="/html/565/565171/">大明流匪</a>
+                        </span>
+                    </div>
+                    <div class="col-xs-12 col-md-5">
+                        <span class="book-new-chapter"><a href="/html/565/565171/6305027.html">第一千零二十八章 劝说</a></span>
+                    </div>
+                    <div class="col-xs-3 col-md-4 hidden-xs hidden-sm">
+                        <a class="book-delete" href="javascript:void(0)" onclick="removebook()">删除</a>
+                        <span class="book-updated">2021-05-08</span>
+                        <span class="book-author text-right">折脚踝骨折</span>
+                    </div>
+                </li>
+                <li class="book-item-5 row">
+                    <div class="col-xs-12 col-md-3">
+                        <span class="book-number">2</span>
+                        <a class="book-delete hidden-md hidden-lg" href="javascript:void(0)" onclick="removebook()">删除</a>
+                        <span class="book-title">
+                            <a href="/html/565/565171/">大明流匪大</a>
+                        </span>
+                    </div>
+                    <div class="col-xs-12 col-md-5">
+                        <span class="book-new-chapter"><a href="/html/565/565171/6305027.html">第一千零二十八章 劝说劝说劝说劝说劝</a></span>
+                    </div>
+                    <div class="col-xs-3 col-md-4 hidden-xs hidden-sm">
+                        <a class="book-delete" href="javascript:void(0)" onclick="removebook()">删除</a>
+                        <span class="book-updated">2021-05-08</span>
+                        <span class="book-author text-right">折脚踝骨折</span>
+                    </div>
+                </li>
+                <li class="book-item-5 row">
+                    <div class="col-xs-12 col-md-3">
+                        <span class="book-number">3</span>
+                        <a class="book-delete hidden-md hidden-lg" href="javascript:void(0)" onclick="removebook()">删除</a>
+                        <span class="book-title">
+                            <a href="/html/565/565171/">大明流匪大明流匪大明流匪</a>
+                        </span>
+                    </div>
+                    <div class="col-xs-12 col-md-5">
+                        <span class="book-new-chapter"><a href="/html/565/565171/6305027.html">第一千零二十八章 劝说劝说劝说劝说劝说劝说劝说劝说劝说劝说劝</a></span>
+                    </div>
+                    <div class="col-xs-3 col-md-4 hidden-xs hidden-sm">
+                        <a class="book-delete" href="javascript:void(0)" onclick="removebook()">删除</a>
+                        <span class="book-updated">2021-05-08</span>
+                        <span class="book-author text-right">折脚踝骨折</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<%- include('common/footer', {}); %>
+<%- include('common/bottom', {}); %>
+<script>
+function loadbooker() {
+    var bookhtml = '';
+    var books = lastread.getBook();
+    var books = books.reverse();
+    if (books.length) {
+        bookhtml += '<h2 class="areaTitle"><a href="javascript:void(0);" class="itemDel" onclick="deleteAllBooks()">清空</a></h2>';
+        for (var i = 0; i < books.length; i++) {
+            if (i <= 100) {
+                bookhtml += '<div class="historyItem">' +
+                    '<div class="itemNum">' + (i + 1) + '</div>' +
+                    '<div class="itemContent">' +
+                    '<div class="title">' +
+                    '<a href="/book/' + books[i][0] + '/">' + books[i][2] + '</a>' +
+                    '</div>' +
+                    '<div class="otherInfo">' +
+                    '   <p>分类：' + books[i][5] + '</p>' +
+                    '<p>作者：' + books[i][4] + '</p>' +
+                    '<p>已读到：<a class="lastReaded" href="/book/' + books[i][0] + '/' + books[i][1] + '">' + books[i][3] + '!</a></p>' +
+                    '</div>' +
+                    '</div>' +
+                    '<a href="javascript:void(0);" class="itemDel" onclick="removebook(' + books[i][0] + ')">删除</a>' +
+                    '</div>';
+            }
+        }
+    } else {
+        bookhtml += '<div style="height:100px;line-height:100px; text-align:center">还木有任何书籍( ˙﹏˙ )</div>';
+    }
+    $(".historyArea").append(bookhtml);
+}
+
+function removebook(k) {
+    lastread.remove(k);
+    location.reload();
+}
+
+function deleteAllBooks(k) {
+    lastread.removeAll();
+    location.reload();
+}
+loadbooker();
+</script>
+<%- include('common/bottom', {}); %>

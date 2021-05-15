@@ -37,6 +37,10 @@ app.use(session({
 }));
 app.set('jsonp callback name', 'onJsonpLoad');
 
+app.use('*', function(req, res, next) {
+    console.log(req.baseUrl, req.method, req.body, req.session && req.session["login_success_user"] ? (req.session["login_success_user"].id + " - " + req.session["login_success_user"].phone) : null);
+    next();
+})
 
 app.use(__G__.CONTEXT + "/static", express.static(path.join(__dirname, '/statics')));
 app.use(__G__.CONTEXT + "/html", express.static(path.join(__dirname, '/html')));

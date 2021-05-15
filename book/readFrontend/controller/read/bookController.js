@@ -78,18 +78,16 @@ exports.listBook = async function(body) {
             }
         }
         var list = await bookSequelize.findAndCountAll(where, offset, pageSize, null, tagWhere);
+        var books = _.map(list[1], function(book) {
+            book.tags = _.map(book.tags, function(tag) {
+                tag = tag.get();
+                delete tag.book_tags;
+                return tag;
+            })
+            return book;
+        })
         return {
-            list: _.map(list[1], function(book) {
-                // book = book.get();
-                // book.categoryName = book.category ? book.category.name : "";
-                // delete book.category;
-                book.tags = _.map(book.tags, function(tag) {
-                    tag = tag.get();
-                    delete tag.book_tags;
-                    return tag;
-                })
-                return book;
-            }),
+            list: books,
             pagination: {
                 totalNum: list[0],
                 page: page,

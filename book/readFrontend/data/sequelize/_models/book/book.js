@@ -6,6 +6,7 @@ var sequelize = require("../../../../service/sequelizeConn.js");
 
 var Branch = require("../branch/branch.js");
 var BookCategory = require("./bookCategory.js");
+var BookChapter = require("./bookChapter.js");
 
 var Book = sequelize.define('book', {
     bookId: {
@@ -28,6 +29,15 @@ var Book = sequelize.define('book', {
     chapterCount: Sequelize.INTEGER, //章节数
     recommend: Sequelize.INTEGER, //推荐指数
     readCount: Sequelize.INTEGER, //阅读数
+    lastChapterId: {
+        type: Sequelize.BIGINT,
+        references: {
+            model: BookChapter,
+            key: 'chapter_id',
+            deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
+        },
+        allowNull: true
+    },
     categoryId: { //主分类
         type: Sequelize.BIGINT,
         references: {
@@ -77,5 +87,9 @@ Book.belongsTo(BookCategory, {
     foreignKey: 'categoryId'
 })
 
+Book.belongsTo(BookChapter, {
+    as: "lastChapter",
+    foreignKey: "lastChapterId"
+})
 
 module.exports = Book;

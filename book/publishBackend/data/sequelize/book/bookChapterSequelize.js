@@ -15,6 +15,16 @@ exports.create = function(chapter) {
     })
 }
 
+exports.bulkCreate = function(chapters) {
+    return new Promise(function(resolve, reject) {
+        BookChapter.bulkCreate(chapters).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
 exports.update = function(obj, where) {
     return new Promise(function(resolve, reject) {
         BookChapter.update(obj, {
@@ -27,10 +37,11 @@ exports.update = function(obj, where) {
     })
 }
 
-exports.findOne = function(where) {
+exports.findOne = function(where, attributes) {
     return new Promise(function(resolve, reject) {
         BookChapter.findOne({
-            where: where
+            where: where,
+            attributes: attributes
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {

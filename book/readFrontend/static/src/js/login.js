@@ -3,9 +3,9 @@ var goto_register = $('#goto_register');
 if (location.search) goto_register.attr("href", goto_register.attr("href") + location.search);
 
 function register() {
-    var username = $('.register_nm').val();
-    var password = $('.register_psw').val();
-    var repassword = $('.register_repsw').val();
+    var username = $('#username').val();
+    var password = $('#userpass').val();
+    var repassword = $('#userpassqr').val();
     if (!username) {
         alert("请输入用户名！");
         return;
@@ -25,20 +25,38 @@ function register() {
     ajaxDo.post("/register", { username: username, password: password }, function(data) {
         alert("注册成功！")
         if (locationSearch.o) location.href = locationSearch.o;
+        else location.href = "/"
     }, function(err) {
         if (err.rtnMsg) alert(err.rtnMsg);
     })
 }
 
 function login() {
-    var username = $('.login_nm').val();
-    var password = $('.login_psw').val();
+    var username = $('#username').val();
+    var password = $('#password').val();
     if (!username || !password) {
         alert("请输入用户名和密码！");
         return;
     }
     ajaxDo.post("/login", { username: username, password: password }, function(data) {
         if (locationSearch.o) location.href = locationSearch.o;
+        else location.href = "/"
+    }, function(err) {
+        if (err.rtnMsg) alert(err.rtnMsg);
+    })
+}
+
+function smallLogin() {
+    var username = $('#small-username').val();
+    var password = $('#small-password').val();
+    if (!username || !password) {
+        alert("请输入用户名和密码！");
+        return;
+    }
+    ajaxDo.post("/login", { username: username, password: password }, function(data) {
+        // if (locationSearch.o) location.href = locationSearch.o;
+        // else location.href = "/"
+        location.reload();
     }, function(err) {
         if (err.rtnMsg) alert(err.rtnMsg);
     })

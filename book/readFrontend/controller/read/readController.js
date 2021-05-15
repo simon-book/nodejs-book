@@ -102,8 +102,10 @@ exports.chapterDetail = async function(bookId, number) {
             if (content) {
                 chapterDetail.content = content
             } else {
+                console.time(book.copyInfo.pc + "/" + book.originId + "/" + chapter.originId + ".html");
                 content = await chapterController.copyChapterContent(book.copyInfo.pc, "/" + book.originId + "/" + chapter.originId + ".html");
                 chapterDetail.content = content;
+                console.timeEnd(book.copyInfo.pc + "/" + book.originId + "/" + chapter.originId + ".html");
                 if (content) {
                     var result = await MossClient.put("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number + ".txt", content);
                     if (result) {
@@ -113,7 +115,7 @@ exports.chapterDetail = async function(bookId, number) {
                         chapter.save();
                     }
                 }
-                // checkSiblingsChapters(book, number);
+                checkSiblingsChapters(book, number);
             }
         } else if (chapterDetail.type == "picture") {
             chapterDetail.content = chapter.pics;

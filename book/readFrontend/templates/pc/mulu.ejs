@@ -1,0 +1,13 @@
+<%- include('common/top', {}); %>
+<%- include('common/pageHeader', {}); %>
+<div class="recommend">
+    <div id="chapterlist" class="directoryArea">
+        <% chapters.forEach(function(chapter){ %>
+        <p><a class="chapter" href="/book/<%= chapter.bookId%>/<%= chapter.number%>">
+                <%= chapter.title%></a></p>
+        <% }); %>
+    </div>
+    <%- include('common/listPagerPopup', {}); %>
+</div>
+<%- include('common/footer', {}); %>
+<%- include('common/bottom', {}); %>

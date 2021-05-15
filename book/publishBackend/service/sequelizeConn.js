@@ -24,6 +24,10 @@ const sequelize = new Sequelize(__PGSQL__.database, __PGSQL__.user, __PGSQL__.pa
         underscored: true,
         paranoid: false
     },
+    pool: {
+        min: 0,
+        max: 100
+    },
     logging: null,
     timezone: '+08:00'
 });
