@@ -3,7 +3,7 @@
     line-height: 35px;
     color: #68aac2;
     overflow: hidden;
-    margin: 15px;
+    margin: 15px 0;
     border: 1px solid #68aac2;
     border-radius: 3px;
 }
@@ -22,7 +22,7 @@
 .Readsetter {
     height: 35px;
     color: #68aac2;
-    margin: 10px 15px 0 15px;
+    margin: 10px 0;
     overflow: hidden;
 }
 
@@ -41,6 +41,13 @@
     background: none;
     margin-right: 1%;
     border-radius: 3px;
+    white-space: nowrap;
+}
+
+.Readsetter .box:last-child button {
+    float: right;
+    margin-right: 0;
+    margin-left: 1%;
 }
 
 .Readsetter button.on {
@@ -59,7 +66,7 @@
 .Readarea {
     font-size: 18px;
     line-height: 35px;
-    padding: 10px;
+    /*padding: 10px;*/
     color: #333;
 }
 
@@ -71,8 +78,9 @@
 body footer {
     background: rgba(0, 0, 0, 0);
 }
+
 body.lightDefault {
-    background: #efefef;
+    /*background: #efefef;*/
 }
 
 body.lightHuyan {

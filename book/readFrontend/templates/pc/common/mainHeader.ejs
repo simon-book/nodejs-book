@@ -12,7 +12,7 @@
             <div class="col-sm-8 text-right">
                 <%  if(user && user.userId){ %>
                 <span>当前登陆：
-                    <%= user.username%></span>
+                    <%= user.username%></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/logout">退出</a>
                 <% } else{ %>
                 <form name="mylogin" class="topbar-login" method="post">
                     <span>账号：</span> <input type="text" class="input-text" name="small-username" id="small-username">
@@ -52,16 +52,16 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li><a href="/">首页</a></li>
+                <li class="<%= currentRender=='home'?'active':'' %>"><a href="/">首页</a></li>
                 <li><a href="/bookshelf">永久书架</a></li>
                 <% branchInfo.categoryMap.forEach(function(category){ %>
-                <li class="<%= branchInfo.currentCategoryId && branchInfo.currentCategoryId == category[1]?'active':'' %>"><a href="/category/<%= category[1] %>/1">
+                <li class="<%= currentRender=='category' && currentCategoryId && currentCategoryId == category[1]?'active':'' %>"><a href="/category/<%= category[1] %>/1">
                         <%= category[0] %></a></li>
                 <% }); %>
                 <!-- <li><a href="/class/1/1.html">玄幻奇幻</a></li> -->
-                <li><a href="/paihang">排行榜单</a></li>
-                <li><a href="/quanben/">完本小说</a></li>
-                <li><a href="/history">阅读记录</a></li>
+                <li class="<%= currentRender=='paihang'?'active':'' %>"><a href="/paihang">排行榜单</a></li>
+                <li class="<%= currentRender=='quanben'?'active':'' %>"><a href="/quanben/">完本小说</a></li>
+                <li class="<%= currentRender=='history'?'active':'' %>"><a href="/history">阅读记录</a></li>
                 <!-- <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                     <ul class="dropdown-menu">

@@ -1,13 +1,52 @@
 <%- include('common/top', {}); %>
-<%- include('common/pageHeader', {}); %>
-<div class="recommend">
-    <div id="chapterlist" class="directoryArea">
-        <% chapters.forEach(function(chapter){ %>
-        <p><a class="chapter" href="/book/<%= chapter.bookId%>/<%= chapter.number%>">
-                <%= chapter.title%></a></p>
-        <% }); %>
+<%- include('common/mainHeader', {}); %>
+<div class="container">
+    <div class="row">
+        <ol class="col-xs-12 breadcrumb">
+            <!-- <li><a href="/">
+        <%= branchInfo.shorttitle%></a></li> -->
+            <li><a href="/category/<%= book.categoryId%>/1">
+                    <%= book.categoryName%></a></li>
+            <li><a href="/book/<%= book.bookId%>">
+                    <%= book.title%></a></li>
+            <li class="active">目录</li>
+        </ol>
+        <div class="col-xs-12 border book-list-box" style="margin-top: 0">
+            <h2 class="book-list-title">全部章节列表第
+                <%= pagination.currentPage%> 页</h2>
+            <ul class="book-list">
+                <% chapters.forEach(function(chapter){ %>
+                <li class="book-item-5 col-xs-12 col-sm-6 col-md-4">
+                    <span class="book-new-chapter"><a href="/book/<%= book.bookId%>/<%= chapter.number%>">
+                            <%= chapter.title%></a></span>
+                </li>
+                <% }); %>
+            </ul>
+            <div class="pagination-box text-center">
+                <ul class="pagination">
+                    <% if(pagination.currentPage > 1){%>
+                    <li title="上一页"><a href="/book/<%= book.bookId%>/mulu/<%= pagination.currentPage-1%>">上一页</a></li>
+                    <% }%>
+                    <li class="hd"><span>
+                            <%= pagination.currentPage%>/
+                            <%= pagination.totalPage%></span></li>
+                    <% if(pagination.currentPage < pagination.totalPage){%>
+                    <li title="下一页"><a href="/book/<%= book.bookId%>/mulu/<%= pagination.currentPage+1%>">下一页</a></li>
+                    <% }%>
+                    <li>
+                        <div class="go-page">
+                            <input type="number" class="go-page-input" id="go-page-input" min="1" max="<%= pagination.totalPage%>" placeholder="页数">
+                            <button type="button" class="go-page-btn" onclick="goPage()">跳转</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <%- include('common/listPagerPopup', {}); %>
 </div>
+<script type="text/javascript">
+var currentPage = <%= pagination.currentPage%>;
+var totalPage = <%= pagination.totalPage%>;
+</script>
 <%- include('common/footer', {}); %>
 <%- include('common/bottom', {}); %>

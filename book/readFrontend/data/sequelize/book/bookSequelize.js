@@ -20,6 +20,11 @@ exports.findByPk = function(id) {
                 raw: true,
                 required: false,
                 attributes: ["tagId", "name"]
+            }, {
+                model: BookChapter,
+                as: 'lastChapter',
+                raw: true,
+                attributes: ["chapterId", "title", "number"]
             }]
         }).then(function(results) {
             resolve(results);
@@ -32,7 +37,7 @@ exports.findByPk = function(id) {
 exports.findSimpleByPk = function(id) {
     return new Promise(function(resolve, reject) {
         Book.findByPk(id, {
-            attributes: ["bookId", "title", "writer", "categoryName", "originId", "copyInfo"]
+            attributes: ["bookId", "title", "writer", "categoryName", "originId", "copyInfo", "categoryId"]
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
@@ -45,8 +50,8 @@ exports.findAll = function(where, raw) {
     return new Promise(function(resolve, reject) {
         Book.findAll({
             where: where,
-            raw: raw || false,
-            attributes: ["bookId", "title", "writer", "categoryName", "cover", "abstractContent"],
+            // raw: raw || false,
+            attributes: ["bookId", "title", "cover", "horiCover", "writer", "categoryId", "categoryName", "abstractContent", "chapterCount", "recommend", "readCount", "publishStatus", "lastUpdatedAt"],
             include: [{
                 model: BookChapter,
                 as: 'lastChapter',

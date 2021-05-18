@@ -42,7 +42,12 @@ router.post('/copy_biquge_book', async function(req, res) {
 })
 
 router.post('/updateBookLastChapterId', async function(req, res) {
-    await commonController.updateBookLastChapterId();
+    await commonController.updateBookLastChapterId(req.body.branchId);
+    res.send(true);
+})
+
+router.post('/updateBookCover', async function(req, res) {
+    await commonController.updateBookCover(req.body.branchId, req.body.oldUrl, req.body.newUrl);
     res.send(true);
 })
 

@@ -1,34 +1,47 @@
 <%- include('common/top', {}); %>
 <%- include('common/mainHeader', {}); %>
-<div class="historyArea">
-    <%  if(!bookMarks.length){ %>
-    <div style="height:100px;line-height:100px; text-align:center">还木有任何书籍( ˙﹏˙ )</div>
-    <% }else{ %>
-    <h2 class="areaTitle"><a href="javascript:void(0);" class="itemDel" onclick="deleteAllBookMarks()">清空</a></h2>
-    <% bookMarks.forEach(function(bookMark, i){ %>
-    <div class="historyItem">
-        <div class="itemNum">
-            <%= i+1%>
+<div class="container">
+    <div class="row ">
+        <div class="col-md-12 border book-list-box">
+            <h2 class="book-list-title">我的书架<a href="javascript:void(0);" class="itemDel pull-right" onclick="deleteAllBookMarks()">清空</a></h2>
+            <ul class="book-list">
+                <%  if(!bookMarks.length){ %>
+                <div style="height:100px;line-height:100px; text-align:center">还木有任何书籍( ˙﹏˙ )</div>
+                <% }else{ %>
+                <% bookMarks.forEach(function(bookMark){ %>
+                <li class="book-item-5 row">
+                    <div class="col-xs-3 col-md-1">
+                        <span>[
+                            <%= bookMark.book.categoryName%>]</span>
+                    </div>
+                    <div class="col-xs-5 col-md-2">
+                        <span>
+                            <a href="/book/<%= bookMark.book.bookId%>">
+                                <%= bookMark.book.title%></a>
+                        </span>
+                    </div>
+                    <div class="col-xs-4 col-md-2">
+                        <span>
+                            <%= bookMark.book.writer%></span>
+                    </div>
+                    <div class="col-xs-12 col-md-4">
+                        已读到：<a class="lastReaded" href="/book/<%= bookMark.bookId%>/<%= bookMark.chapter.number%>">
+                            <%= bookMark.chapter.title%></a>
+                    </div>
+                    <div class="col-xs-8 col-md-2">
+                        <span>最近更新：
+                            <%= bookMark.book.lastUpdatedAt%></span>
+                    </div>
+                    <div class="col-xs-4 col-md-1  text-center">
+                        <a href="javascript:void(0);" class="itemDel pull-right" onclick="deleteBookMark(<%= bookMark.id%>)">删除</a>
+                        <!-- <span>
+                            <%= bookMark.book.publishStatus == 1?'连载中':'已完结'%></span> -->
+                    </div>
+                </li>
+                <% })} %>
+            </ul>
         </div>
-        <div class="itemContent">
-            <div class="title">
-                <a href="/book/<%= bookMark.bookId%>/">
-                    <%= bookMark.book.title%></a>
-            </div>
-            <div class="otherInfo">
-                <p>分类：
-                    <%= bookMark.book.categoryName%>
-                </p>
-                <p>作者：
-                    <%= bookMark.book.writer%>
-                </p>
-                <p>已读到：<a class="lastReaded" href="/book/<%= bookMark.bookId%>/<%= bookMark.chapter.number%>">
-                        <%= bookMark.chapter.title%></a></p>
-            </div>
-        </div>
-        <a href="javascript:void(0);" class="itemDel" onclick="deleteBookMark('<%= bookMark.id%>')">删除</a>
     </div>
-    <% })} %>
 </div>
 <%- include('common/footer', {}); %>
 <script language="javascript" type="text/javascript">

@@ -117,7 +117,7 @@ body {
 
 .navbar-default .navbar-nav>.active>a,
 .navbar-default .navbar-nav>.active>a:hover {
-    background: #88C6E5;
+    background: #337ab7;
     color: white !important;
 }
 
@@ -327,7 +327,6 @@ body {
 
 .book-item-5 {
     border-bottom: 1px solid #DDDDDD;
-    /*height: 32px;*/
     line-height: 32px;
     overflow: hidden;
     list-style-type: none;
@@ -336,11 +335,9 @@ body {
 .book-item-5>div {
     padding: 0;
     overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
-
-/*.book-item-5>div:last-child {
-    text-align: right;
-}*/
 
 .book-item-5 .book-category,
 .book-item-5 .book-number {
@@ -350,14 +347,15 @@ body {
 .book-item-5 .book-number {
     display: inline-block;
     height: 20px;
-    width: 20px;
-    border-radius: 4px;
+    width: 30px;
+    text-align: center;
+    /*border-radius: 4px;
     border: 1px solid;
     line-height: 18px;
     text-align: center;
     background: #88C6E5;
     color: white;
-    margin: 5px 0 0;
+    margin: 5px 0 0;*/
 }
 
 .book-item-5 .book-updated,
@@ -377,6 +375,10 @@ body {
     float: right;
     color: red;
     text-align: right;
+}
+
+.itemDel {
+    color: red;
 }
 
 .book-item-5 .book-title,
@@ -404,7 +406,82 @@ body {
     }
 }
 
+.book-item-6 {
+    padding: 5px;
+}
 
+.book-item-6 .book-image {
+    padding: 0;
+}
+
+.book-item-6 .book-image img {
+    background-color: #FFF;
+    border: 1px solid #DDD;
+    padding: 1px;
+    width: 100%;
+    height: auto;
+}
+
+.book-item-6 dl {
+    overflow: hidden;
+    margin: 0;
+    /*padding: 7px 0 0;*/
+}
+
+.book-item-6 .book-title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 24px;
+    padding: 5px 0;
+    margin: 0;
+    border-bottom: 1px dotted #A6D3E8;
+    font-weight: 700;
+    overflow: hidden;
+}
+
+.book-item-6 dd {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.book-item-6 .book-abstract {
+    font-size: 14px;
+    color: #555;
+    text-indent: 28px;
+    text-align: center;
+    text-align-last: left;
+    word-break: break-all;
+}
+
+.book-operate-box a {
+    padding: 5px 10px;
+    margin: 10px 15px 10px 0;
+    font-size: 14px;
+    display: inline-block;
+    background: #eb2650;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.book-operate-box .btn_toBookShelf {
+    background: #f0962a;
+    box-shadow: 0 2px 1px #d88726 inset;
+}
+
+.book-operate-box .btn_toMyBook {
+    background: #658fbd;
+    box-shadow: 0 2px 1px #5b80aa inset;
+}
+
+.breadcrumb {
+    margin: 0px 0;
+    background: transparent;
+    font-size: 14px;
+    white-space: nowrap;
+}
 
 footer {
     color: #b2b2b2;
@@ -419,6 +496,9 @@ footer {
     /*width: 949px;*/
     margin-top: 30px;
     padding: 9px 0 9px 9px;
+    /*text-align: center;*/
+    /*text-align-last: left;*/
+    /*word-break: break-all;*/
 }
 
 #firendlink a {
@@ -493,6 +573,41 @@ footer {
 }
 
 
+.pagination-box .pagination {
+    margin: 10px auto;
+}
+
+.pagination-box .pagination span,
+.pagination-box .pagination a {
+    background: #fdf9ef;
+}
+
+.pagination-box .pagination .hd span,
+.pagination-box .pagination .hd span:hover {
+    color: #000;
+    background: #fdf9ef;
+}
+
+.pagination-box .go-page {
+    display: inline-block;
+}
+
+.pagination .go-page .go-page-input {
+    width: 70px;
+    height: 31px;
+    padding: 6px;
+    margin: 0 0 0 4px;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+}
+
+.pagination .go-page .go-page-btn {
+    height: 30px;
+    vertical-align: middle;
+    background: #fdf9ef;
+    border: 1px solid #ddd;
+}
+
 
 /*.m-footer {
     display: none;
@@ -520,7 +635,7 @@ footer {
 }*/
 
 /* 登陆 */
-.grid {
+/*.grid {
     width: 90%;
     max-width: 580px;
     margin: 50px auto;
@@ -561,7 +676,7 @@ footer {
     height: 32px;
     margin-right: 5px;
     padding: 0 10px;
-    /* -webkit-appearance: none; */
+    /* -webkit-appearance: none; 
     border-radius: 4px;
     background: #fff;
 }
@@ -582,7 +697,7 @@ footer {
 
 .red {
     color: #f00;
-}
+}*/
 
 
 /* 小于980适配 */
@@ -611,7 +726,7 @@ footer {
 }*/
 
 /* 排行榜 */
-.row-rank .layout-col1,
+/*.row-rank .layout-col1,
 .row-detail .layout-col1,
 .row-section .layout-col1 {
     width: 253px;
@@ -674,7 +789,7 @@ footer {
     font-family: "Verdana";
     color: #999;
     text-align: right;
-}
+}*/
 
 /* 小于980适配 */
 /*@media (max-width: 1024px) {
@@ -692,7 +807,7 @@ footer {
 }*/
 
 /* 历史记录 */
-.history-table {
+/*.history-table {
     width: 100%;
     margin: 20px auto;
     border: 3px solid #A6D3E8;
@@ -721,7 +836,7 @@ footer {
 .history-table td {
     padding: 10px;
     border-bottom: solid 1px #DDDDDD;
-}
+}*/
 
 /*@media (max-width: 1024px) {
 
@@ -1185,7 +1300,7 @@ footer {
 }
 
 /* 分页 */
-.pagination {
+/*.pagination {
     width: auto;
     overflow: hidden;
     font-size: 13px;
@@ -1226,7 +1341,7 @@ footer {
     color: #fff;
     border-color: #A6D3E8;
     background: #A6D3E8;
-}
+}*/
 
 .listpage {
     margin: 10px;

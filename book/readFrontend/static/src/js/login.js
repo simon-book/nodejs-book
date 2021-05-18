@@ -61,3 +61,12 @@ function smallLogin() {
         if (err.rtnMsg) alert(err.rtnMsg);
     })
 }
+
+function goPage() {
+    var page = parseInt($("#go-page-input").val() || 1);
+    if (page && page >= 1 && page <= totalPage) location.href = location.href.replace(/(\d+\/?)$/, page);
+    else {
+        alert("请输入正确的页码！");
+        $("#go-page-input").val("");
+    }
+}

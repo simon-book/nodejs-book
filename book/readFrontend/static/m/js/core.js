@@ -54,9 +54,9 @@ function parseLocationSearch() {
 
 function LastRead() {
     this.bookList = "bookList";
-    this.set = function(bid, tid, title, texttitle, author, sortname) { //保存book阅读记录并更新book列表
+    this.set = function(bid, tid, title, texttitle, author, sortname, time) { //保存book阅读记录并更新book列表
         if (!(bid && tid && title && texttitle && author && sortname)) return;
-        var v = bid + '#' + tid + '#' + title + '#' + texttitle + '#' + author + '#' + sortname;
+        var v = bid + '#' + tid + '#' + title + '#' + texttitle + '#' + author + '#' + sortname + '#' + time;
         this.setItem(bid, v);
         this.setBook(bid)
     };

@@ -536,7 +536,7 @@ exports.copy_rank = function() {
 async function copy_rank_books(token, startIndex, endIndex) {
     try {
         var index = startIndex;
-        if (branch.isTest) endIndex = startIndex + 5;
+        if (branch.isTest) endIndex = startIndex + 3;
         var rankBookIds = [];
         do {
             var path = "/" + token + "/" + index + ".html";

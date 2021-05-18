@@ -2,15 +2,17 @@
 <%- include('common/mainHeader', {}); %>
 <div class="container">
     <ul class="child-nav">
-        <% branchInfo.rankMap.forEach(function(rank){ %>
-        <li><a href="/paihang/<%= rank[1]%>/1" title="<%= rank[0]%>">
+        <li><a href="/quanben" title="全部小说">全部小说</a></li>
+        <% branchInfo.categoryMap.forEach(function(rank){ %>
+        <li><a href="/quanben/<%= rank[1]%>/1" title="<%= rank[0]%>">
                 <%= rank[0]%></a></li>
         <% }); %>
     </ul>
     <div class="row ">
         <div class="col-md-12 border book-list-box" style="margin-top: 0;">
             <h2 class="book-list-title">
-                <%= pageTitle%>小说列表</h2>
+                已完结
+                <%= pageTitle%> 列表</h2>
             <ul class="book-list">
                 <li class="book-item-5 row">
                     <div class="col-xs-2 col-md-1">
@@ -58,7 +60,7 @@
                         <span>
                             <%= book.lastUpdatedAt%></span>
                     </div>
-                    <div class="col-xs-4 col-md-1  text-center">
+                    <div class="col-xs-4 col-md-1 text-center">
                         <span>
                             <%= book.publishStatus == 1?'连载中':'已完结'%></span>
                     </div>
@@ -68,13 +70,13 @@
             <div class="pagination-box text-center">
                 <ul class="pagination">
                     <% if(pagination.currentPage > 1){%>
-                    <li title="上一页"><a href="/paihang/<%= currentRankId%>/<%= pagination.currentPage-1%>">上一页</a></li>
+                    <li title="上一页"><a href="/quanben/<%= currentCategoryId?currentCategoryId+'/':''%><%= pagination.currentPage-1%>">上一页</a></li>
                     <% }%>
                     <li class="hd"><span>
                             <%= pagination.currentPage%>/
                             <%= pagination.totalPage%></span></li>
                     <% if(pagination.currentPage < pagination.totalPage){%>
-                    <li title="下一页"><a href="/paihang/<%= currentRankId%>/<%= pagination.currentPage+1%>">下一页</a></li>
+                    <li title="下一页"><a href="/quanben/<%= currentCategoryId?currentCategoryId+'/':''%><%= pagination.currentPage+1%>">下一页</a></li>
                     <% }%>
                     <li>
                         <div class="go-page">

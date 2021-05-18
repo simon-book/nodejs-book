@@ -47,17 +47,18 @@ var bookChapterSequelize = require('../../data/sequelize/book/bookChapterSequeli
 
 exports.listPaihang = async function(rankId, page, pageSize) {
     try {
-        if (!page) page = 0;
+        if (!page) page = 1;
         if (!pageSize) pageSize = 20;
         var rank = await rankSequelize.findOne({
             rankId: rankId
         });
         rank.books = await bookSequelize.findAll({
             bookId: {
-                [Op.in]: rank.rankBookIds.slice(page, page + pageSize)
+                [Op.in]: rank.rankBookIds.slice((page - 1) * pageSize, page * pageSize)
             }
         }, true);
-        rank.totalPage = Math.ceil(rank.rankBookIds.length / 20);
+        rank.totalPage = Math.ceil(rank.rankBookIds.length / pageSize);
+        rank.totalNum = rank.rankBookIds.length;
         return rank;
     } catch (err) {
         console.error(err);

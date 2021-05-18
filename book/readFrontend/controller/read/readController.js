@@ -14,27 +14,17 @@ exports.bookDeail = async function(bookId) {
     try {
         var book = await bookSequelize.findByPk(bookId);
         book = book.get();
-        // book.categoryName = book.category ? book.category.name : "";
-        // delete book.category;
         book.tags = _.map(book.tags, function(tag) {
             // tag = tag.get();
             delete tag.book_tags;
             return tag;
         })
-        var lastChapters = await bookChapterSequelize.findAll({
+        var allChapters = await bookChapterSequelize.findAll({
             bookId: bookId
-        }, 0, 10, [
-            ["number", "desc"]
-        ], true);
-        var firstChapters = await bookChapterSequelize.findAll({
-            bookId: bookId
-        }, 0, 10, [
-            ["number", "asc"]
-        ], true);
+        }, 0, 100000, null, true);
         return {
             book: book,
-            lastChapters: lastChapters ? lastChapters : [],
-            firstChapters: firstChapters ? firstChapters : []
+            allChapters: allChapters
         }
     } catch (err) {
         console.error(err);

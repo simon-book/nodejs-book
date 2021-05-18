@@ -90,9 +90,11 @@ exports.copyHtml = async function(host, path, charset) {
 }
 
 
-exports.updateBookLastChapterId = async function() {
+exports.updateBookLastChapterId = async function(branchId) {
     try {
-        var books = await bookSequelize.findAll(null, ["bookId", "lastChapterId", "chapterCount"]);
+        var books = await bookSequelize.findAll({
+            branchId: branchId
+        }, ["bookId", "lastChapterId", "chapterCount"]);
         for (var i = 0; i < books.length; i++) {
             var book = books[i];
             if (book.lastChapterId || !book.chapterCount) continue;
@@ -104,6 +106,22 @@ exports.updateBookLastChapterId = async function() {
                 book.set("lastChapterId", lastChapter.chapterId);
                 await book.save();
             }
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+exports.updateBookCover = async function(branchId, oldUrl, newUrl) {
+    try {
+        var books = await bookSequelize.findAll({
+            branchId: branchId
+        }, ["bookId", "cover"]);
+        for (var i = 0; i < books.length; i++) {
+            var book = books[i];
+            if (!book.cover) continue;
+            book.set("cover", book.cover.replace(oldUrl, newUrl));
+            await book.save();
         }
     } catch (err) {
         console.log(err);

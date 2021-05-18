@@ -1,13 +1,35 @@
 <%- include('common/top', {}); %>
+<%- include('common/mainHeader', {}); %>
 <link rel="stylesheet" href="/static/src/css/read.css" />
-<%- include('common/pageHeader', {}); %>
-<%- include('common/readPager', {}); %>
-<%- include('common/readSetter', {}); %>
-<div id="chaptercontent" class="Readarea ReadAjax_content">
-    <%- chapter.content%>
-    <p class="add-book-label"><a href="javascript:addBookMark('<%- chapter.bookId%>', '<%- chapter.chapterId%>');">『加入书签，方便阅读』</a></p>
+<div class="container">
+    <div class="row">
+        <ol class="col-xs-12 breadcrumb">
+            <!-- <li><a href="/">
+                    <%= branchInfo.shorttitle%></a></li> -->
+            <li><a href="/category/<%= chapter.book.categoryId%>/1">
+                    <%= chapter.book.categoryName%></a></li>
+            <li><a href="/book/<%= chapter.book.bookId%>">
+                    <%= chapter.book.title%></a></li>
+            <li class="active">
+                <%= chapter.title%>
+            </li>
+        </ol>
+        <div class="col-xs-12 border book-list-box" style="margin-top: 0">
+            <div class="book-list">
+                <h4 class="text-center">
+                    <%= chapter.title%>
+                </h4>
+                <%- include('common/readPager', {}); %>
+                <%- include('common/readSetter', {}); %>
+                <div id="chaptercontent" class="Readarea ReadAjax_content">
+                    <%- chapter.content%>
+                    <p class="add-book-label"><a href="javascript:addBookMark('<%- chapter.bookId%>', '<%- chapter.chapterId%>');">『加入书签，方便阅读』</a></p>
+                </div>
+                <%- include('common/readPager', {}); %>
+            </div>
+        </div>
+    </div>
 </div>
-<%- include('common/readPager', {}); %>
 <%- include('common/footer', {}); %>
 <script language="javascript" type="text/javascript">
 function readGetSet() {
@@ -51,6 +73,6 @@ function addBookMark(bookId, chapterId) {
 }
 </script>
 <script language="javascript" type="text/javascript">
-lastread.set("<%- chapter.bookId%>", "<%- chapter.number%>", "<%- chapter.book.title%>", "<%- chapter.title%>", "<%- chapter.book.writer%>", "<%- chapter.book.categoryName%>");
+lastread.set("<%- chapter.bookId%>", "<%- chapter.number%>", "<%- chapter.book.title%>", "<%- chapter.title%>", "<%- chapter.book.writer%>", "<%- chapter.book.categoryName%>", "<%- now%>");
 </script>
 <%- include('common/bottom', {}); %>

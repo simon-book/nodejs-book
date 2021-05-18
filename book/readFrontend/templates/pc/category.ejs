@@ -8,7 +8,7 @@
                 <div class="col-xs-12 col-sm-4 book-item-1">
                     <div class="book-image">
                         <a href="/book/<%= book.bookId%>">
-                            <img onerror="src='/images/nopic.gif'" src="<%= book.cover%>" alt="<%= book.title%>"></a>
+                            <img onerror="src='/static/src/images/noimg.jpg'" src="<%= book.cover%>" alt="<%= book.title%>"></a>
                     </div>
                     <dl>
                         <dt>
@@ -55,6 +55,25 @@
                 </li>
                 <% }); %>
             </ul>
+            <div class="pagination-box text-center">
+                <ul class="pagination">
+                    <% if(pagination.currentPage > 1){%>
+                    <li title="上一页"><a href="/category/<%= currentCategoryId?currentCategoryId+'/':''%><%= pagination.currentPage-1%>">上一页</a></li>
+                    <% }%>
+                    <li class="hd"><span>
+                            <%= pagination.currentPage%>/
+                            <%= pagination.totalPage%></span></li>
+                    <% if(pagination.currentPage < pagination.totalPage){%>
+                    <li title="下一页"><a href="/category/<%= currentCategoryId?currentCategoryId+'/':''%><%= pagination.currentPage+1%>">下一页</a></li>
+                    <% }%>
+                    <li>
+                        <div class="go-page">
+                            <input type="number" class="go-page-input" id="go-page-input" min="1" max="<%= pagination.totalPage%>" placeholder="页数">
+                            <button type="button" class="go-page-btn" onclick="goPage()">跳转</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
         <div class="col-md-3 border book-list-box">
             <h2 class="book-list-title">
@@ -74,5 +93,9 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+var currentPage = <%= pagination.currentPage%>;
+var totalPage = <%= pagination.totalPage%>;
+</script>
 <%- include('common/footer', {}); %>
 <%- include('common/bottom', {}); %>
