@@ -68,13 +68,13 @@
             <div class="pagination-box text-center">
                 <ul class="pagination">
                     <% if(pagination.currentPage > 1){%>
-                    <li title="上一页"><a href="/paihang/<%= currentRankId%>/<%= pagination.currentPage-1%>">上一页</a></li>
-                    <% }%>
+                    <li title="上一页"><a href="/paihang/<%= currentRankId%>/<%= pagination.currentPage-1%>">
+                            <</a> </li> <% }%>
                     <li class="hd"><span>
                             <%= pagination.currentPage%>/
                             <%= pagination.totalPage%></span></li>
                     <% if(pagination.currentPage < pagination.totalPage){%>
-                    <li title="下一页"><a href="/paihang/<%= currentRankId%>/<%= pagination.currentPage+1%>">下一页</a></li>
+                    <li title="下一页"><a href="/paihang/<%= currentRankId%>/<%= pagination.currentPage+1%>">></a></li>
                     <% }%>
                     <li>
                         <div class="go-page">

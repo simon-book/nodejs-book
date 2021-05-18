@@ -68,7 +68,8 @@ function LastRead() {
         this.removeBook(k)
     };
     this.setBook = function(v) {
-        var reg = new RegExp("(^|#)" + v);
+        // var reg = new RegExp("(^|#)" + v);
+        var reg = new RegExp("#" + v + "#" + "|" + "#" + v + "$");
         var books = this.getItem(this.bookList);
         if (books == "") {
             books = v
