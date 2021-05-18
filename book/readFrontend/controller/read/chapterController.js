@@ -37,7 +37,7 @@ async function copyBiqugeInfoChapterContent(host, path) {
 
 exports.copyChapterContent = async function(host, path) {
     try {
-        // if (/biquge\.info/.test(host)) {
+        // if (/biquge/.test(host)) {
         var content = await copyBiqugeInfoChapterContent(host, path);
         if (!content) var content = await copyBiqugeInfoChapterContent(host, path);
         if (!content) var content = await copyBiqugeInfoChapterContent(host, path);

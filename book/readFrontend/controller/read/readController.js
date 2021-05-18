@@ -70,7 +70,6 @@ exports.chapterDetail = async function(bookId, number) {
             bookId: bookId
         });
         if (!chapter) {
-            // adminHttpResult.jsonSuccOut(req, res, null);
             return null;
         }
         var chapterDetail = {
