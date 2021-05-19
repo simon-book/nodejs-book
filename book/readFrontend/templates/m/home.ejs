@@ -13,7 +13,7 @@
             <%= firstBlock.name%></a>
     </div>
     <div class="slide">
-        <% firstBlock.books.forEach(function(book){ %>
+        <% firstBlock.recommendBooks.forEach(function(book){ %>
         <a class="hot_sale" href="/book/<%= book.bookId%>/">
             <div class="bookimg">
                 <img src="<%= book.cover%>">
@@ -40,7 +40,7 @@
             <%= block.name%></a>
     </div>
     <div class="slide">
-        <% block.books.forEach(function(book){ %>
+        <% block.recommendBooks.forEach(function(book){ %>
         <a class="common_sale" href="/book/<%= book.bookId%>/">
             <!-- <span class="sort">
                 <%= '['+book.categoryName+']'%></span> -->

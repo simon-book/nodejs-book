@@ -69,24 +69,20 @@ function LastRead() {
     };
     this.setBook = function(v) {
         // var reg = new RegExp("(^|#)" + v);
-        var reg = new RegExp("#" + v + "#" + "|" + "#" + v + "$");
+        var reg = new RegExp("#" + v + "#");
         var books = this.getItem(this.bookList);
-        if (books == "") {
-            books = v
-        } else {
-            if (books.search(reg) == -1) {
-                books += "#" + v
-            } else {
-                books.replace(reg, "#" + v)
-            }
+        if (books.search(reg) == -1) {
+            if (!books) books = "#";
+            books = books + v + "#";
+            this.setItem(this.bookList, books)
         }
-        this.setItem(this.bookList, books)
     };
     this.getBook = function() { //获取阅读记录中的book列表
         var v = this.getItem(this.bookList) ? this.getItem(this.bookList).split("#") : Array();
         var books = Array();
         if (v.length) {
             for (var i = 0; i < v.length; i++) {
+                if (!v[i]) continue;
                 var tem = this.getItem(v[i]).split('#');
                 if (tem.length > 3) books.push(tem);
             }
