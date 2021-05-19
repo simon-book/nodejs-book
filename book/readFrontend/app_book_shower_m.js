@@ -49,7 +49,8 @@ app.use(__G__.CONTEXT + "/static", express.static(path.join(__dirname, '/static'
 }));
 app.use(__G__.CONTEXT + "/html", express.static(path.join(__dirname, '/html')));
 
-app.use(__G__.CONTEXT || '/', require('./controller/mPageRoutes.js'));
+// app.use(__G__.CONTEXT || '/', require('./controller/mPageRoutes.js'));
+app.use(__G__.CONTEXT || '/', require('./controller/pageRoutes.js'));
 
 branchMap.queryBranchInfo();
 

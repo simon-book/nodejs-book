@@ -2,7 +2,7 @@
 <%- include('common/pageHeader', {}); %>
 <div class="searchArea">
     <h2 class="areaTitle">搜索<font color="red">
-            <%= keyword%>
+            <%= keywords%>
         </font>结果</h2>
     <% books.forEach(function(book, i){ %>
     <a class="common_sale" href="/book/<%= book.bookId%>/">
@@ -12,12 +12,24 @@
     </a>
     <% }); %>
 </div>
-<% if(errorMsg){ %>
-<h2 class="errorMsg">
-    <%= errorMsg %>
-</h2>
-<% } %>
-<%- include('common/listPagerPopup', {}); %>
+<div class="page">
+    <%  if(pagination.currentPage > 1){ %>
+    <a class="page-btn" href="/search?keyword=<%= keywords%>&page=<%= pagination.currentPage-1%>">
+        上一页</a>
+    <% } %>
+    <span>
+        <%= pagination.currentPage%> /
+        <%= pagination.totalPage%></span>
+    <% if(pagination.currentPage < pagination.totalPage){ %>
+    <a class="page-btn" href="/search?keyword=<%= keywords%>&page=<%= pagination.currentPage+1%>">下一页</a>
+    <% } %>
+    <input type="number" class="go-page-input" id="go-page-input" min="1" max="<%= pagination.totalPage%>" placeholder="页数">
+    <button type="button" class="go-page-btn" onclick="goPage()">跳转</button>
+</div>
 <%- include('common/searchForm', {}); %>
+<script type="text/javascript">
+var currentPage = <%= pagination.currentPage%>;
+var totalPage = <%= pagination.totalPage%>;
+</script>
 <%- include('common/footer', {}); %>
 <%- include('common/bottom', {}); %>

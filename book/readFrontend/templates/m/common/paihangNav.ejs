@@ -1,8 +1,0 @@
-<nav class="sortChannel_nav">
-    <ul>
-        <% rankMap.forEach(function(rank){ %>
-        <li><a href="/<%= pageIndex %>/<%= rank[1] %>/1" class="<%= currentRankId == rank[1]?'sel':'' %>">
-                <%= rank[0] %></a></li>
-        <% }); %>
-    </ul>
-</nav>

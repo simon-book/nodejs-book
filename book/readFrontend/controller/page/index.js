@@ -93,10 +93,14 @@ exports.category = async function(req, res) {
         var lastUpdatedBooks = await bookController.listBook(query);
         var currentPage = query.page;
         var totalPage = Math.ceil(lastUpdatedBooks.pagination.totalNum / lastUpdatedBooks.pagination.pageSize);
-        var currentCategory = _.find(branchInfo.categoryMap, function(category) {
-            return category[1] == query.categoryId;
-        })[0];
-        var currentBlock = _.find(blocks, { name: currentCategory });
+        if (query.categoryId) {
+            var currentCategory = _.find(branchInfo.categoryMap, function(category) {
+                return category[1] == query.categoryId;
+            })[0];
+            var currentBlock = _.find(blocks, { name: currentCategory });
+        } else {
+            var currentCategory = "全部小说";
+        }
         res.render('category', {
             title: currentCategory + "_" + "好看的" + currentCategory + "_" + branchInfo.title,
             branchInfo: branchInfo,
@@ -312,7 +316,7 @@ exports.search = async function(req, res) {
                 branchInfo: branchInfo,
                 user: auth.getUser(req, res),
                 currentRender: "search",
-                keyword: "",
+                keywords: "",
                 pageTitle: "无搜索内容，搜索请输入书名或作者",
                 books: [],
                 pagination: null

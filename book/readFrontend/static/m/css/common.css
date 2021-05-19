@@ -425,6 +425,10 @@ header span.logo {
     margin: 0;
 }
 
+.text-center {
+    text-align: center;
+}
+
 .page {
     background: #68aac2;
     padding: 0 10px;
@@ -436,7 +440,22 @@ header span.logo {
 
 .page a {
     color: #fff;
-    margin: 0 4px;
+    /*margin: 0 4px;*/
+}
+
+.page .page-btn {
+    padding: 5px 8px;
+    /*border: 1px solid #ddd;*/
+}
+
+.page input {
+    width: 50px;
+    height: 20px;
+}
+
+.page button {
+    width: 40px;
+    height: 24px;
 }
 
 .page a.disabled {
