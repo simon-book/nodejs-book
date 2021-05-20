@@ -5,9 +5,23 @@ var branchMap = require('./common/branchMap.js');
 var userController = require("./user/userController.js");
 
 router.use(function(req, res, next) {
-    // req.currentUser = manager;
     req.branchInfo = branchMap.hostMap[req.hostname];
-    next();
+    var sUserAgent = req.headers["user-agent"].toLowerCase();
+    var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+    var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+    // var bIsMidp = sUserAgent.match(/midp/i) == "midp";
+    var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+    var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+    var bIsAndroid = sUserAgent.match(/android/i) == "android";
+    // var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+    // var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+    var isLocalhost = /^(localhost)/.test(req.hostname);
+    var isM = /^(m\.)/.test(req.hostname);
+    if ((bIsIpad || bIsIphoneOs || bIsUc7 || bIsUc || bIsAndroid) && !isM && !isLocalhost) {
+        res.redirect(req.protocol + "://" + req.hostname.replace(/^(www)/, "m") + req.originalUrl)
+    } else {
+        next();
+    }
 });
 
 router.get('/', page.home);
