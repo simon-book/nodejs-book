@@ -29,51 +29,16 @@
         <div class="col-md-3 border book-list-box">
             <h2 class="book-list-title">经典推荐</h2>
             <ul class="book-list">
+                <% firstBlock.hotBooks.forEach(function(book){ %>
                 <li class="book-item-2">
-                    <span class="book-category">[女生频道]</span>
-                    <span class="book-author">吱吱</span>
-                    <span class="book-title"><a href="/html/192/192329/">慕南枝</a></span>
+                    <span class="book-category">[
+                        <%= book.categoryName%>]</span>
+                    <span class="book-author">
+                        <%= book.writer%> </span>
+                    <span class="book-title"><a class="book-title" href="/book/<%= book.bookId%>">
+                            <%= book.title%> </a></span>
                 </li>
-                <li class="book-item-2">
-                    <span class="book-category">[女生频道]</span>
-                    <span class="book-author">吱吱</span>
-                    <span class="book-title"><a href="/html/192/192329/">慕南枝</a></span>
-                </li>
-                <li class="book-item-2">
-                    <span class="book-category">[女生频道]</span>
-                    <span class="book-author">吱吱</span>
-                    <span class="book-title"><a href="/html/192/192329/">慕南枝</a></span>
-                </li>
-                <li class="book-item-2">
-                    <span class="book-category">[女生频道]</span>
-                    <span class="book-author">吱吱</span>
-                    <span class="book-title"><a href="/html/192/192329/">慕南枝</a></span>
-                </li>
-                <li class="book-item-2">
-                    <span class="book-category">[女生频道]</span>
-                    <span class="book-author">吱吱吱吱吱</span>
-                    <span class="book-title"><a href="/html/192/192329/">慕南枝慕南枝慕南枝慕南枝</a></span>
-                </li>
-                <li class="book-item-2">
-                    <span class="book-category">[女生频道]</span>
-                    <span class="book-author">吱吱</span>
-                    <span class="book-title"><a href="/html/192/192329/">慕南枝</a></span>
-                </li>
-                <li class="book-item-2">
-                    <span class="book-category">[女生频道]</span>
-                    <span class="book-author">吱吱</span>
-                    <span class="book-title"><a href="/html/192/192329/">慕南枝</a></span>
-                </li>
-                <li class="book-item-2">
-                    <span class="book-category">[女生频道]</span>
-                    <span class="book-author">吱吱</span>
-                    <span class="book-title"><a href="/html/192/192329/">慕南枝</a></span>
-                </li>
-                <li class="book-item-2">
-                    <span class="book-category">[女生频道]</span>
-                    <span class="book-author">吱吱</span>
-                    <span class="book-title"><a href="/html/192/192329/">慕南枝</a></span>
-                </li>
+                <% }); %>
             </ul>
         </div>
         <div class="col-md-12 border book-list-box" style="padding-bottom: 0;">

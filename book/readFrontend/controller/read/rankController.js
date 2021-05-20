@@ -72,19 +72,27 @@ exports.listPage = async function(branchId, recommend, rank) {
             branchId: branchId
         });
         for (var i = 0; i < list.length; i++) {
-            // if (recommend) {
-            list[i].recommendBooks = await bookSequelize.findAll({
-                bookId: {
-                    [Op.in]: list[i].recommendBookIds
-                }
-            }, true);
-            // } else if (rank) {
-            list[i].rankBooks = await bookSequelize.findAll({
-                bookId: {
-                    [Op.in]: list[i].rankBookIds
-                }
-            }, true);
-            // }
+            if (list[i].recommendBookIds && list[i].recommendBookIds.length) {
+                list[i].recommendBooks = await bookSequelize.findAll({
+                    bookId: {
+                        [Op.in]: list[i].recommendBookIds
+                    }
+                }, true);
+            }
+            if (list[i].rankBookIds && list[i].rankBookIds.length) {
+                list[i].rankBooks = await bookSequelize.findAll({
+                    bookId: {
+                        [Op.in]: list[i].rankBookIds
+                    }
+                }, true);
+            }
+            if (list[i].hotBookIds && list[i].hotBookIds.length) {
+                list[i].hotBooks = await bookSequelize.findAll({
+                    bookId: {
+                        [Op.in]: list[i].hotBookIds
+                    }
+                }, true);
+            }
         }
         return list;
     } catch (err) {

@@ -344,8 +344,13 @@ exports.copy_page = async function() {
             console.log(path);
             var recommendBookIds = [];
             var rankBookIds = [];
+            var hotBookIds = [];
             var allRecommendOriginIds = {};
             console.log("homepage page");
+            var savedRank = await pageSequelize.findOne({
+                branchId: branch.branchId,
+                token: "homepage"
+            })
             var $ = await commonController.copyHtml(branch.pcCopyUrl, path, branch.charset);
             var targetItems = $("#hotcontent").find(".item");
             for (var i = 0; i < targetItems.length; i++) {
@@ -368,6 +373,31 @@ exports.copy_page = async function() {
                 }
             }
 
+            if (!savedRank) {
+                var targetItems = $("#hotcontent").find("ul li");
+                for (var i = 0; i < targetItems.length; i++) {
+                    try {
+                        var item = targetItems[i];
+                        var bookHref = $(item).find("a").attr("href");
+                        if (!bookHref.match(/\/\d+\_\d+\//g)) continue;
+                        var originId = bookHref.match(/\/\d+\_\d+\//g)[0].replace(/\//g, "");
+                        var savedBook = await bookSequelize.findOneBook({
+                            branchId: branch.branchId,
+                            originId: originId
+                        })
+                        if (!savedBook) {
+                            savedBook = await create_book(originId);
+                            if (!savedBook) continue;
+                        }
+                        hotBookIds.push(savedBook.bookId);
+                    } catch (err) {
+                        console.log(originId);
+                        console.log(err);
+                    }
+                }
+            }
+
+
             var targetItems = $("#newscontent .r").find("li");
             for (var i = 0; i < targetItems.length; i++) {
                 try {
@@ -389,10 +419,6 @@ exports.copy_page = async function() {
                 }
             }
             if (recommendBookIds.length && rankBookIds.length) {
-                var savedRank = await pageSequelize.findOne({
-                    branchId: branch.branchId,
-                    token: "homepage"
-                })
                 if (savedRank) {
                     savedRank.set("recommendBookIds", recommendBookIds);
                     savedRank.set("rankBookIds", rankBookIds);
@@ -403,6 +429,7 @@ exports.copy_page = async function() {
                         name: "首页",
                         recommendBookIds: recommendBookIds,
                         rankBookIds: rankBookIds,
+                        hotBookIds: hotBookIds,
                         orderIndex: 0,
                         branchId: branch.branchId
                     });

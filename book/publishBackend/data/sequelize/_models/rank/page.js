@@ -26,6 +26,7 @@ var Page = sequelize.define('page', {
     // }]
     recommendBookIds: Sequelize.JSONB,
     rankBookIds: Sequelize.JSONB,
+    hotBookIds: Sequelize.JSONB,
     moreLink: Sequelize.TEXT,
     orderIndex: {
         type: Sequelize.INTEGER,
