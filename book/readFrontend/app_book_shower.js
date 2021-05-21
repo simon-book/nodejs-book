@@ -10,6 +10,7 @@ var favicon = require('static-favicon');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var bodyParser = require('body-parser');
+var compression = require('compression');
 var properties = require('./config/properties.js')();
 var branchMap = require('./controller/common/branchMap.js');
 
@@ -29,6 +30,7 @@ app.use(bodyParser.urlencoded({
     limit: '50mb',
     extended: true
 }));
+app.use(compression());
 app.use(cookieParser('IB_Ck!'));
 app.use(session({
     name: 'book_sid',
