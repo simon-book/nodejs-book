@@ -10,6 +10,10 @@ var branchVisitStat = {};
 
 router.use(function(req, res, next) {
     req.branchInfo = branchMap.hostMap[req.hostname];
+    if (!req.branchInfo) {
+        res.redirect("https://www.99amn.com");
+        return;
+    }
     var sUserAgent = req.headers["user-agent"].toLowerCase();
     var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
     var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
