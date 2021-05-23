@@ -54,7 +54,7 @@ exports.findAll = function(where) {
                 as: 'book',
                 raw: true,
                 required: true,
-                attributes: ["title", "writer", "cover", "categoryId", "categoryName", "lastUpdatedAt"]
+                attributes: ["bookId", "title", "writer", "cover", "categoryId", "categoryName", "lastUpdatedAt"]
             }, {
                 model: BookChapter,
                 as: 'chapter',

@@ -15,16 +15,15 @@
 <div class="page">
     <%  if(pagination.currentPage > 1){ %>
     <a class="page-btn" href="/search?keyword=<%= keywords%>&page=<%= pagination.currentPage-1%>">
-        上一页</a>
-    <% } %>
-    <span>
-        <%= pagination.currentPage%> /
-        <%= pagination.totalPage%></span>
-    <% if(pagination.currentPage < pagination.totalPage){ %>
-    <a class="page-btn" href="/search?keyword=<%= keywords%>&page=<%= pagination.currentPage+1%>">下一页</a>
-    <% } %>
-    <input type="number" class="go-page-input" id="go-page-input" min="1" max="<%= pagination.totalPage%>" placeholder="页数">
-    <button type="button" class="go-page-btn" onclick="goPage()">跳转</button>
+        <</a> <% } %>
+            <span>
+                <%= pagination.currentPage%> /
+                <%= pagination.totalPage%></span>
+            <% if(pagination.currentPage < pagination.totalPage){ %>
+            <a class="page-btn" href="/search?keyword=<%= keywords%>&page=<%= pagination.currentPage+1%>">></a>
+            <% } %>
+            <input type="number" class="go-page-input" id="go-page-input" min="1" max="<%= pagination.totalPage%>" placeholder="页数" onkeydown="if(event.keyCode==13){goPage(); return false;}">
+            <button type="button" class="go-page-btn" onclick="goPage()">跳转</button>
 </div>
 <%- include('common/searchForm', {}); %>
 <script type="text/javascript">

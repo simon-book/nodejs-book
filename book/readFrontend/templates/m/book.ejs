@@ -45,7 +45,8 @@
         <% }); %>
     </div>
     <div class="tab-nav">
-        <a href="/book/<%= book.bookId%>/mulu">查看全部章节</a>
+        <a href="/book/<%= book.bookId%>/mulu">查看全部章节（共
+            <%= allChapters.length%>章）</a>
     </div>
 </div>
 <%- include('common/footer', {}); %>

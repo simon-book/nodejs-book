@@ -80,7 +80,7 @@
                     <% }%>
                     <li>
                         <div class="go-page">
-                            <input type="number" class="go-page-input" id="go-page-input" min="1" max="<%= pagination.totalPage%>" placeholder="页数">
+                            <input type="number" class="go-page-input" id="go-page-input" min="1" max="<%= pagination.totalPage%>" placeholder="页数" onkeydown="if(event.keyCode==13){goPage(); return false;}">
                             <button type="button" class="go-page-btn" onclick="goPage()">跳转</button>
                         </div>
                     </li>

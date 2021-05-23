@@ -11,6 +11,7 @@ var rankSequelize = require('../../data/sequelize/rank/rankSequelize.js');
 var hostMap = {
     "localhost": {
         branchId: 1,
+        staticVersion: "20210522-01",
         title: "笔趣阁_书友最值得收藏的网络小说阅读网",
         shorttitle: "笔趣阁",
         keywords: "笔趣阁,网络小说,小说阅读网,免费小说,小说,biquge",
@@ -18,6 +19,7 @@ var hostMap = {
     },
     "192.168.1.100": {
         branchId: 1,
+        staticVersion: "20210522-01",
         title: "笔趣阁_书友最值得收藏的网络小说阅读网",
         shorttitle: "笔趣阁",
         keywords: "笔趣阁,网络小说,小说阅读网,免费小说,小说,biquge",
@@ -32,6 +34,7 @@ var hostMap = {
     // },
     "www.99amn.com": {
         branchId: 1,
+        staticVersion: "20210522-01",
         title: "笔趣阁_书友最值得收藏的网络小说阅读网",
         shorttitle: "笔趣阁",
         keywords: "笔趣阁,网络小说,小说阅读网,免费小说,小说,biquge",
@@ -39,6 +42,7 @@ var hostMap = {
     },
     "m.99amn.com": {
         branchId: 1,
+        staticVersion: "20210522-01",
         title: "笔趣阁_书友最值得收藏的网络小说阅读网",
         shorttitle: "笔趣阁",
         keywords: "笔趣阁,网络小说,小说阅读网,免费小说,小说,biquge",
