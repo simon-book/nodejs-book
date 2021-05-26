@@ -45,6 +45,8 @@ app.use('*', function(req, res, next) {
 app.use(__G__.CONTEXT + "/static", express.static(path.join(__dirname, '/statics')));
 app.use(__G__.CONTEXT + "/html", express.static(path.join(__dirname, '/html')));
 
+app.use(__G__.CONTEXT || '/api/publisher/biquge', require('./controller/biqugeHttpRoutes.js'));
+app.use(__G__.CONTEXT || '/api/publisher/dashen', require('./controller/dashenHttpRoutes.js'));
 app.use(__G__.CONTEXT || '/api/publisher', require('./controller/index.js'));
 
 

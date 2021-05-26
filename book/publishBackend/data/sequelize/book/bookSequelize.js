@@ -83,11 +83,18 @@ exports.findOneBook = function(where) {
     })
 }
 
-exports.findAll = function(where, attributes) {
+exports.findAll = function(where, attributes, offset, limit) {
     return new Promise(function(resolve, reject) {
         Book.findAll({
             where: where,
-            attributes: attributes
+            attributes: attributes,
+            offset: offset || 0,
+            limit: limit || 200000,
+            order: [
+                [
+                    "bookId", "asc"
+                ]
+            ]
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {

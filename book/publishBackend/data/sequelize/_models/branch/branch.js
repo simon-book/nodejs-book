@@ -20,26 +20,6 @@ var Branch = sequelize.define('branch', {
         allowNull: false,
         unique: true
     },
-    // contacts: {
-    //     type: Sequelize.TEXT,
-    //     allowNull: false
-    // },
-    // phone: {
-    //     type: Sequelize.TEXT,
-    //     allowNull: false
-    // },
-    // email: Sequelize.TEXT,
-    // logo: Sequelize.TEXT,
-    // ServicePhone: Sequelize.TEXT,
-    // ServiceEmail: Sequelize.TEXT,
-    // ServiceOnline: Sequelize.TEXT,
-    // domainName: Sequelize.TEXT,
-    // branchType: { //主master，副agency
-    //     type: Sequelize.TEXT,
-    //     allowNull: false,
-    //     defaultValue: "master"
-    // },
-    // masterBranchId: Sequelize.BIGINT,
     copySrc: Sequelize.TEXT,
     copyParams: Sequelize.JSONB,
     remark: Sequelize.TEXT,

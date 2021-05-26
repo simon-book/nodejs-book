@@ -15,34 +15,7 @@ var rankSequelize = require('../../data/sequelize/rank/rankSequelize.js');
 var pageSequelize = require('../../data/sequelize/rank/pageSequelize.js');
 
 var branch = { //笔趣阁
-    copySrc: "www.biquwx.la",
-    // branchId: 1,
-    // copyUrl: "http://m.biquge.info",
-    // pcCopyUrl: "http://www.biquge.info",
-    // charset: "utf-8",
-    // category: {
-    //     "玄幻小说": [1, 1, "xuanhuan"],
-    //     "修真小说": [2, 2, "xiuzhen"],
-    //     "都市小说": [3, 3, "dushi"],
-    //     "穿越小说": [4, 4, "chuanyue"],
-    //     "网游小说": [5, 5, "wangyou"],
-    //     "科幻小说": [6, 6, "kehuan"]
-    // },
-    // rank: {
-    //     "总点击榜": "paihangbang_allvisit",
-    //     "周点击榜": "paihangbang_weekvisit",
-    //     "月点击榜": "paihangbang_monthvisit",
-    //     "周推荐榜": "paihangbang_weekvote",
-    //     "月推荐榜": "paihangbang_monthvote",
-    //     "总推荐榜": "paihangbang_allvote",
-    //     "总收藏榜": "paihangbang_goodnum",
-    //     "总字数榜": "paihangbang_size",
-    //     "最新入库": "paihangbang_postdate",
-    //     "最近更新": "paihangbang_lastupdate",
-    //     "新书榜单": "paihangbang_goodnew"
-    // },
-    // categoryPage: 2,
-    // rankPage: 2
+    copySrc: "www.biquwx.la"
 }
 
 exports.queryBranchInfo = async function() {
@@ -231,6 +204,8 @@ async function create_book(originId, categoryId, categoryName) {
         }
         // console.log(bookHref);
         var $ = await commonController.copyHtml(branch.pcCopyUrl, bookHref, branch.charset);
+        var chapters = $("#list dl").children();
+        if (!chapters.length) return false;
         book.cover = $("#fmimg").find("img").attr("src");
         if (!/^(http)/.test(book.cover)) book.cover = branch.pcCopyUrl + book.cover;
         var liItems = $("#info").children();
@@ -238,7 +213,7 @@ async function create_book(originId, categoryId, categoryName) {
         // console.log(book.title);
         book.writer = $(liItems[1]).text().split(":")[1];
         if (!book.categoryName) book.categoryName = $(liItems[2]).text().split(":")[1];
-        if (!book.categoryId) book.categoryId = branch.category[book.categoryName] ? branch.category[book.categoryName][1] : 7
+        if (!book.categoryId) book.categoryId = branch.category[book.categoryName] ? branch.category[book.categoryName][1] : 0;
         book.publishStatus = $('meta[property="og:novel:status"]').attr("content").indexOf("连载") > -1 ? 1 : 2;
         book.lastUpdatedAt = new Date($(liItems[3]).text().split(/\s+\:/)[1]);
         book.abstractContent = $($("#intro").children()[0]).html().replace(/<br>/g, "\\n");
@@ -254,7 +229,7 @@ async function create_book(originId, categoryId, categoryName) {
         var start = 0;
         var newChapters = [];
         var lastChapter = null;
-        var chapters = $("#list dl").children();
+
         for (var j = start; j < chapters.length; j++) {
             var a = $(chapters[j]).children()[0];
             var aHref = $(a).attr("href");
@@ -288,6 +263,26 @@ async function create_book(originId, categoryId, categoryName) {
 }
 
 exports.create_book = create_book;
+
+exports.update_all_books = async function(startIndex, endIndex, date) {
+    try {
+        var offset = 0;
+        var limit = 5000;
+        do {
+            var books = await bookSequelize.findAll({
+                branchId: branch.branchId
+            }, ["bookId", "lastChapterId", "chapterCount", "originId", "lastUpdatedAt", "publishStatus"], offset, limit);
+            for (var i = 0; i < books.length; i++) {
+                var book = books[i];
+                if (book.publishStatus == 2) continue;
+                await update_book(book);
+            }
+            offset += books.length;
+        } while (books.length < limit)
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 async function update_book(savedBook) {
     try {
