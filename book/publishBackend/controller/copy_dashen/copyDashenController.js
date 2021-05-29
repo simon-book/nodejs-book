@@ -5,7 +5,7 @@ var moment = require('moment');
 var cheerio = require('cheerio');
 var util = require('../../util/index.js');
 var httpGateway = require('../../data/http/httpGateway.js')
-var commonController = require('./commonController.js')
+var commonController = require('../copy_biqu/commonController.js')
 var branchSequelize = require('../../data/sequelize/branch/branchSequelize.js');
 var bookCategorySequelize = require('../../data/sequelize/book/bookCategorySequelize.js');
 var tagSequelize = require('../../data/sequelize/book/tagSequelize.js');
@@ -122,8 +122,12 @@ async function copy_category_books(category, startIndex, endIndex) {
                             title: $(item).find(".title").text().replace(/\n|\t|\s/g, ""),
                             writer: $(item).find(".author").text().replace(/\n|\t|\s/g, "").split("：")[1]
                         })
-                        if (savedBook) continue;
-                        var result = await create_book(originId, branch.category[category][1], category);
+                        if (savedBook && savedBook.branchId != branch.branchId) continue;
+                        if (!savedBook) {
+                            var result = await create_book(originId, branch.category[category][1], category);
+                        } else {
+                            var result = await update_book(savedBook);
+                        }
                         if (!result) throw new Error("save book error.")
                     } catch (err) {
                         console.log(category, branch.category[category][0], index, i, originId);
@@ -219,8 +223,57 @@ async function create_book(originId, categoryId, categoryName) {
 
 exports.create_book = create_book;
 
-exports.update_all_books = async function() {
+exports.update_all_books = async function(startIndex, endIndex, date) {
     try {
+        var index = startIndex || 1;
+        endIndex = endIndex || 1000;
+        if (branch.isTest) endIndex = index + 5;
+        if (!date) date = moment().subtract(2, 'days');
+        else date = moment(date);
+        date = parseInt(date.format("YYMMDD"));
+        var stop = false;
+        do {
+            try {
+                var path = "/paihangbang_lastupdate/" + index + ".html";
+                console.log(path);
+                var $ = await commonController.copyHtml(branch.pcCopyUrl, path, branch.charset);
+                var targetItems = $("#main").find("li");
+                for (var i = 0; i < targetItems.length; i++) {
+                    try {
+                        var item = targetItems[i];
+                        var bookHref = $(item).find(".s2 a").attr("href");
+                        var originId = bookHref.match(/\/\d+\_\d+\//g)[0].replace(/\//g, "");
+                        var bookDate = parseInt($(item).find(".s5").text().replace(/-/g, ""));
+                        if (bookDate < date) {
+                            stop = true;
+                            break;
+                        }
+                        var savedBook = await bookSequelize.findOneBook({
+                            branchId: branch.branchId,
+                            originId: originId
+                        })
+                        if (savedBook) {
+                            var result = await update_book(savedBook);
+                        } else {
+                            var result = await create_book(originId);
+                        }
+                        if (!result) throw new Error("save book error.")
+                    } catch (err) {
+                        console.log(category, branch.category[category][0], index, i, originId);
+                        console.log(err);
+                    }
+                }
+            } catch (err) {
+                console.log(category, branch.category[category][0], index);
+                console.log(err);
+            }
+            index++;
+        } while (index <= endIndex && !stop);
+
+
+
+
+
         var offset = 0;
         var limit = 5000;
         do {

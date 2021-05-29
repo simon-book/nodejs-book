@@ -143,10 +143,14 @@ exports.copy_all_books = async function() {
 }
 
 
-async function copy_category_books(category, startIndex, endIndex) {
+async function copy_category_books(category, startIndex, endIndex, date) {
     try {
         var index = startIndex;
         if (branch.isTest) endIndex = startIndex + 5;
+        if (!date) date = moment().subtract(2, 'days');
+        else date = moment(date);
+        date = parseInt(date.format("YYMMDD"));
+        var stop = false;
         do {
             try {
                 var path = "/list/" + branch.category[category][0] + "_" + index + ".html";
@@ -162,7 +166,18 @@ async function copy_category_books(category, startIndex, endIndex) {
                             branchId: branch.branchId,
                             originId: originId
                         })
+                        if (savedBook && savedBook.publishStatus == 2) continue;
                         if (savedBook) {
+                            var bookHref = "/" + originId + "/";
+                            var $ = await commonController.copyHtml(branch.pcCopyUrl, bookHref, branch.charset);
+                            var liItems = $("#info").children();
+                            var lastUpdatedAt = new Date($(liItems[3]).text().split(/\s+\:/)[1]);
+                            var bookDate = parseInt(moment(lastUpdatedAt).format("YYMMDD"));
+                            if (bookDate < date) {
+                                stop = true;
+                                break;
+                            }
+                            if (savedBook.lastChapterId && Math.abs(lastUpdatedAt.getTime() - new Date(savedBook.lastUpdatedAt).getTime()) <= 10000) continue;
                             var result = await update_book(savedBook);
                         } else {
                             var result = await create_book(originId, branch.category[category][1], category);
@@ -178,7 +193,7 @@ async function copy_category_books(category, startIndex, endIndex) {
                 console.log(err);
             }
             index++;
-        } while (index <= endIndex);
+        } while (index <= endIndex && !stop);
     } catch (err) {
         console.log(err);
     }
@@ -266,19 +281,51 @@ exports.create_book = create_book;
 
 exports.update_all_books = async function(startIndex, endIndex, date) {
     try {
-        var offset = 0;
-        var limit = 5000;
+        var index = startIndex || 1;
+        endIndex = endIndex || 1000;
+        if (branch.isTest) endIndex = index + 5;
+        if (!date) date = moment().subtract(2, 'days');
+        else date = moment(date);
+        date = parseInt(date.format("YYMMDD"));
+        var stop = false;
         do {
-            var books = await bookSequelize.findAll({
-                branchId: branch.branchId
-            }, ["bookId", "lastChapterId", "chapterCount", "originId", "lastUpdatedAt", "publishStatus"], offset, limit);
-            for (var i = 0; i < books.length; i++) {
-                var book = books[i];
-                if (book.publishStatus == 2) continue;
-                await update_book(book);
+            try {
+                var path = "/paihangbang_lastupdate/" + index + ".html";
+                console.log(path);
+                var $ = await commonController.copyHtml(branch.pcCopyUrl, path, branch.charset);
+                var targetItems = $("#main").find("li");
+                for (var i = 0; i < targetItems.length; i++) {
+                    try {
+                        var item = targetItems[i];
+                        var bookHref = $(item).find(".s2 a").attr("href");
+                        var originId = bookHref.match(/\/\d+\_\d+\//g)[0].replace(/\//g, "");
+                        var bookDate = parseInt($(item).find(".s5").text().replace(/-/g, ""));
+                        if (bookDate < date) {
+                            stop = true;
+                            break;
+                        }
+                        var savedBook = await bookSequelize.findOneBook({
+                            branchId: branch.branchId,
+                            originId: originId
+                        })
+                        if (savedBook && savedBook.publishStatus == 2) continue;
+                        if (savedBook) {
+                            var result = await update_book(savedBook);
+                        } else {
+                            var result = await create_book(originId);
+                        }
+                        if (!result) throw new Error("save book error.")
+                    } catch (err) {
+                        console.log(category, branch.category[category][0], index, i, originId);
+                        console.log(err);
+                    }
+                }
+            } catch (err) {
+                console.log(category, branch.category[category][0], index);
+                console.log(err);
             }
-            offset += books.length;
-        } while (books.length < limit)
+            index++;
+        } while (index <= endIndex && !stop);
     } catch (err) {
         console.log(err);
     }
