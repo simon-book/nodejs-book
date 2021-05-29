@@ -11,17 +11,17 @@ router.post('/copy_categorys', async function(req, res) {
 })
 router.post('/copy_books', async function(req, res) {
     await copyBiqugeController.queryBranchInfo();
-    copyBiqugeController.copy_all_books();
+    copyBiqugeController.copy_all_books(req.body.date);
     res.send(true);
 })
-router.post('/update_books', async function(req, res) {
-    await copyBiqugeController.queryBranchInfo();
-    copyBiqugeController.update_all_books(1, 100);
-    copyBiqugeController.update_all_books(101, 200);
-    copyBiqugeController.update_all_books(201, 300);
-    copyBiqugeController.update_all_books(301, 400);
-    res.send(true);
-})
+// router.post('/update_books', async function(req, res) {
+//     await copyBiqugeController.queryBranchInfo();
+//     copyBiqugeController.update_all_books(1, 100);
+//     copyBiqugeController.update_all_books(101, 200);
+//     copyBiqugeController.update_all_books(201, 300);
+//     copyBiqugeController.update_all_books(301, 400);
+//     res.send(true);
+// })
 router.post('/copy_page', async function(req, res) {
     await copyBiqugeController.queryBranchInfo();
     await copyBiqugeController.copy_page();

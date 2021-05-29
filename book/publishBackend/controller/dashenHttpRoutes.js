@@ -10,13 +10,19 @@ router.post('/copy_categorys', async function(req, res) {
 })
 router.post('/copy_books', async function(req, res) {
     await copyDashenController.queryBranchInfo();
-    copyDashenController.copy_all_books(req.body.categoryPageIndex);
+    copyDashenController.copy_all_books(req.body.date);
     res.send(true);
 })
 
-router.post('/update_books', async function(req, res) {
+// router.post('/update_books', async function(req, res) {
+//     await copyDashenController.queryBranchInfo();
+//     copyDashenController.update_all_books();
+//     res.send(true);
+// })
+
+router.post('/copy_book', async function(req, res) {
     await copyDashenController.queryBranchInfo();
-    copyDashenController.update_all_books();
+    await copyDashenController.create_book(req.body.originId);
     res.send(true);
 })
 
