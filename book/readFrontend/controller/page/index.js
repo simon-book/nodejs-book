@@ -1,3 +1,5 @@
+var Sequelize = require('sequelize');
+var Op = Sequelize.Op;
 var _ = require('lodash');
 var moment = require('moment');
 var util = require("../../util/index.js");
@@ -54,10 +56,9 @@ exports.bookshelf = async function(req, res) {
 exports.home = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
-        // var blocks = await homeController.index(branchInfo.branchId, true);
         var blocks = await rankController.listPage(branchInfo.branchId);
         var lastUpdatedBooks = await bookController.listBook({
-            branchId: branchInfo.branchId,
+            // branchId: branchInfo.branchId,
             pageSize: 30,
             page: 1
         })
@@ -82,34 +83,40 @@ exports.home = async function(req, res) {
 exports.category = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
+        var currentCategoryId = null;
         var query = {
-            branchId: branchInfo.branchId,
+            // branchId: branchInfo.branchId,
             page: parseInt(req.params.page || 1),
             pageSize: 30
         };
-        if (req.params.categoryId) query.categoryId = parseInt(req.params.categoryId);
+        if (req.params.categoryId) currentCategoryId = parseInt(req.params.categoryId);
         var blocks = await rankController.listPage(branchInfo.branchId);
-
+        if (currentCategoryId) {
+            var currentCategory = _.find(branchInfo.categoryMap, function(category) {
+                return category[1] == currentCategoryId || _.indexOf(category[2], currentCategoryId) > -1;
+            });
+            var currentBlock = _.find(blocks, { name: currentCategory[0] });
+            if (currentCategory[2]) {
+                query.categoryId = {
+                    [Op.in]: currentCategory[2]
+                }
+                currentCategoryId = currentCategory[1];
+            } else query.categoryId = currentCategoryId;
+        } else {
+            var currentCategory = ["全部小说"];
+        }
         var lastUpdatedBooks = await bookController.listBook(query);
         var currentPage = query.page;
         var totalPage = Math.ceil(lastUpdatedBooks.pagination.totalNum / lastUpdatedBooks.pagination.pageSize);
-        if (query.categoryId) {
-            var currentCategory = _.find(branchInfo.categoryMap, function(category) {
-                return category[1] == query.categoryId;
-            })[0];
-            var currentBlock = _.find(blocks, { name: currentCategory });
-        } else {
-            var currentCategory = "全部小说";
-        }
         res.render('category', {
-            title: currentCategory + "_" + "好看的" + currentCategory + "_" + branchInfo.title,
+            title: currentCategory[0] + "_" + "好看的" + currentCategory[0] + "_" + branchInfo.title,
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
-            pageTitle: currentCategory,
+            pageTitle: currentCategory[0],
             books: lastUpdatedBooks.list,
             currentBlock: currentBlock,
             currentRender: "category",
-            currentCategoryId: query.categoryId,
+            currentCategoryId: currentCategoryId,
             pagination: {
                 totalNum: lastUpdatedBooks.pagination.totalNum,
                 currentPage: currentPage,
@@ -162,34 +169,62 @@ exports.paihang = async function(req, res) {
 exports.quanben = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
+        var currentCategoryId = null;
         var query = {
-            branchId: branchInfo.branchId,
+            // branchId: branchInfo.branchId,
             publishStatus: 2,
             page: parseInt(req.params.page || 1),
             pageSize: 30
         };
-        if (req.params.categoryId) query.categoryId = parseInt(req.params.categoryId);
+        if (req.params.categoryId) currentCategoryId = parseInt(req.params.categoryId);
+        if (currentCategoryId) {
+            var currentCategory = _.find(branchInfo.categoryMap, function(category) {
+                return category[1] == currentCategoryId || _.indexOf(category[2], currentCategoryId) > -1;
+            });
+            if (currentCategory[2]) {
+                query.categoryId = {
+                    [Op.in]: currentCategory[2]
+                }
+                currentCategoryId = currentCategory[1];
+            } else query.categoryId = currentCategoryId;
+        } else {
+            var currentCategory = ["全部小说"];
+        }
         var lastUpdatedBooks = await bookController.listBook(query);
         var currentPage = query.page;
         var totalPage = Math.ceil(lastUpdatedBooks.pagination.totalNum / lastUpdatedBooks.pagination.pageSize);
-        if (query.categoryId) {
-            var currentCategory = _.find(branchInfo.categoryMap, function(category) {
-                return category[1] == query.categoryId;
-            })[0];
-        } else var currentCategory = "全部小说"
         res.render('quanben', {
-            title: "已完结" + currentCategory + "小说列表_" + branchInfo.title,
+            title: "已完结" + currentCategory[0] + "小说列表_" + branchInfo.title,
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
-            pageTitle: currentCategory,
+            pageTitle: currentCategory[0],
             books: lastUpdatedBooks.list,
             currentRender: "quanben",
-            currentCategoryId: query.categoryId,
+            currentCategoryId: currentCategoryId,
             pagination: {
                 totalNum: lastUpdatedBooks.pagination.totalNum,
                 currentPage: currentPage,
                 totalPage: totalPage
             }
+        });
+    } catch (err) {
+        console.log(err);
+        res.render('error', {
+            message: "请求错误！",
+            error: err ? JSON.stringify(err) : ""
+        });
+    }
+};
+
+exports.quanbu = async function(req, res) {
+    try {
+        var branchInfo = req.branchInfo;
+        res.render('quanbu', {
+            title: "全部小说列表_" + branchInfo.title,
+            branchInfo: branchInfo,
+            user: auth.getUser(req, res),
+            categoryMap: branchInfo.categoryMap,
+            currentRender: "quanbu"
         });
     } catch (err) {
         console.log(err);
@@ -218,6 +253,10 @@ exports.book = async function(req, res) {
         var bookUrl = req.protocol + "://" + req.headers.host + "/book/" + req.params.bookId + "/";
         var book = result.book;
         var description = book.title + "最新章节由网友提供，《" + book.title + "》情节跌宕起伏、扣人心弦，是一本情节与文笔俱佳的" + book.categoryName + "小说，" + branchInfo.title + "免费提供" + book.writer + "最新清爽干净的文字章节在线阅读.";
+        var currentCategory = _.find(branchInfo.categoryMap, function(category) {
+            return category[1] == book.categoryId || _.indexOf(category[2], book.categoryId) > -1;
+        });
+        if (currentCategory) book.categoryId = currentCategory[1];
         res.render('book', {
             title: book.title + "最新章节列表_" + book.title + "最新章节目录_" + branchInfo.shorttitle,
             branchInfo: branchInfo,
@@ -326,8 +365,8 @@ exports.search = async function(req, res) {
 
         var branchInfo = req.branchInfo;
         var query = {
-            branchId: branchInfo.branchId,
-            searchContent: req.query.keyword,
+            // branchId: branchInfo.branchId,
+            searchContent: req.query.keyword.replace(/^\s+|\s+$/g, ""),
             page: parseInt(req.query.page || 1),
             pageSize: 30
         };

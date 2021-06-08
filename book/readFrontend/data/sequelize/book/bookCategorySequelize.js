@@ -16,7 +16,7 @@ exports.findAll = function(where, offset, limit, order) {
                 ['orderIndex', 'ASC'],
                 ['categoryId', 'DESC']
             ],
-            attributes: ["categoryId", "name"]
+            attributes: ["categoryId", "name", "relatedCategoryIds", "recommendBooks"]
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {

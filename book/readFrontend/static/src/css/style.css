@@ -454,6 +454,15 @@ body {
     word-break: break-all;
 }
 
+.book-item-7 {
+    border-bottom: 1px solid #DDDDDD;
+    line-height: 32px;
+    overflow: hidden;
+    list-style-type: none;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
 .book-operate-box a {
     padding: 5px 10px;
     margin: 10px 15px 10px 0;

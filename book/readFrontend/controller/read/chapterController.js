@@ -11,9 +11,9 @@ var charsets = {
     "www.35wx.com": "GBK"
 }
 
-async function copyBiqugeInfoChapterContent(host, path) {
+async function copyBiqugeInfoChapterContent(host, path, charset) {
     try {
-        var bookHtml = await httpGateway.htmlStartReq(host, path);
+        var bookHtml = await httpGateway.htmlStartReq(host, path, charset);
         var $ = cheerio.load(bookHtml, {
             decodeEntities: false
         });
@@ -35,18 +35,23 @@ async function copyBiqugeInfoChapterContent(host, path) {
     }
 }
 
-exports.copyChapterContent = async function(host, path) {
+exports.copyChapterContent = async function(host, bookOriginId, chapterOriginId) {
     try {
-        // if (/biquge/.test(host)) {
-        var content = await copyBiqugeInfoChapterContent(host, path);
-        if (!content) var content = await copyBiqugeInfoChapterContent(host, path);
-        if (!content) var content = await copyBiqugeInfoChapterContent(host, path);
-        if (!content) var content = await copyBiqugeInfoChapterContent(host, path);
-        if (!content) var content = await copyBiqugeInfoChapterContent(host, path);
+        var content = "";
+        var charset = "utf-8";
+        if (/biqu/.test(host)) {
+            var path = "/" + bookOriginId + "/" + chapterOriginId + ".html";
+        } else if (/dashen/.test(host)) {
+            charset = "gbk"
+            var path = "/html/" + bookOriginId.split("_")[0] + "/" + bookOriginId.split("_")[1] + "/" + chapterOriginId + ".html";
+        }
+        content = await copyBiqugeInfoChapterContent(host, path, charset);
+        if (!content) var content = await copyBiqugeInfoChapterContent(host, path, charset);
+        if (!content) var content = await copyBiqugeInfoChapterContent(host, path, charset);
+        if (!content) var content = await copyBiqugeInfoChapterContent(host, path, charset);
+        if (!content) var content = await copyBiqugeInfoChapterContent(host, path, charset);
+
         return content;
-        // } else {
-        //     return "";
-        // }
     } catch (err) {
         console.log(err);
         return "";

@@ -54,13 +54,14 @@
             <ul class="nav navbar-nav">
                 <li class="<%= currentRender=='home'?'active':'' %>"><a href="/">首页</a></li>
                 <li><a href="/bookshelf">永久书架</a></li>
-                <% branchInfo.categoryMap.forEach(function(category){ %>
+                <% branchInfo.categoryMap.forEach(function(category){ if(!category[3]) return true; %>
                 <li class="<%= currentRender=='category' && currentCategoryId && currentCategoryId == category[1]?'active':'' %>"><a href="/category/<%= category[1] %>/1">
                         <%= category[0] %></a></li>
                 <% }); %>
                 <!-- <li><a href="/class/1/1.html">玄幻奇幻</a></li> -->
                 <li class="<%= currentRender=='paihang'?'active':'' %>"><a href="/paihang">排行榜单</a></li>
-                <li class="<%= currentRender=='quanben'?'active':'' %>"><a href="/quanben/">完本小说</a></li>
+                <li class="<%= currentRender=='quanben'?'active':'' %>"><a href="/quanben/">完结小说</a></li>
+                <li class="<%= currentRender=='quanbu'?'active':'' %>"><a href="/quanbu/">全部小说</a></li>
                 <li class="<%= currentRender=='history'?'active':'' %>"><a href="/history">阅读记录</a></li>
                 <!-- <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>

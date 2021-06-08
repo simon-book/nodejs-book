@@ -52,13 +52,12 @@ exports.listCategoryAndTag = async function(branchId) {
 
 exports.listBook = async function(body) {
     try {
-        if (!body || !body.branchId) throw new Error("缺少branchId");
+        // if (!body || !body.branchId) throw new Error("缺少branchId");
         var pageSize = body.pageSize || 20;
         var page = body.page || 1;
         var offset = pageSize * (page - 1);
-        var where = {
-            branchId: body.branchId
-        }
+        var where = {}
+        if (body.branchId) where.branchId = body.branchId;
         if (body.categoryId) where.categoryId = body.categoryId;
         if (body.bookType) where.bookType = body.bookType;
         if (body.publishStatus) where.publishStatus = body.publishStatus;

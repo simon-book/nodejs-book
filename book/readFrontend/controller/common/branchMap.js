@@ -8,48 +8,13 @@ var bookCategorySequelize = require('../../data/sequelize/book/bookCategorySeque
 var tagSequelize = require('../../data/sequelize/book/tagSequelize.js');
 var rankSequelize = require('../../data/sequelize/rank/rankSequelize.js');
 
-var hostMap = {
-    "localhost": {
-        branchId: 1,
-        staticVersion: "20210522-01",
-        title: "笔趣阁_书友最值得收藏的网络小说阅读网",
-        shorttitle: "笔趣阁",
-        keywords: "笔趣阁,网络小说,小说阅读网,免费小说,小说,biquge",
-        description: "笔趣阁是广大书友最值得收藏的网络小说阅读网，网站收录了当前最火热的网络小说，免费提供高质量的小说最新章节，是广大网络小说爱好者必备的小说阅读网。"
-    },
-    "192.168.1.100": {
-        branchId: 1,
-        staticVersion: "20210522-01",
-        title: "笔趣阁_书友最值得收藏的网络小说阅读网",
-        shorttitle: "笔趣阁",
-        keywords: "笔趣阁,网络小说,小说阅读网,免费小说,小说,biquge",
-        description: "笔趣阁是广大书友最值得收藏的网络小说阅读网，网站收录了当前最火热的网络小说，免费提供高质量的小说最新章节，是广大网络小说爱好者必备的小说阅读网。"
-    },
-    // "144.34.243.105": {
-    //     branchId: 1,
-    //     title: "笔趣阁_书友最值得收藏的网络小说阅读网",
-    //     shorttitle: "笔趣阁",
-    //     keywords: "笔趣阁,网络小说,小说阅读网,免费小说,小说,biquge",
-    //     description: "笔趣阁是广大书友最值得收藏的网络小说阅读网，网站收录了当前最火热的网络小说，免费提供高质量的小说最新章节，是广大网络小说爱好者必备的小说阅读网。"
-    // },
-    "www.99amn.com": {
-        branchId: 1,
-        staticVersion: "20210522-01",
-        title: "笔趣阁_书友最值得收藏的网络小说阅读网",
-        shorttitle: "笔趣阁",
-        keywords: "笔趣阁,网络小说,小说阅读网,免费小说,小说,biquge",
-        description: "笔趣阁是广大书友最值得收藏的网络小说阅读网，网站收录了当前最火热的网络小说，免费提供高质量的小说最新章节，是广大网络小说爱好者必备的小说阅读网。"
-    },
-    "m.99amn.com": {
-        branchId: 1,
-        staticVersion: "20210522-01",
-        title: "笔趣阁_书友最值得收藏的网络小说阅读网",
-        shorttitle: "笔趣阁",
-        keywords: "笔趣阁,网络小说,小说阅读网,免费小说,小说,biquge",
-        description: "笔趣阁是广大书友最值得收藏的网络小说阅读网，网站收录了当前最火热的网络小说，免费提供高质量的小说最新章节，是广大网络小说爱好者必备的小说阅读网。"
-    },
-};
+var testMap = require('./testMap.js');
+var prodMap = require('./prodMap.js');
 
+var isProd = true;
+// var isProd = false;
+
+var hostMap = isProd ? prodMap.hostMap : testMap.hostMap;
 exports.hostMap = hostMap;
 exports.queryBranchInfo = async function() {
     try {
@@ -72,7 +37,7 @@ exports.queryBranchInfo = async function() {
                     return item.orderIndex || 0;
                 })
                 _.forEach(categories, function(item) {
-                    hostMap[url].categoryMap.push([item.name, item.categoryId]);
+                    hostMap[url].categoryMap.push([item.name, item.categoryId, item.relatedCategoryIds, item.name == "其他小说" ? false : true, item.recommendBooks ? item.recommendBooks.slice(0, 3000) : null]);
                 })
                 var ranks = await rankSequelize.findAll({
                     branchId: hostMap[url].branchId

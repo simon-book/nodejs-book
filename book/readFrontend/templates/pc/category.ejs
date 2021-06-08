@@ -4,7 +4,7 @@
     <div class="row ">
         <div class="col-md-12 border book-list-box" style="padding: 5px;">
             <div class="row">
-                <% currentBlock.recommendBooks.forEach(function(book){ %>
+                <% currentBlock && currentBlock.recommendBooks.forEach(function(book){ %>
                 <div class="col-xs-12 col-sm-4 book-item-1">
                     <div class="book-image">
                         <a href="/book/<%= book.bookId%>">
@@ -79,7 +79,7 @@
             <h2 class="book-list-title">
                 <%= pageTitle%>最新入库小说</h2>
             <ul class="book-list">
-                <% currentBlock.rankBooks.forEach(function(book){ %>
+                <% currentBlock && currentBlock.rankBooks.forEach(function(book){ %>
                 <li class="book-item-2">
                     <span class="book-category">[
                         <%= book.categoryName%>]</span>

@@ -92,10 +92,10 @@ exports.chapterDetail = async function(bookId, number) {
             if (content) {
                 chapterDetail.content = content
             } else {
-                console.time(book.copyInfo.pc + "/" + book.originId + "/" + chapter.originId + ".html");
-                content = await chapterController.copyChapterContent(book.copyInfo.pc, "/" + book.originId + "/" + chapter.originId + ".html");
+                // console.time(book.copyInfo.pc + "/" + book.originId + "/" + chapter.originId + ".html");
+                content = await chapterController.copyChapterContent(book.copyInfo.pc, book.originId, chapter.originId);
                 chapterDetail.content = content;
-                console.timeEnd(book.copyInfo.pc + "/" + book.originId + "/" + chapter.originId + ".html");
+                // console.timeEnd(book.copyInfo.pc + "/" + book.originId + "/" + chapter.originId + ".html");
                 if (content) {
                     var result = await MossClient.put("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number + ".txt", content);
                     if (result) {
@@ -132,7 +132,7 @@ async function checkSiblingsChapters(book, number) {
             var chapter = chapters[i];
             if (!chapter.local) {
                 {
-                    var content = await chapterController.copyChapterContent(book.copyInfo.pc, "/" + book.originId + "/" + chapter.originId + ".html");
+                    var content = await chapterController.copyChapterContent(book.copyInfo.pc, book.originId, chapter.originId);
                     if (!content) continue;
                     var result = await MossClient.put("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number + ".txt", content);
                     if (result) {
