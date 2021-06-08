@@ -81,6 +81,8 @@ var Book = sequelize.define('book', {
         fields: ['last_updated_at']
     }, {
         fields: ['origin_id']
+    }, {
+        fields: ['category_id']
     }]
 });
 

@@ -91,11 +91,12 @@ exports.copy_all_books = async function(date) {
             } catch (err) {
                 console.log("获取分类totalPage失败", category, err);
             }
-            var ranges = _.range(1, totalPage, 100);
-            console.log(ranges);
-            _.forEach(ranges, function(start) {
-                copy_category_books(category, start, start + 99 > totalPage ? totalPage : start + 99, date);
-            })
+            await copy_category_books(category, 1, totalPage, date);
+            // var ranges = _.range(1, totalPage, 100);
+            // console.log(ranges);
+            // _.forEach(ranges, function(start) {
+            //     copy_category_books(category, start, start + 99 > totalPage ? totalPage : start + 99, date);
+            // })
         }
     } catch (err) {
         console.log(err);

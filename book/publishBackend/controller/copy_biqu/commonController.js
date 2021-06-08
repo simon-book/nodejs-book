@@ -3,6 +3,7 @@ var _ = require('lodash');
 var Op = Sequelize.Op;
 var moment = require('moment');
 var cheerio = require('cheerio');
+var util = require('../../util/index.js');
 var httpGateway = require('../../data/http/httpGateway.js');
 
 var bookSequelize = require('../../data/sequelize/book/bookSequelize.js');
@@ -28,15 +29,30 @@ async function reqHtmlContent(host, path, charset) {
 
 exports.copyHtml = async function(host, path, charset) {
     try {
-        console.time(host + path);
         var result = await reqHtmlContent(host, path, charset);
-        if (!result) var result = await reqHtmlContent(host, path, charset);
-        if (!result) var result = await reqHtmlContent(host, path, charset);
-        if (!result) var result = await reqHtmlContent(host, path, charset);
-        if (!result) var result = await reqHtmlContent(host, path, charset);
-        console.timeEnd(host + path);
+        await util.sleep(1000);
+        if (!result) {
+            var result = await reqHtmlContent(host, path, charset);
+            await util.sleep(1000);
+        }
+        if (!result) {
+            var result = await reqHtmlContent(host, path, charset);
+            await util.sleep(1000);
+        }
+        if (!result) {
+            var result = await reqHtmlContent(host, path, charset);
+            await util.sleep(1000);
+        }
+        if (!result) {
+            var result = await reqHtmlContent(host, path, charset);
+            await util.sleep(1000);
+        }
+        if (!result) {
+            var result = await reqHtmlContent(host, path, charset);
+            await util.sleep(1000);
+        }
         if (result) {
-            // console.log("success:" + host + path)
+            console.log("success:" + host + path)
             return result;
         } else throw new Error("5次请求html失败");
     } catch (err) {

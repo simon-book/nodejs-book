@@ -61,6 +61,7 @@ exports.update = async function(req, res) {
             return;
         }
         if (body.name) category.set("name", body.name);
+        if (body.relatedCategoryIds && body.relatedCategoryIds.length) category.set("relatedCategoryIds", body.relatedCategoryIds);
         await category.save();
         adminHttpResult.jsonSuccOut(req, res, true);
     } catch (err) {

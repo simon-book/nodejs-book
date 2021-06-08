@@ -27,12 +27,14 @@ var BookCategory = sequelize.define('book_category', {
         },
         allowNull: false
     },
+    relatedCategoryIds: Sequelize.JSONB,
     orderIndex: {
         type: Sequelize.INTEGER,
         defaultValue: 0
     },
     originId: Sequelize.TEXT, //复制原始ID
     token: Sequelize.TEXT,
+    recommendBooks: Sequelize.JSONB,
     statusId: {
         type: Sequelize.INTEGER,
         defaultValue: 1

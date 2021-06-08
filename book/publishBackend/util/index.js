@@ -11,8 +11,13 @@ function prefixInteger(num, n) {
     return (Array(n).join(0) + num).slice(-n);
 }
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 
 module.exports = {
     generateTokenSalt,
-    prefixInteger
+    prefixInteger,
+    sleep
 }

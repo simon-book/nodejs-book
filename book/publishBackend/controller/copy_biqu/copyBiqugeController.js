@@ -131,11 +131,12 @@ exports.copy_all_books = async function(date) {
             } catch (err) {
                 console.log("获取分类totalPage失败", category, err);
             }
-            var ranges = _.range(1, totalPage, 100);
-            console.log(ranges);
-            _.forEach(ranges, function(start) {
-                copy_category_books(category, start, start + 99 > totalPage ? totalPage : start + 99, date);
-            })
+            await copy_category_books(category, 1, totalPage, date);
+            // var ranges = _.range(1, totalPage, 100);
+            // console.log(ranges);
+            // _.forEach(ranges, function(start) {
+            //     copy_category_books(category, start, start + 99 > totalPage ? totalPage : start + 99, date);
+            // })
         }
     } catch (err) {
         console.log(err);
@@ -577,7 +578,7 @@ exports.copy_page = async function() {
     }
 }
 
-exports.copy_rank = function() {
+exports.copy_rank = async function() {
     try {
         for (var rankName in branch.rank) {
             var rank = branch.rank[rankName];
@@ -599,7 +600,7 @@ exports.copy_rank = function() {
             // _.forEach(ranges, function(start, index) {
             //     copy_rank_books(rank, start, start + 199 > totalPage ? totalPage : start + 199, index + 1);
             // })
-            copy_rank_books(rank.token, 1, totalPage);
+            await copy_rank_books(rank.token, 1, totalPage);
         }
     } catch (err) {
         console.log(err);
@@ -611,6 +612,7 @@ async function copy_rank_books(token, startIndex, endIndex) {
         var index = startIndex;
         if (branch.isTest) endIndex = startIndex + 3;
         var rankBookIds = [];
+        if (token == "paihangbang_allvisit") var categoryRecommendBooks = {};
         do {
             var path = "/" + token + "/" + index + ".html";
             console.log(path);
@@ -630,6 +632,10 @@ async function copy_rank_books(token, startIndex, endIndex) {
                         if (!savedBook) {
                             savedBook = await create_book(originId);
                             if (!savedBook) continue;
+                        }
+                        if (token == "paihangbang_allvisit" && index <= 1000) {
+                            if (!categoryRecommendBooks[savedBook.categoryId]) categoryRecommendBooks[savedBook.categoryId] = [];
+                            categoryRecommendBooks[savedBook.categoryId].push({ i: savedBook.bookId, n: savedBook.title });
                         }
                         rankBookIds.push(savedBook.bookId);
                     } catch (err) {
@@ -651,6 +657,15 @@ async function copy_rank_books(token, startIndex, endIndex) {
         if (savedRank) {
             savedRank.set("rankBookIds", rankBookIds);
             await savedRank.save();
+        }
+        if (token == "paihangbang_allvisit") {
+            for (var categoryId in categoryRecommendBooks) {
+                var category = await bookCategorySequelize.findByPk(parseInt(categoryId));
+                if (category) {
+                    category.set("recommendBooks", categoryRecommendBooks[categoryId]);
+                    await category.save();
+                }
+            }
         }
     } catch (err) {
         console.log(err);
