@@ -119,7 +119,7 @@ exports.copy_book_rank_category = async function() {
 exports.copy_all_books = async function(date) {
     try {
         for (var category in branch.category) {
-            var totalPage = 100;
+            var totalPage = 0;
             try {
                 var path = "/list/" + branch.category[category][0] + "_1" + ".html";
                 console.log(path);
@@ -127,11 +127,12 @@ exports.copy_all_books = async function(date) {
                 var pages = $(".page2").text().match(/\d+/g);
                 if (pages[1]) totalPage = parseInt(pages[1]);
                 console.log(category, totalPage);
-                branch.category[category].push(totalPage);
+                // branch.category[category].push(totalPage);
+                await copy_category_books(category, 1, totalPage, date);
             } catch (err) {
                 console.log("获取分类totalPage失败", category, err);
             }
-            await copy_category_books(category, 1, totalPage, date);
+
             // var ranges = _.range(1, totalPage, 100);
             // console.log(ranges);
             // _.forEach(ranges, function(start) {
@@ -149,7 +150,7 @@ async function copy_category_books(category, startIndex, endIndex, date) {
         var index = startIndex;
         if (branch.isTest) endIndex = startIndex + 5;
         if (date != -1) {
-            if (!date) date = moment().subtract(2, 'days');
+            if (!date) date = moment().subtract(1, 'days');
             else date = moment(date);
             date = parseInt(date.format("YYMMDD"));
         }
@@ -223,7 +224,7 @@ async function create_book(originId, categoryId, categoryName) {
         // console.log(bookHref);
         var $ = await commonController.copyHtml(branch.pcCopyUrl, bookHref, branch.charset);
         var chapters = $("#list dl").children();
-        if (!chapters.length) return false;
+        if (!chapters.length) return true;
         book.cover = $("#fmimg").find("img").attr("src");
         if (!/^(http)/.test(book.cover)) book.cover = branch.pcCopyUrl + book.cover;
         var liItems = $("#info").children();
@@ -635,7 +636,10 @@ async function copy_rank_books(token, startIndex, endIndex) {
                         }
                         if (token == "paihangbang_allvisit" && index <= 1000) {
                             if (!categoryRecommendBooks[savedBook.categoryId]) categoryRecommendBooks[savedBook.categoryId] = [];
-                            categoryRecommendBooks[savedBook.categoryId].push({ i: savedBook.bookId, n: savedBook.title });
+                            categoryRecommendBooks[savedBook.categoryId].push({
+                                i: savedBook.bookId,
+                                n: savedBook.title
+                            });
                         }
                         rankBookIds.push(savedBook.bookId);
                     } catch (err) {

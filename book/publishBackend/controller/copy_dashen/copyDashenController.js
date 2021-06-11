@@ -79,7 +79,7 @@ exports.copy_book_category = async function() {
 exports.copy_all_books = async function(date) {
     try {
         for (var category in branch.category) {
-            var totalPage = 100;
+            var totalPage = 0;
             try {
                 var path = "/xclass/" + branch.category[category][0] + "/1" + ".html";
                 console.log(path);
@@ -87,11 +87,11 @@ exports.copy_all_books = async function(date) {
                 var pages = $(".page_txt").val().match(/\d+/g);
                 if (pages[1]) totalPage = parseInt(pages[1]);
                 console.log(category, totalPage);
-                branch.category[category].push(totalPage);
+                // branch.category[category].push(totalPage);
+                await copy_category_books(category, 1, totalPage, date);
             } catch (err) {
                 console.log("获取分类totalPage失败", category, err);
             }
-            await copy_category_books(category, 1, totalPage, date);
             // var ranges = _.range(1, totalPage, 100);
             // console.log(ranges);
             // _.forEach(ranges, function(start) {
@@ -109,7 +109,7 @@ async function copy_category_books(category, startIndex, endIndex, date) {
         var index = startIndex;
         if (branch.isTest) endIndex = startIndex + 5;
         if (date != -1) {
-            if (!date) date = moment().subtract(2, 'days');
+            if (!date) date = moment().subtract(1, 'days');
             else date = moment(date);
             date = parseInt(date.format("YYMMDD"));
         }
@@ -156,7 +156,7 @@ async function copy_category_books(category, startIndex, endIndex, date) {
                 console.log(err);
             }
             index++;
-        } while (index <= endIndex);
+        } while (index <= endIndex && !stop);
     } catch (err) {
         console.log(err);
     }
@@ -194,7 +194,7 @@ async function create_book(originId, categoryId, categoryName) {
         bookHref = bookHref + "booklist.html";
         var $ = await commonController.copyHtml(branch.copyUrl, bookHref, branch.charset);
         var chapters = $("#chapterlist p").slice(1);
-        if (!chapters.length) return false;
+        if (!chapters.length) return true;
 
         // var sameBook = await bookSequelize.findOneBook({
         //     title: book.title,
