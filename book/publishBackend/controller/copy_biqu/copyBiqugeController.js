@@ -584,6 +584,7 @@ exports.copy_rank = async function() {
         for (var rankName in branch.rank) {
             var rank = branch.rank[rankName];
             var totalPage = 2000;
+            if (rank.token == "paihangbang_postdate" || rank.token == "paihangbang_lastupdate") continue;
 
             // try {
             //     var path = "/" + rank.token + "/1.html";

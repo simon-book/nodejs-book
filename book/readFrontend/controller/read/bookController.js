@@ -50,7 +50,7 @@ exports.listCategoryAndTag = async function(branchId) {
     }
 }
 
-exports.listBook = async function(body) {
+exports.listBook = async function(body, order) {
     try {
         // if (!body || !body.branchId) throw new Error("缺少branchId");
         var pageSize = body.pageSize || 20;
@@ -76,7 +76,7 @@ exports.listBook = async function(body) {
                 tagId: body.tagId
             }
         }
-        var list = await bookSequelize.findAndCountAll(where, offset, pageSize, null, tagWhere);
+        var list = await bookSequelize.findAndCountAll(where, offset, pageSize, order, tagWhere);
         var books = _.map(list[1], function(book) {
             book.tags = _.map(book.tags, function(tag) {
                 tag = tag.get();
@@ -89,6 +89,7 @@ exports.listBook = async function(body) {
             list: books,
             pagination: {
                 totalNum: list[0],
+                totalPage: Math.ceil(list[0] / pageSize),
                 page: page,
                 pageSize: pageSize
             }
