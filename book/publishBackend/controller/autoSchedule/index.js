@@ -17,12 +17,6 @@ exports.auto_schedule_biqu = function() {
         await copyBiqugeController.queryBranchInfo();
         copyBiqugeController.copy_page();
     });
-    schedule.scheduleJob('0 10 * * * *', async function() {
-        // console.log("更新biqu主页数据！");
-
-        await copyBiqugeController.queryBranchInfo();
-        copyBiqugeController.copy_page();
-    });
 
     //每周更新
     schedule.scheduleJob('0 0 0 * * 1', async function() {

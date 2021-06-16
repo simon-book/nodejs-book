@@ -90,7 +90,7 @@ exports.htmlStartReq = function(host, path, charset) {
                         reject(err);
                     }
                 } else {
-                    console.log("status error", path, _data);
+                    console.log("status error", host + path);
                     reject("status error");
                 }
 

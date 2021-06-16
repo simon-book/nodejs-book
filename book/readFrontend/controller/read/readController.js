@@ -49,6 +49,7 @@ exports.bookChapters = async function(body) {
             list: list.rows,
             pagination: {
                 totalNum: list.count,
+                totalPage: Math.ceil(list.count / pageSize),
                 page: page,
                 pageSize: pageSize
             }
@@ -90,7 +91,8 @@ exports.chapterDetail = async function(bookId, number) {
                 content = await MossClient.get("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number + ".txt");
             }
             if (content) {
-                chapterDetail.content = content
+                chapterDetail.content = content;
+                checkSiblingsChapters(book, number, 1);
             } else {
                 // console.time(book.copyInfo.pc + "/" + book.originId + "/" + chapter.originId + ".html");
                 content = await chapterController.copyChapterContent(book.copyInfo.pc, book.originId, chapter.originId);
@@ -105,7 +107,7 @@ exports.chapterDetail = async function(bookId, number) {
                         chapter.save();
                     }
                 }
-                checkSiblingsChapters(book, number);
+                checkSiblingsChapters(book, number, 5);
             }
         } else if (chapterDetail.type == "picture") {
             chapterDetail.content = chapter.pics;
@@ -119,9 +121,10 @@ exports.chapterDetail = async function(bookId, number) {
     }
 }
 
-async function checkSiblingsChapters(book, number) {
+async function checkSiblingsChapters(book, number, limit) {
     try {
-        var numbers = [number + 1, number + 2, number + 3, number + 4, number + 5];
+        var numbers = _.range(number + 1, number + 1 + limit);
+        console.log(numbers);
         var chapters = await bookChapterSequelize.findAll({
             number: {
                 [Op.in]: numbers
