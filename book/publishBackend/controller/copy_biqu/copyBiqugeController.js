@@ -384,6 +384,7 @@ async function update_book(savedBook, $) {
     }
 }
 
+exports.update_book = update_book;
 
 exports.copy_page = async function() {
     try {

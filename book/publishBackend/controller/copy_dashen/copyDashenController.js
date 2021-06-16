@@ -314,3 +314,5 @@ async function update_book(savedBook, $) {
         return false;
     }
 }
+
+exports.update_book = update_book;
