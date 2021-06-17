@@ -52,10 +52,12 @@ exports.copyChapterContent = async function(host, bookOriginId, chapterOriginId)
         if (!content) var content = await copyBiqugeInfoChapterContent(host, path, charset);
         if (!content) var content = await copyBiqugeInfoChapterContent(host, path, charset);
         if (!content) var content = await copyBiqugeInfoChapterContent(host, path, charset);
-
-        return content;
+        if (content) {
+            console.log("success:" + host + path)
+            return content;
+        } else throw new Error("5次请求html失败");
     } catch (err) {
-        console.log(err);
+        console.log("5次请求html失败:", host + path);
         return "";
     }
 }
