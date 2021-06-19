@@ -37,7 +37,7 @@ exports.publishUpdateStartReq = function(branchId, action, body) {
             port: branchUpdateUrl[branchId].port,
             method: "POST",
             path: "/api/publisher/" + branchUpdateUrl[branchId].path + "/" + action,
-            timeout: 30000
+            timeout: 5000
         });
         try {
             server.request(body);

@@ -232,6 +232,7 @@ exports.quanbu = async function(req, res) {
             title: "全部小说列表_" + branchInfo.title,
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
+            pageTitle: "全部小说",
             categoryMap: branchInfo.categoryMap,
             currentRender: "quanbu"
         });
