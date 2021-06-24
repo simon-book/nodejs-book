@@ -15,7 +15,7 @@ var rankSequelize = require('../../data/sequelize/rank/rankSequelize.js');
 var pageSequelize = require('../../data/sequelize/rank/pageSequelize.js');
 
 var branch = { //大神小说
-    copySrc: "www.dashenxiaoshuo.com"
+    copySrc: "dashen" //www.dashenxiaoshuo.com
 }
 
 exports.queryBranchInfo = async function() {

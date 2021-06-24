@@ -52,11 +52,11 @@ exports.updateBookAndChapters = function(book, chapters) {
     })
 }
 
-exports.update = function(obj, where) {
+exports.update = function(obj, where, returning) {
     return new Promise(function(resolve, reject) {
         Book.update(obj, {
             where: where,
-            returning: true
+            returning: returning == undefined ? true : returning
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {

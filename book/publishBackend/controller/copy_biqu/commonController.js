@@ -5,10 +5,11 @@ var moment = require('moment');
 var cheerio = require('cheerio');
 var util = require('../../util/index.js');
 var httpGateway = require('../../data/http/httpGateway.js');
-
+var adminHttpResult = require('../../util/adminHttpResult.js');
+var errHandler = require('../../util/errHandler.js');
 var bookSequelize = require('../../data/sequelize/book/bookSequelize.js');
 var bookChapterSequelize = require('../../data/sequelize/book/bookChapterSequelize.js');
-
+var branchSequelize = require('../../data/sequelize/branch/branchSequelize.js');
 async function reqHtmlContent(host, path, charset) {
     try {
         var html = await httpGateway.htmlStartReq(host, path, charset);
@@ -97,5 +98,52 @@ exports.updateBookCover = async function(branchId, oldUrl, newUrl) {
         }
     } catch (err) {
         console.log(err);
+    }
+}
+
+exports.updateBrnchCopyUrl = = async function(req, res) {
+    var body = req.body;
+    if (!body || !body.branchId) {
+        adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
+        return;
+    }
+    try {
+        var branchId = body.branchId;
+        var branch = body.branch;
+        var book = body.book;
+        var savedBranch = await branchSequelize.findOne({
+            branchId: branchId
+        });
+        if (!savedBranch) {
+            adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID", "branch not exist");
+            return;
+        }
+        if (branch && branch.copyParams) {
+            savedBranch.set("copyParams", branch.copyParams);
+            await savedBranch.save();
+        }
+        if (book && book.copyInfo) {
+            var result = await bookSequelize.update({
+                copyInfo: book.copyInfo
+            }, {
+                branchId: branchId
+            }, false);
+        }
+        if (book && book.oldUrl && book.newUrl) {
+            var books = await bookSequelize.findAll({
+                branchId: branchId
+            }, ["bookId", "cover"]);
+            for (var i = 0; i < books.length; i++) {
+                var book = books[i];
+                if (!book.cover) continue;
+                book.set("cover", book.cover.replace(book.oldUrl, book.newUrl));
+                await book.save();
+            }
+        }
+        adminHttpResult.jsonSuccOut(req, res, true);
+    } catch (err) {
+        errHandler.setHttpError(req.originalUrl, req.body, err);
+        adminHttpResult.jsonFailOut(req, res, "SERVICE_INVALID", null, err);
+        return;
     }
 }

@@ -15,7 +15,7 @@ var rankSequelize = require('../../data/sequelize/rank/rankSequelize.js');
 var pageSequelize = require('../../data/sequelize/rank/pageSequelize.js');
 
 var branch = {
-    copySrc: "www.ibswtan.com"
+    copySrc: "ibs" //www.ibswtan.com
 }
 
 exports.queryBranchInfo = async function() {

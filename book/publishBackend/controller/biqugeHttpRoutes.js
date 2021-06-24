@@ -46,4 +46,6 @@ router.post('/updateBookCover', async function(req, res) {
     res.send(true);
 })
 
+router.post('/updateBookCover', commonController.updateBrnchCopyUrl)
+
 module.exports = router;

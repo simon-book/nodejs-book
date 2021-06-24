@@ -15,7 +15,7 @@ var rankSequelize = require('../../data/sequelize/rank/rankSequelize.js');
 var pageSequelize = require('../../data/sequelize/rank/pageSequelize.js');
 
 var branch = { //笔趣阁
-    copySrc: "www.xbiquwx.la"
+    copySrc: "biqu" //www.xbiquwx.la
 }
 
 exports.queryBranchInfo = async function() {
