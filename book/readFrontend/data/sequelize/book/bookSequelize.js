@@ -12,7 +12,7 @@ exports.findByPk = function(id) {
     return new Promise(function(resolve, reject) {
         Book.findByPk(id, {
             attributes: {
-                exclude: ["coinCount", "branchId", "statusId", "createdAt", "updatedAt"]
+                exclude: ["coinCount", "statusId", "createdAt", "updatedAt"]
             },
             include: [{
                 model: Tag,

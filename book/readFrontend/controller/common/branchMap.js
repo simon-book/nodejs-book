@@ -11,8 +11,8 @@ var rankSequelize = require('../../data/sequelize/rank/rankSequelize.js');
 var testMap = require('./testMap.js');
 var prodMap = require('./prodMap.js');
 
-var isProd = true;
-// var isProd = false;
+// var isProd = true;
+var isProd = false;
 
 var hostMap = isProd ? prodMap.hostMap : testMap.hostMap;
 exports.hostMap = hostMap;
@@ -37,7 +37,7 @@ exports.queryBranchInfo = async function() {
                     return item.orderIndex || 0;
                 })
                 _.forEach(categories, function(item) {
-                    hostMap[url].categoryMap.push([item.name, item.categoryId, item.relatedCategoryIds, item.name == "其他小说" ? false : true, item.recommendBooks ? item.recommendBooks.slice(0, 3000) : null]);
+                    hostMap[url].categoryMap.push([item.name, item.categoryId, item.relatedCategoryIds, item.name == "其他小说" ? false : true, item.recommendBooks ? item.recommendBooks.slice(0, 2000) : null]);
                 })
                 var ranks = await rankSequelize.findAll({
                     branchId: hostMap[url].branchId

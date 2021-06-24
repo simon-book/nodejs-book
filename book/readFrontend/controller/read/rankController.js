@@ -52,13 +52,19 @@ exports.listPaihang = async function(rankId, page, pageSize) {
         var rank = await rankSequelize.findOne({
             rankId: rankId
         });
-        rank.books = await bookSequelize.findAll({
+        rank.list = await bookSequelize.findAll({
             bookId: {
                 [Op.in]: rank.rankBookIds.slice((page - 1) * pageSize, page * pageSize)
             }
         }, true);
-        rank.totalPage = Math.ceil(rank.rankBookIds.length / pageSize);
-        rank.totalNum = rank.rankBookIds.length;
+        rank.pagination = {
+            totalNum: rank.rankBookIds.length,
+            totalPage: Math.ceil(rank.rankBookIds.length / pageSize),
+            page: page,
+            pageSize: pageSize
+        }
+        // rank.totalPage = Math.ceil(rank.rankBookIds.length / pageSize);
+        // rank.totalNum = rank.rankBookIds.length;
         return rank;
     } catch (err) {
         console.error(err);

@@ -8,24 +8,41 @@ var https = require('https')
 var zlib = require('zlib')
 var iconv = require('iconv-lite')
 
-exports.readerStartReq = function(branchId, action) {
+var branchUpdateUrl = {
+    "1": {
+        protocol: "http:",
+        host: "localhost",
+        port: "3801",
+        path: "biquge"
+    },
+    "2": {
+        protocol: "http:",
+        host: "localhost",
+        port: "3802",
+        path: "dashen"
+    },
+    "3": {
+        protocol: "http:",
+        host: "localhost",
+        port: "3803",
+        path: "ibs"
+    }
+}
+
+exports.publishUpdateStartReq = function(branchId, action, body) {
     return new Promise(function(resolve, reject) {
         var server = new Platserver({
-            protocol: __plat__.reader_api.protocol,
-            host: __plat__.reader_api.host,
-            port: __plat__.reader_api.port,
-            method: "GET",
-            path: "/api/reader/" + branchId + "/" + action,
-            timeout: 30000
+            protocol: branchUpdateUrl[branchId].protocol,
+            host: branchUpdateUrl[branchId].host,
+            port: branchUpdateUrl[branchId].port,
+            method: "POST",
+            path: "/api/publisher/" + branchUpdateUrl[branchId].path + "/" + action,
+            timeout: 5000
         });
         try {
-            server.request("");
+            server.request(body);
             server.completed(function(result) {
-                if (result.rtnCode && result.rtnCode == 10000) {
-                    resolve(result.data);
-                } else {
-                    reject(result);
-                }
+                resolve(result);
             });
             server.error(function(e) {
                 reject(e);
@@ -73,7 +90,7 @@ exports.htmlStartReq = function(host, path, charset) {
                         reject(err);
                     }
                 } else {
-                    console.log("status error", path, _data);
+                    console.log("status error", host + path);
                     reject("status error");
                 }
 

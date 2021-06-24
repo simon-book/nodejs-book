@@ -17,7 +17,7 @@ process.env.NODE_ENV = __G__.NODE_ENV;
 
 var app = express();
 // all environments
-app.set('port', process.env.PORT || 3800);
+app.set('port', process.env.PORT || 3802);
 app.use(favicon(path.join(__dirname, 'statics/src/images/favicon.ico')));
 app.use(bodyParser.json({
     limit: '50mb'
@@ -43,13 +43,9 @@ app.use('*', function(req, res, next) {
     next();
 })
 
-// app.use(__G__.CONTEXT + "/static", express.static(path.join(__dirname, '/statics')));
-// app.use(__G__.CONTEXT + "/html", express.static(path.join(__dirname, '/html')));
+app.use(__G__.CONTEXT || '/api/publisher/dashen', require('./controller/dashenHttpRoutes.js'));
 
-// app.use(__G__.CONTEXT || '/api/publisher/biquge', require('./controller/biqugeHttpRoutes.js'));
-// app.use(__G__.CONTEXT || '/api/publisher/dashen', require('./controller/dashenHttpRoutes.js'));
-// app.use(__G__.CONTEXT || '/api/publisher/ibs', require('./controller/ibsHttpRoutes.js'));
-app.use(__G__.CONTEXT || '/api/publisher', require('./controller/index.js'));
+auto_schedule.auto_schedule_dashen();
 
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);

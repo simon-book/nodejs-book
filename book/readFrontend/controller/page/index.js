@@ -107,7 +107,6 @@ exports.category = async function(req, res) {
         }
         var lastUpdatedBooks = await bookController.listBook(query);
         var currentPage = query.page;
-        var totalPage = Math.ceil(lastUpdatedBooks.pagination.totalNum / lastUpdatedBooks.pagination.pageSize);
         res.render('category', {
             title: currentCategory[0] + "_" + "好看的" + currentCategory[0] + "_" + branchInfo.title,
             branchInfo: branchInfo,
@@ -120,7 +119,7 @@ exports.category = async function(req, res) {
             pagination: {
                 totalNum: lastUpdatedBooks.pagination.totalNum,
                 currentPage: currentPage,
-                totalPage: totalPage
+                totalPage: lastUpdatedBooks.pagination.totalPage
             }
         });
     } catch (err) {
@@ -138,23 +137,34 @@ exports.paihang = async function(req, res) {
         var rankMap = branchInfo.rankMap;
         var currentRankId = req.params.rankId ? parseInt(req.params.rankId) : rankMap[0][1]
         var currentPage = parseInt(req.params.page || 1);
+        var pageSize = 30;
         var currentRank = _.find(rankMap, function(category) {
             return category[1] == currentRankId;
         })
         currentRank = currentRank[0];
-        var result = await rankController.listPaihang(currentRankId, currentPage, 30);
+        if (currentRankId == 10) {
+            var result = await bookController.listBook({ page: currentPage, pageSize: pageSize }, [
+                ["createdAt", "desc"]
+            ]);
+        } else if (currentRankId == 11) {
+            var result = await bookController.listBook({ page: currentPage, pageSize: pageSize }, [
+                ["lastUpdatedAt", "desc"]
+            ]);
+        } else {
+            var result = await rankController.listPaihang(currentRankId, currentPage, pageSize);
+        }
         res.render('paihang', {
             title: currentRank + "小说列表_" + branchInfo.title,
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             pageTitle: currentRank,
-            books: result.books,
+            books: result.list,
             currentRender: "paihang",
             currentRankId: currentRankId,
             pagination: {
-                totalNum: result.totalNum,
+                totalNum: result.pagination.totalNum,
                 currentPage: currentPage,
-                totalPage: result.totalPage,
+                totalPage: result.pagination.totalPage,
             }
         });
     } catch (err) {
@@ -192,7 +202,6 @@ exports.quanben = async function(req, res) {
         }
         var lastUpdatedBooks = await bookController.listBook(query);
         var currentPage = query.page;
-        var totalPage = Math.ceil(lastUpdatedBooks.pagination.totalNum / lastUpdatedBooks.pagination.pageSize);
         res.render('quanben', {
             title: "已完结" + currentCategory[0] + "小说列表_" + branchInfo.title,
             branchInfo: branchInfo,
@@ -204,7 +213,7 @@ exports.quanben = async function(req, res) {
             pagination: {
                 totalNum: lastUpdatedBooks.pagination.totalNum,
                 currentPage: currentPage,
-                totalPage: totalPage
+                totalPage: lastUpdatedBooks.pagination.totalPage
             }
         });
     } catch (err) {
@@ -223,6 +232,7 @@ exports.quanbu = async function(req, res) {
             title: "全部小说列表_" + branchInfo.title,
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
+            pageTitle: "全部小说",
             categoryMap: branchInfo.categoryMap,
             currentRender: "quanbu"
         });
@@ -274,6 +284,9 @@ exports.book = async function(req, res) {
             lastChapterUrl: book.lastChapter ? bookUrl + book.lastChapter.number : "",
             // firstChapters: result.firstChapters
         });
+        if (book.publishStatus == 1) {
+            httpGateway.publishUpdateStartReq(book.branchId, "update_book", { bookId: book.bookId });
+        }
     } catch (err) {
         console.log(err);
         res.render('error', {
@@ -293,7 +306,6 @@ exports.mulu = async function(req, res) {
         };
         var result = await readController.bookChapters(query);
         var currentPage = query.page;
-        var totalPage = Math.ceil(result.pagination.totalNum / result.pagination.pageSize);
         var book = result.book;
         res.render('mulu', {
             title: book.title + "全部章节列表_" + book.title + "全部章节目录_" + branchInfo.shorttitle,
@@ -306,7 +318,7 @@ exports.mulu = async function(req, res) {
             pagination: {
                 totalNum: result.pagination.totalNum,
                 currentPage: currentPage,
-                totalPage: totalPage
+                totalPage: result.pagination.totalPage
             }
         });
     } catch (err) {
@@ -373,7 +385,6 @@ exports.search = async function(req, res) {
 
         var lastUpdatedBooks = await bookController.listBook(query);
         var currentPage = query.page;
-        var totalPage = Math.ceil(lastUpdatedBooks.pagination.totalNum / lastUpdatedBooks.pagination.pageSize);
         res.render('search', {
             title: "搜索_" + query.searchContent + "_" + branchInfo.title,
             branchInfo: branchInfo,
@@ -385,7 +396,7 @@ exports.search = async function(req, res) {
             pagination: {
                 totalNum: lastUpdatedBooks.pagination.totalNum,
                 currentPage: currentPage,
-                totalPage: totalPage
+                totalPage: lastUpdatedBooks.pagination.totalPage
             }
         });
     } catch (err) {
