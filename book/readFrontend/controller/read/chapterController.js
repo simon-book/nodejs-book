@@ -3,7 +3,7 @@ var _ = require('lodash');
 var Op = Sequelize.Op;
 var moment = require('moment');
 var cheerio = require('cheerio');
-
+var util = require('../../util/index.js');
 var httpGateway = require('../../data/http/httpGateway.js')
 
 var charsets = {
@@ -44,13 +44,26 @@ exports.copyChapterContent = async function(host, bookOriginId, chapterOriginId)
         } else if (/dashen/.test(host)) {
             charset = "gbk"
             var path = "/html/" + bookOriginId.split("_")[0] + "/" + bookOriginId.split("_")[1] + "/" + chapterOriginId + ".html";
+        } else if (/ibs/.test(host)) {
+            var path = "/" + bookOriginId + "/" + chapterOriginId + ".html";
         }
         content = await copyBiqugeInfoChapterContent(host, path, charset);
-        if (!content) var content = await copyBiqugeInfoChapterContent(host, path, charset);
-        if (!content) var content = await copyBiqugeInfoChapterContent(host, path, charset);
-        if (!content) var content = await copyBiqugeInfoChapterContent(host, path, charset);
-        if (!content) var content = await copyBiqugeInfoChapterContent(host, path, charset);
-
+        if (!content) {
+            await util.sleep(1000);
+            var content = await copyBiqugeInfoChapterContent(host, path, charset);
+        }
+        if (!content) {
+            await util.sleep(1000);
+            var content = await copyBiqugeInfoChapterContent(host, path, charset);
+        }
+        if (!content) {
+            await util.sleep(1000);
+            var content = await copyBiqugeInfoChapterContent(host, path, charset);
+        }
+        if (!content) {
+            await util.sleep(1000);
+            var content = await copyBiqugeInfoChapterContent(host, path, charset);
+        }
         return content;
     } catch (err) {
         console.log(err);

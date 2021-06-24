@@ -19,9 +19,13 @@ function generateReqQuery(queryObj) {
     return "?" + queryArray.join("&");
 }
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
 
 module.exports = {
     generateTokenSalt,
     prefixInteger,
-    generateReqQuery
+    generateReqQuery,
+    sleep
 }

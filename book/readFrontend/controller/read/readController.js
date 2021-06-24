@@ -3,7 +3,7 @@ var _ = require('lodash');
 var Op = Sequelize.Op;
 var moment = require('moment');
 var cheerio = require('cheerio');
-
+var util = require('../../util/index.js');
 var chapterController = require('./chapterController.js');
 var bookSequelize = require('../../data/sequelize/book/bookSequelize.js');
 var bookChapterSequelize = require('../../data/sequelize/book/bookChapterSequelize.js');
@@ -132,6 +132,7 @@ async function checkSiblingsChapters(book, number) {
             var chapter = chapters[i];
             if (!chapter.local) {
                 {
+                    await util.sleep(1000);
                     var content = await chapterController.copyChapterContent(book.copyInfo.pc, book.originId, chapter.originId);
                     if (!content) continue;
                     var result = await MossClient.put("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number + ".txt", content);
