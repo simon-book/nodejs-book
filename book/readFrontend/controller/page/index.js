@@ -345,6 +345,7 @@ exports.chapter = async function(req, res) {
                 description: description,
                 pageTitle: chapter.title,
                 chapter: chapter,
+                chapterCount: chapter.book.chapterCount,
                 number: chapter.number,
                 now: moment().format("YYYY-MM-DD HH:mm:ss")
             });

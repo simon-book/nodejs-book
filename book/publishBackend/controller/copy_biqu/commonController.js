@@ -101,7 +101,7 @@ exports.updateBookCover = async function(branchId, oldUrl, newUrl) {
     }
 }
 
-exports.updateBrnchCopyUrl = = async function(req, res) {
+exports.updateBrnchCopyUrl = async function(req, res) {
     var body = req.body;
     if (!body || !body.branchId) {
         adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
@@ -134,10 +134,10 @@ exports.updateBrnchCopyUrl = = async function(req, res) {
                 branchId: branchId
             }, ["bookId", "cover"]);
             for (var i = 0; i < books.length; i++) {
-                var book = books[i];
-                if (!book.cover) continue;
-                book.set("cover", book.cover.replace(book.oldUrl, book.newUrl));
-                await book.save();
+                var savedBook = books[i];
+                if (!savedBook.cover) continue;
+                savedBook.set("cover", savedBook.cover.replace(book.oldUrl, book.newUrl));
+                await savedBook.save();
             }
         }
         adminHttpResult.jsonSuccOut(req, res, true);

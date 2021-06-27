@@ -6,10 +6,12 @@ var copyDashenController = require('./copy_dashen/copyDashenController.js');
 
 copyDashenController.queryBranchInfo();
 router.post('/copy_categorys', async function(req, res) {
+    await copyDashenController.queryBranchInfo();
     await copyDashenController.copy_book_category();
     res.send(true);
 })
 router.post('/copy_books', async function(req, res) {
+    await copyDashenController.queryBranchInfo();
     copyDashenController.copy_all_books(req.body.date);
     res.send(true);
 })
