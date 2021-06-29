@@ -42,13 +42,13 @@ var BookCategory = sequelize.define('book_category', {
 }, {
     schema: __PGSQL__.schemas.book_publisher,
     tableName: 'book_category',
-    defaultScope: {
-        where: {
-            statusId: {
-                [Op.ne]: 0
-            }
-        }
-    }
+    // defaultScope: {
+    //     where: {
+    //         statusId: {
+    //             [Op.ne]: 0
+    //         }
+    //     }
+    // }
 });
 
 

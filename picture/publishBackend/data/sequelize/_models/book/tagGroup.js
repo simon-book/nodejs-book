@@ -1,13 +1,11 @@
 var _ = require('lodash');
 var Sequelize = require('sequelize');
-var Op = Sequelize.Op;
-var moment = require('moment');
 var sequelize = require("../../../../service/sequelizeConn.js");
 
 var Branch = require("../branch/branch.js");
 
-var Tag = sequelize.define('tag', {
-    tagId: {
+var TagGroup = sequelize.define('tag', {
+    tagGroupId: {
         type: Sequelize.BIGINT,
         primaryKey: true,
         allowNull: false,
@@ -32,22 +30,14 @@ var Tag = sequelize.define('tag', {
         defaultValue: 0
     },
     originId: Sequelize.TEXT, //复制原始ID
-    token: Sequelize.TEXT,
-    statusId: {
-        type: Sequelize.INTEGER,
-        defaultValue: 1
-    }
+    token: Sequelize.TEXT
 }, {
     schema: __PGSQL__.schemas.book_publisher,
     tableName: 'tag',
-    // defaultScope: {
-    //     where: {
-    //         statusId: {
-    //             [Op.ne]: 0
-    //         }
-    //     }
-    // }
+    timestamps: true,
+    underscored: true,
+    indexes: []
 });
 
 
-module.exports = Tag;
+module.exports = TagGroup;
