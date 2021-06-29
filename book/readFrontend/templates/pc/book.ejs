@@ -45,7 +45,7 @@
                                     <%= book.lastChapter.title%></a></span>
                             <% } %>
                         </dd>
-                        <dd class="hidden-xs hidden-sm">
+                        <dd class="hidden-xs">
                             操&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;作：
                             <span class="book-operate-box">
                                 <a href="/book/<%= book.bookId%>/1">开始阅读</a>
@@ -53,12 +53,12 @@
                                 <a href="/bookshelf" class="btn_toMyBook">我的书架</a>
                             </span>
                         </dd>
-                        <dd class="book-abstract hidden-xs hidden-sm">
+                        <dd class="book-abstract hidden-xs">
                             <span>
                                 <%= book.abstractContent?book.abstractContent.replace(/\\n/g, '').replace(/\s+/g, ''):''%></span>
                         </dd>
                     </dl>
-                    <div class="col-xs-12 hidden-mg hidden-lg padding-0">
+                    <div class="col-xs-12 hidden-sm hidden-md hidden-lg padding-0">
                         <div class="book-operate-box text-center">
                             <a href="/book/<%= book.bookId%>/1">开始阅读</a>
                             <a href="/book/<%= book.bookId%>/mulu" class="btn_toBookShelf">完整目录</a>
