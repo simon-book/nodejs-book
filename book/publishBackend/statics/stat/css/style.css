@@ -1,0 +1,57 @@
+body {
+    font-size: 14px;
+}
+
+.text-right {
+    text-align: right;
+}
+.uv-list{
+    border-collapse:collapse;
+}
+.uv-list tr:nth-child(2n+0) {
+    background: #efefef;
+}
+.uv-list th,.uv-list td  {
+    border: 1px solid #999;
+    padding: 5px 10px;
+}
+
+.pagination-box .pagination {
+    /*margin: 10px auto;*/
+}
+
+.pagination-box .pagination li {
+    list-style: none;
+    display: inline-block;
+}
+
+.pagination-box .pagination span,
+.pagination-box .pagination a {
+    background: #fdf9ef;
+}
+
+.pagination-box .pagination .hd span,
+.pagination-box .pagination .hd span:hover {
+    color: #000;
+    background: #fdf9ef;
+}
+
+.pagination-box .go-page {
+    display: inline-block;
+}
+
+.pagination .go-page .go-page-input {
+    width: 70px;
+    height: 31px;
+    padding: 6px;
+    margin: 0 0 0 4px;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+}
+
+.pagination .go-page .go-page-btn {
+    height: 30px;
+    vertical-align: middle;
+    background: #fdf9ef;
+    border: 1px solid #ddd;
+}

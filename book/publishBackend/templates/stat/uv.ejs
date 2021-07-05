@@ -1,0 +1,50 @@
+<%- include('common/top', {}); %>
+<div class="container">
+    <h2><%= title%></h2>
+    <div class="row">
+        <div>
+            <table class="uv-list">
+                <tr>
+                    <th>id</th>
+                    <th>branchId</th>
+                    <th>date</th>
+                    <th>hostname</th>
+                    <th>count(万)</th>
+                    <th>createdAt</th>
+                    <th>updatedAt</th>
+                </tr>
+                <% list.forEach(function(item){ %>
+                <tr class="uv-item">
+                    <td><%= item.id%></td>
+                    <td><%= item.branchId%></td>
+                    <td><%= item.date%></td>
+                    <td><%= item.hostname%></td>
+                    <td class="text-right"><%= (item.count/10000).toFixed(4)%></td>
+                    <td><%= item.createdAt%></td>
+                    <td><%= item.updatedAt%></td>
+                </tr>
+                <% }); %>
+            </table>
+            <div class="pagination-box text-center">
+                <ul class="pagination">
+                    <% if(pagination.currentPage > 1){%>
+                    <li title="上一页"><a href="./<%= pagination.currentPage-1%>">
+                            上一页</a> </li> <% }%>
+                    <li class="hd"><span>
+                            <%= pagination.currentPage%>/
+                            <%= pagination.totalPage%></span></li>
+                    <% if(pagination.currentPage < pagination.totalPage){%>
+                    <li title="下一页"><a href="./<%= pagination.currentPage+1%>">下一页</a></li>
+                    <% }%>
+                    <!-- <li>
+                        <div class="go-page">
+                            <input type="number" class="go-page-input" id="go-page-input" min="1" max="<%= pagination.totalPage%>" placeholder="页数" onkeydown="if(event.keyCode==13){goPage(); return false;}">
+                            <button type="button" class="go-page-btn" onclick="goPage()">跳转</button>
+                        </div>
+                    </li> -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('common/footer', {}); %>
