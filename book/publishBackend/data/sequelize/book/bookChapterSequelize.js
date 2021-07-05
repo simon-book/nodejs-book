@@ -37,6 +37,18 @@ exports.update = function(obj, where) {
     })
 }
 
+exports.destroy = function(where) {
+    return new Promise(function(resolve, reject) {
+        BookChapter.destroy({
+            where: where
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
 exports.findOne = function(where, attributes) {
     return new Promise(function(resolve, reject) {
         BookChapter.findOne({
