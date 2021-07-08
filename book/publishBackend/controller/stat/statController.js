@@ -6,15 +6,15 @@ var moment = require('moment');
 var util = require('../../util/index.js');
 var visitStatSequelize = require('../../data/sequelize/visitStatSequelize.js');
 
-exports.getUV = async function(req, res) {
+exports.getPV = async function(req, res) {
     try {
         var page = parseInt(req.params.page || 1);
         var pageSize = parseInt(req.params.pageSize || 30);
         var offset = (page - 1) * pageSize;
         var result = await visitStatSequelize.findAndCountAll({}, offset, pageSize);
         // console.log(result);
-        res.render('uv', {
-            title: "uv",
+        res.render('pv', {
+            title: "pv",
             list: result.rows,
             pagination: {
                 totalNum: result.count,
