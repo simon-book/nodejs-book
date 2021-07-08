@@ -36,21 +36,4 @@ sequelize.sync({
     // force: true
 });
 
-
-var saltNums = "0123456789".split("");
-
-function generateNumSalt(len) {
-    var sb = [];
-    for (var i = 0; i < len; i++) {
-        sb.push(saltNums[parseInt(Math.random() * 10)]);
-    }
-    return sb.join("");
-}
-
-sequelize.bossToken = function(prefix) {
-    return prefix + (new Date().getTime()) + generateNumSalt(6);
-}
-
-sequelize.generateNumSalt = generateNumSalt;
-
 module.exports = sequelize;
