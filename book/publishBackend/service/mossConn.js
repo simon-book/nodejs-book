@@ -42,4 +42,32 @@ minioClient.get = function(bucketName, objectName) {
     });
 }
 
+minioClient.getStream = function(bucketName, objectName) {
+    return new Promise(function(resolve, reject) {
+        minioClient.getObject(bucketName, objectName, function(err, dataStream) {
+            if (err) {
+                resolve(false);
+                return;
+            }
+            resolve(dataStream);
+        })
+    });
+}
+
+minioClient.listObjects = function(bucketName, prefix, recursive) {
+    return new Promise(function(resolve, reject) {
+        var dataStream = minioClient.listObjects(bucketName, prefix || "", recursive)
+        var _data = [];
+        dataStream.on('data', function(chunk) {
+            _data.push(chunk);
+        })
+        dataStream.on('end', function() {
+            resolve(_data);
+        })
+        dataStream.on('error', function(err) {
+            resolve(false);
+        })
+    });
+}
+
 module.exports = minioClient;

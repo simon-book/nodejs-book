@@ -8,7 +8,8 @@
   },
   "dependencies": {
     "body-parser": ">=1.0.0",
-    "cheerio": "^1.0.0-rc.3",
+    "cheerio": "^1.0.0-rc.10",
+    "compressing": "^1.5.1",
     "cookie-parser": "^1.4.4",
     "debug": "^4.1.1",
     "ejs": "*",
@@ -18,7 +19,7 @@
     "express-session": "^1.16.1",
     "i18n": "*",
     "iconv-lite": "^0.6.2",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "log4js": "^0.6.38",
     "minio": "^7.0.16",
     "moment": "^2.24.0",

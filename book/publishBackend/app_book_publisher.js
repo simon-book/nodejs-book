@@ -53,6 +53,7 @@ app.use(__G__.CONTEXT + "/static", express.static(path.join(__dirname, '/statics
 // app.use(__G__.CONTEXT || '/api/publisher/dashen', require('./controller/dashenHttpRoutes.js'));
 // app.use(__G__.CONTEXT || '/api/publisher/ibs', require('./controller/ibsHttpRoutes.js'));
 app.use(__G__.CONTEXT || '/page/stat', require('./controller/statHttpRoutes.js'));
+app.use(__G__.CONTEXT || '/moss', require('./controller/mossHttpRoutes.js'));
 app.use(__G__.CONTEXT || '/api/publisher', require('./controller/index.js'));
 
 app.use(function(err, req, res, next) {
