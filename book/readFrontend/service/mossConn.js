@@ -42,4 +42,16 @@ minioClient.get = function(bucketName, objectName) {
     });
 }
 
+minioClient.getStream = function(bucketName, objectName) {
+    return new Promise(function(resolve, reject) {
+        minioClient.getObject(bucketName, objectName, function(err, dataStream) {
+            if (err) {
+                resolve(false);
+                return;
+            }
+            resolve(dataStream);
+        })
+    });
+}
+
 module.exports = minioClient;
