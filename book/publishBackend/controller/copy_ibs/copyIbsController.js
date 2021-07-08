@@ -337,10 +337,10 @@ async function reset_category_books_copy(category, startIndex, endIndex) {
                             title: $(item).find(".xsm a").text().replace(/\n|\t|\s/g, ""),
                             writer: $(item).find(".xsm").next().text().replace(/\n|\t|\s/g, "").split("：")[1]
                         })
-                        if (savedBook && savedBook.branchId == branch.branchId) continue;
-                        if (savedBook && savedBook.categoryId <= 3) continue;
+                        if (savedBook && savedBook.lastChapterId && savedBook.branchId == branch.branchId) continue;
+                        if (savedBook && savedBook.lastChapterId && savedBook.categoryId <= 4) continue;
                         if (savedBook) {
-                            if (savedBook.branchId == 2 || savedBook.branchId == 1) {
+                            if (savedBook.branchId == 2 || savedBook.branchId == 1 || !savedBook.lastChapterId) {
                                 var bookHref = "/" + originId + "/";
                                 var book = {
                                     copyInfo: {
@@ -351,13 +351,14 @@ async function reset_category_books_copy(category, startIndex, endIndex) {
                                     branchId: branch.branchId,
                                     categoryId: branch.category[category][1],
                                     categoryName: category,
+                                    lastChapterId: null,
                                     // bookType: 1,
                                     // recommend: 60 + parseInt(40 * Math.random()),
                                     // chapters: []
                                 }
                                 var $ = await commonController.copyHtml(branch.pcCopyUrl, bookHref, branch.charset);
                                 var chapters = $("#list dl").children();
-                                if (!chapters.length) return false;
+                                if (!chapters.length) continue;
                                 book.cover = $("#fmimg").find("img").attr("src");
                                 if (!/^(http)/.test(book.cover)) book.cover = branch.pcCopyUrl + book.cover;
                                 var liItems = $("#info").children();
@@ -372,13 +373,15 @@ async function reset_category_books_copy(category, startIndex, endIndex) {
                                 branch.bookCount++;
                                 book.sn = util.prefixInteger(branch.bookCount, 8);
 
-                                savedBook = await bookSequelize.update(book, {
+                                var savedResult = await bookSequelize.update(book, {
                                     bookId: savedBook.bookId
                                 });
+                                console.log(savedBook.bookId);
+                                if (savedResult[0] > 0) savedBook = savedResult[1][0];
                                 await bookChapterSequelize.destroy({
                                     bookId: savedBook.bookId
                                 });
-
+                                console.log(savedBook.bookId);
                                 var start = 0;
                                 var newChapters = [];
                                 var lastChapter = null;
@@ -402,9 +405,11 @@ async function reset_category_books_copy(category, startIndex, endIndex) {
                                     }
                                 }
                                 if (newChapters.length) var added = await bookChapterSequelize.bulkCreate(newChapters);
+                                console.log(savedBook.bookId, newChapters.length);
                                 if (lastChapter) {
                                     var added = await bookChapterSequelize.create(lastChapter);
                                     savedBook.set("lastChapterId", added.chapterId);
+                                    console.log(savedBook.bookId, added.chapterId);
                                 }
                                 savedBook.set("chapterCount", chapters.length);
                                 await savedBook.save();

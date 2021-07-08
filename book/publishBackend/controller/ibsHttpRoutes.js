@@ -15,6 +15,12 @@ router.post('/copy_books', async function(req, res) {
     res.send(true);
 })
 
+router.post('/reset_books_copy', async function(req, res) {
+    await copyIbsController.queryBranchInfo();
+    copyIbsController.reset_books_copy();
+    res.send(true);
+})
+
 router.post('/copy_book', async function(req, res) {
     await copyIbsController.create_book(req.body.originId);
     res.send(true);
