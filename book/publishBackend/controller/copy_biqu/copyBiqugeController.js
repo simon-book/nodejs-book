@@ -207,12 +207,12 @@ async function create_book(originId, categoryId, categoryName) {
     try {
         var bookHref = "/" + originId + "/";
         var book = {
-            copyInfo: {
-                m: branch.copyUrl, //移动端地址
-                pc: branch.pcCopyUrl, //pc端地址
-                // book: bookHref, //book路径
-                // chapter: bookHref + "**chapter**.html"
-            },
+            // copyInfo: {
+            //     m: branch.copyUrl, //移动端地址
+            //     pc: branch.pcCopyUrl, //pc端地址
+            //     // book: bookHref, //book路径
+            //     // chapter: bookHref + "**chapter**.html"
+            // },
             originId: originId,
             branchId: branch.branchId,
             categoryId: categoryId,
@@ -226,7 +226,9 @@ async function create_book(originId, categoryId, categoryName) {
         var chapters = $("#list dl").children();
         if (!chapters.length) return true;
         book.cover = $("#fmimg").find("img").attr("src");
-        if (!/^(http)/.test(book.cover)) book.cover = branch.pcCopyUrl + book.cover;
+        if (/^(https)/.test(book.cover)) book.cover = book.cover.replace(/https:\/\/[^\/]+/, "");
+        else if (/^(http)/.test(book.cover)) book.cover = book.cover.replace(/http:\/\/[^\/]+/, "");
+        // if (!/^(http)/.test(book.cover)) book.cover = branch.pcCopyUrl + book.cover;
         var liItems = $("#info").children();
         book.title = $(liItems[0]).text();
         // console.log(book.title);

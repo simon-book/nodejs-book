@@ -167,12 +167,12 @@ async function create_book(originId, categoryId, categoryName) {
     try {
         var bookHref = "/" + originId + "/";
         var book = {
-            copyInfo: {
-                m: branch.copyUrl, //移动端地址
-                pc: branch.pcCopyUrl, //pc端地址
-                // book: bookHref, //book路径
-                // chapter: bookHref + "**chapter**.html"
-            },
+            // copyInfo: {
+            //     m: branch.copyUrl, //移动端地址
+            //     pc: branch.pcCopyUrl, //pc端地址
+            //     // book: bookHref, //book路径
+            //     // chapter: bookHref + "**chapter**.html"
+            // },
             originId: originId,
             branchId: branch.branchId,
             categoryId: categoryId,
@@ -186,7 +186,9 @@ async function create_book(originId, categoryId, categoryName) {
         var chapters = $("#list dl").children();
         if (!chapters.length) return false;
         book.cover = $("#fmimg").find("img").attr("src");
-        if (!/^(http)/.test(book.cover)) book.cover = branch.pcCopyUrl + book.cover;
+        // if (!/^(http)/.test(book.cover)) book.cover = branch.pcCopyUrl + book.cover;
+        if (/^(https)/.test(book.cover)) book.cover = book.cover.replace(/https:\/\/[^\/]+/, "");
+        else if (/^(http)/.test(book.cover)) book.cover = book.cover.replace(/http:\/\/[^\/]+/, "");
         var liItems = $("#info").children();
         book.title = $(liItems[0]).text();
         // console.log(book.title);
@@ -343,10 +345,10 @@ async function reset_category_books_copy(category, startIndex, endIndex) {
                             if (savedBook.branchId == 2 || savedBook.branchId == 1 || !savedBook.lastChapterId) {
                                 var bookHref = "/" + originId + "/";
                                 var book = {
-                                    copyInfo: {
-                                        m: branch.copyUrl, //移动端地址
-                                        pc: branch.pcCopyUrl, //pc端地址
-                                    },
+                                    // copyInfo: {
+                                    //     m: branch.copyUrl, //移动端地址
+                                    //     pc: branch.pcCopyUrl, //pc端地址
+                                    // },
                                     originId: originId,
                                     branchId: branch.branchId,
                                     categoryId: branch.category[category][1],
@@ -360,7 +362,9 @@ async function reset_category_books_copy(category, startIndex, endIndex) {
                                 var chapters = $("#list dl").children();
                                 if (!chapters.length) continue;
                                 book.cover = $("#fmimg").find("img").attr("src");
-                                if (!/^(http)/.test(book.cover)) book.cover = branch.pcCopyUrl + book.cover;
+                                // if (!/^(http)/.test(book.cover)) book.cover = branch.pcCopyUrl + book.cover;
+                                if (/^(https)/.test(book.cover)) book.cover = book.cover.replace(/https:\/\/[^\/]+/, "");
+                                else if (/^(http)/.test(book.cover)) book.cover = book.cover.replace(/http:\/\/[^\/]+/, "");
                                 var liItems = $("#info").children();
                                 // book.title = $(liItems[0]).text();
                                 // book.writer = $(liItems[1]).text().split("：")[1];

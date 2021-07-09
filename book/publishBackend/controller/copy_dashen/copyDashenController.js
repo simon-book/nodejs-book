@@ -166,10 +166,10 @@ async function create_book(originId, categoryId, categoryName) {
     try {
         var bookHref = "/" + originId + "/";
         var book = {
-            copyInfo: {
-                m: branch.copyUrl, //移动端地址
-                pc: branch.pcCopyUrl, //pc端地址
-            },
+            // copyInfo: {
+            //     m: branch.copyUrl, //移动端地址
+            //     pc: branch.pcCopyUrl, //pc端地址
+            // },
             originId: originId,
             branchId: branch.branchId,
             categoryId: categoryId,
@@ -184,6 +184,8 @@ async function create_book(originId, categoryId, categoryName) {
         book.title = $(".channelHeader2").find("span").text().replace(/\n|\t|\s/g, "");
         var liItems = $(".synopsisArea_detail").children();
         book.cover = $(liItems[0]).attr("src");
+        if (/^(https)/.test(book.cover)) book.cover = book.cover.replace(/https:\/\/[^\/]+/, "");
+        else if (/^(http)/.test(book.cover)) book.cover = book.cover.replace(/http:\/\/[^\/]+/, "");
         book.writer = $(liItems[1]).find("p").text().replace(/\n|\t|\s/g, "").split("：")[1];
         if (!book.categoryName) book.categoryName = $(liItems[2]).text().replace(/\n|\t|\s/g, "").split("：")[1];
         if (!book.categoryId) book.categoryId = branch.category[book.categoryName] ? branch.category[book.categoryName][1] : 13;
