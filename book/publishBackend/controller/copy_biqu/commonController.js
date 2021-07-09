@@ -93,8 +93,14 @@ exports.updateBookCover = async function(branchId, oldUrl, newUrl) {
         for (var i = 0; i < books.length; i++) {
             var book = books[i];
             if (!book.cover) continue;
-            book.set("cover", book.cover.replace(oldUrl, newUrl));
-            await book.save();
+            var cover = "";
+            if (/^(https)/.test(book.cover)) cover = book.cover.replace(/https:\/\/[^\/]+/, "");
+            else if (/^(http)/.test(book.cover)) cover = book.cover.replace(/http:\/\/[^\/]+/, "");
+            // book.set("cover", book.cover.replace(oldUrl, newUrl));
+            if (cover) {
+                book.set("cover", cover);
+                await book.save();
+            }
         }
     } catch (err) {
         console.log(err);
