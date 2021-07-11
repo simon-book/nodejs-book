@@ -1,15 +1,8 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>出错了</title>
-</head>
-
-<body>
-    <h2>
-        <%= message %>
-    </h2>
-    <div>
-        <%= error%>
-    </div>
-    <%- include('common/bottom', {}); %>
+<%- include('common/top', {}); %>
+<%- include('common/pageHeader', {}); %>
+<div class="searchArea">
+    <h3 style="text-align: center;font-size: 14px;margin: 20px 0;">您访问的资源已转移，请尝试使用“搜索”功能重新找回</h3>
+</div>
+<%- include('common/searchForm', {}); %>
+<%- include('common/footer', {}); %>
+<%- include('common/bottom', {}); %>

@@ -6,6 +6,7 @@ var cheerio = require('cheerio');
 var fs = require('fs');
 var compressing = require('compressing');
 var util = require('../../util/index.js');
+var branchMap = require('../common/branchMap.js').hostMap;
 var chapterController = require('./chapterController.js');
 var bookSequelize = require('../../data/sequelize/book/bookSequelize.js');
 var bookChapterSequelize = require('../../data/sequelize/book/bookChapterSequelize.js');
@@ -90,30 +91,18 @@ exports.chapterDetail = async function(bookId, number) {
             }
             var content = "";
             if (chapter.local == 1) {
-                var mossFileName = parseInt((chapter.number - 1) / 10) * 10 + 1 + "-" + (Math.ceil(chapter.number / 10) * 10);
-                if (fs.existsSync("./file/" + chapter.bookId + "/" + mossFileName + "/" + chapter.number)) {
-                    content = fs.readFileSync("./file/" + chapter.bookId + "/" + mossFileName + "/" + chapter.number)
-                }
-                if (!content) {
-                    var savedFile = await MossClient.getStream("branch" + chapter.branchId, chapter.bookId + "/" + mossFileName + ".zip");
-                    if (savedFile) {
-                        await compressing.zip.uncompress(savedFile, "./file/" + chapter.bookId);
-                        if (fs.existsSync("./file/" + chapter.bookId + "/" + mossFileName + "/" + chapter.number)) {
-                            content = fs.readFileSync("./file/" + chapter.bookId + "/" + mossFileName + "/" + chapter.number)
-                        }
-                    }
-                }
-                // content = await MossClient.get("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number + ".txt");
+                content = await httpGateway.mossServerStartReq("GET", "/moss/get/" + chapter.branchId + "/" + chapter.bookId + "/" + chapter.number, "");
             }
             if (content) {
                 chapterDetail.content = content;
                 checkSiblingsChapters(book, number, 1);
             } else {
-                content = await chapterController.copyChapterContent(book.copyInfo.pc, book.originId, chapter.originId);
+                content = await chapterController.copyChapterContent(branchMap.includeBranches[book.branchId].pcCopyUrl, book.originId, chapter.originId);
                 chapterDetail.content = content;
                 if (content) {
-                    // var result = await MossClient.put("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number + ".txt", content);
-
+                    var result = await httpGateway.mossServerStartReq("POST", "/moss/put/" + chapter.branchId + "/" + chapter.bookId + "/" + chapter.number, {
+                        content: content
+                    });
                     if (result) {
                         chapter.set("local", 1);
                         chapter.save();
@@ -148,9 +137,11 @@ async function checkSiblingsChapters(book, number, limit) {
             if (!chapter.local) {
                 {
                     await util.sleep(1000);
-                    var content = await chapterController.copyChapterContent(book.copyInfo.pc, book.originId, chapter.originId);
+                    var content = await chapterController.copyChapterContent(branchMap.includeBranches[book.branchId].pcCopyUrl, book.originId, chapter.originId);
                     if (!content) continue;
-                    var result = await MossClient.put("branch" + chapter.branchId, chapter.bookId + "/" + chapter.number + ".txt", content);
+                    var result = await httpGateway.mossServerStartReq("POST", "/moss/put/" + chapter.branchId + "/" + chapter.bookId + "/" + chapter.number, {
+                        content: content
+                    });
                     if (result) {
                         chapter.set("local", 1);
                         chapter.save();

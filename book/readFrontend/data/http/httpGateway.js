@@ -53,6 +53,45 @@ exports.publishUpdateStartReq = function(branchId, action, body) {
     })
 }
 
+exports.mossServerStartReq = function(method, path, body) {
+    var _http = http;
+    return new Promise(function(resolve, reject) {
+        var req = _http.request({
+            host: __plat__.mossServer.host,
+            port: __plat__.mossServer.port,
+            method: method,
+            path: path,
+            headers: {
+                "Content-Type": "application/json; charset=utf-8"
+            },
+            timeout: 60000
+        }, function(res) {
+            var _data = "";
+            res.on('data', function(chunk) {
+                _data += chunk;
+            });
+            res.on('end', function() {
+                if (res.statusCode == 200) {
+                    resolve(_data);
+                } else {
+                    reject(false)
+                }
+            });
+        });
+        req.on('error', function(e) {
+            console.log("error", e);
+            reject(e);
+        });
+        req.on('timeout', function(e) {
+            req.abort();
+            console.log("timeout", e);
+            reject(false);
+        });
+        req.write(body ? JSON.stringify(body) : "");
+        req.end();
+    })
+}
+
 exports.htmlStartReq = function(host, path, charset) {
     var _http = http;
     if (/^(https)/.test(host)) _http = https;

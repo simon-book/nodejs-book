@@ -37,7 +37,7 @@ exports.findByPk = function(id) {
 exports.findSimpleByPk = function(id) {
     return new Promise(function(resolve, reject) {
         Book.findByPk(id, {
-            attributes: ["bookId", "title", "writer", "categoryName", "originId", "copyInfo", "categoryId", "chapterCount"]
+            attributes: ["bookId", "branchId", "title", "writer", "categoryName", "originId", "copyInfo", "categoryId", "chapterCount"]
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
@@ -51,7 +51,7 @@ exports.findAll = function(where, raw) {
         Book.findAll({
             where: where,
             // raw: raw || false,
-            attributes: ["bookId", "title", "cover", "horiCover", "writer", "categoryId", "categoryName", "abstractContent", "chapterCount", "recommend", "readCount", "publishStatus", "lastUpdatedAt"],
+            attributes: ["bookId", "branchId", "title", "cover", "horiCover", "writer", "categoryId", "categoryName", "abstractContent", "chapterCount", "recommend", "readCount", "publishStatus", "lastUpdatedAt"],
             include: [{
                 model: BookChapter,
                 as: 'lastChapter',
@@ -110,7 +110,7 @@ exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
                     ['lastUpdatedAt', 'DESC']
                 ],
                 transaction: t,
-                attributes: ["bookId", "title", "cover", "horiCover", "writer", "categoryId", "categoryName", "abstractContent", "chapterCount", "recommend", "readCount", "publishStatus", "lastUpdatedAt"],
+                attributes: ["bookId", "branchId", "title", "cover", "horiCover", "writer", "categoryId", "categoryName", "abstractContent", "chapterCount", "recommend", "readCount", "publishStatus", "lastUpdatedAt"],
                 include: include
             }));
             return Promise.all(all);

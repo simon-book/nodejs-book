@@ -11,11 +11,7 @@ var environment = "dev";
 module.exports = function() {
     if (environment == "dev") {
         global.__plat__ = {
-            mossServer: {
-                protocol: "http:",
-                host: "localhost",
-                port: "3600"
-            }
+
         };
         global.__G__ = {
             SEESION_TIMEOUT: 1209600000, //14day*24*60*60
@@ -27,7 +23,7 @@ module.exports = function() {
         global.__PGSQL__ = {
             host: "localhost",
             user: "mac",
-            password: "",
+            // password: "",
             database: "mac",
             port: "5432",
             timezone: "Asia/Shanghai",
@@ -46,11 +42,7 @@ module.exports = function() {
 
     } else if (environment == "prod") {
         global.__plat__ = {
-            mossServer: {
-                protocol: "http:",
-                host: "localhost",
-                port: "3600"
-            }
+
         };
         global.__G__ = {
             SEESION_TIMEOUT: 1209600000, //14day*24*60*60

@@ -1,15 +1,13 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>出错了</title>
-</head>
-
-<body>
-    <h2>
-        <%= message %>
-    </h2>
-    <div>
-        <%= error%>
+<%- include('common/top', {}); %>
+<%- include('common/mainHeader', {}); %>
+<div class="container">
+    <br />
+    <br />
+    <div class="row ">
+        <div class="col-md-12 border book-list-box" style="margin-top: 0;">
+            <h3 style="text-align: center;">您访问的资源已转移，请尝试使用“搜索”功能重新找回</h3>
+        </div>
     </div>
-    <%- include('common/bottom', {}); %>
+</div>
+<%- include('common/footer', {}); %>
+<%- include('common/bottom', {}); %>

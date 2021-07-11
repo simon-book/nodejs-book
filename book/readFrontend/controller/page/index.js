@@ -290,8 +290,14 @@ exports.book = async function(req, res) {
     } catch (err) {
         console.log(err);
         res.render('error', {
-            message: "请求错误！",
-            error: err ? JSON.stringify(err) : ""
+            title: "资源错误" + branchInfo.title,
+            branchInfo: branchInfo,
+            user: auth.getUser(req, res),
+            currentRender: "search",
+            keywords: "",
+            pageTitle: "资源错误",
+            books: [],
+            pagination: null
         });
     }
 };
@@ -324,8 +330,14 @@ exports.mulu = async function(req, res) {
     } catch (err) {
         console.log(err);
         res.render('error', {
-            message: "请求错误！",
-            error: err ? JSON.stringify(err) : ""
+            title: "资源错误" + branchInfo.title,
+            branchInfo: branchInfo,
+            user: auth.getUser(req, res),
+            currentRender: "search",
+            keywords: "",
+            pageTitle: "资源错误",
+            books: [],
+            pagination: null
         });
     }
 };
@@ -353,8 +365,14 @@ exports.chapter = async function(req, res) {
     } catch (err) {
         console.log(err);
         res.render('error', {
-            message: "请求错误！",
-            error: err ? JSON.stringify(err) : ""
+            title: "资源错误" + branchInfo.title,
+            branchInfo: branchInfo,
+            user: auth.getUser(req, res),
+            currentRender: "search",
+            keywords: "",
+            pageTitle: "资源错误",
+            books: [],
+            pagination: null
         });
     }
 };
@@ -399,6 +417,28 @@ exports.search = async function(req, res) {
                 currentPage: currentPage,
                 totalPage: lastUpdatedBooks.pagination.totalPage
             }
+        });
+    } catch (err) {
+        console.log(err);
+        res.render('error', {
+            message: "请求错误！",
+            error: err ? JSON.stringify(err) : ""
+        });
+    }
+};
+
+exports.error = async function(req, res) {
+    try {
+        var branchInfo = req.branchInfo;
+        res.render('error', {
+            title: "资源错误" + branchInfo.title,
+            branchInfo: branchInfo,
+            user: auth.getUser(req, res),
+            currentRender: "search",
+            keywords: "",
+            pageTitle: "资源错误",
+            books: [],
+            pagination: null
         });
     } catch (err) {
         console.log(err);

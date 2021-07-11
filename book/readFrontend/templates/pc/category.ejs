@@ -8,7 +8,7 @@
                 <div class="col-xs-12 col-sm-4 book-item-1">
                     <div class="book-image">
                         <a href="/book/<%= book.bookId%>">
-                            <img onerror="src='/static/src/images/noimg.jpg'" src="<%= book.cover%>" alt="<%= book.title%>"></a>
+                            <img onerror="src='/static/src/images/noimg.jpg'" src="<%= branchInfo.includeBranches[book.branchId].coverUrl+book.cover%>" alt="<%= book.title%>"></a>
                     </div>
                     <dl>
                         <dt>

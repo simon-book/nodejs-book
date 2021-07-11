@@ -45,29 +45,7 @@ router.get('/register', page.register);
 router.get('/logout', userController.logout);
 
 //页面访问
-// router.use(async function(req, res, next) {
-//     var branchInfo = req.branchInfo;
-//     var date = moment().format("YYYY-MM-DD");
-//     if (!branchVisitStat[req.hostname] || branchVisitStat[req.hostname].date != date) {
-//         var record = await visitStatSequelize.findOrCreate({
-//             hostname: req.hostname,
-//             date: date
-//         }, {
-//             branchId: branchInfo.branchId,
-//             date: date,
-//             hostname: req.hostname
-//         });
-//         branchVisitStat[req.hostname] = record;
-//     }
-//     if (branchVisitStat[req.hostname]) {
-//         visitStatSequelize.increment({
-//             id: branchVisitStat[req.hostname].id
-//         })
-//     }
-//     next();
-// });
-
-router.get('/branchVisitStat', async function(req, res) {
+router.use(async function(req, res, next) {
     var branchInfo = req.branchInfo;
     var date = moment().format("YYYY-MM-DD");
     if (!branchVisitStat[req.hostname] || branchVisitStat[req.hostname].date != date) {
@@ -86,8 +64,30 @@ router.get('/branchVisitStat', async function(req, res) {
             id: branchVisitStat[req.hostname].id
         })
     }
-    res.send(true);
+    next();
 });
+
+// router.get('/branchVisitStat', async function(req, res) {
+//     var branchInfo = req.branchInfo;
+//     var date = moment().format("YYYY-MM-DD");
+//     if (!branchVisitStat[req.hostname] || branchVisitStat[req.hostname].date != date) {
+//         var record = await visitStatSequelize.findOrCreate({
+//             hostname: req.hostname,
+//             date: date
+//         }, {
+//             branchId: branchInfo.branchId,
+//             date: date,
+//             hostname: req.hostname
+//         });
+//         branchVisitStat[req.hostname] = record;
+//     }
+//     if (branchVisitStat[req.hostname]) {
+//         visitStatSequelize.increment({
+//             id: branchVisitStat[req.hostname].id
+//         })
+//     }
+//     res.send(true);
+// });
 
 router.get('/', page.home);
 router.get('/category', page.category);
@@ -108,5 +108,6 @@ router.get('/book/:bookId/:number', page.chapter);
 router.get('/paihang', page.paihang);
 router.get('/paihang/:rankId/:page', page.paihang);
 router.get('/search', page.search);
+router.get('/error', page.error);
 
 module.exports = router;

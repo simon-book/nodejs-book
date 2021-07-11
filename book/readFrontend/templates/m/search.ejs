@@ -12,6 +12,7 @@
     </a>
     <% }); %>
 </div>
+<% if(pagination){%>
 <div class="page">
     <%  if(pagination.currentPage > 1){ %>
     <a class="page-btn" href="/search?keyword=<%= keywords%>&page=<%= pagination.currentPage-1%>">
@@ -25,10 +26,11 @@
             <input type="number" class="go-page-input" id="go-page-input" min="1" max="<%= pagination.totalPage%>" placeholder="页数" onkeydown="if(event.keyCode==13){goPage(); return false;}">
             <button type="button" class="go-page-btn" onclick="goPage()">跳转</button>
 </div>
-<%- include('common/searchForm', {}); %>
 <script type="text/javascript">
 var currentPage = <%= pagination.currentPage%>;
 var totalPage = <%= pagination.totalPage%>;
 </script>
+<% }%>
+<%- include('common/searchForm', {}); %>
 <%- include('common/footer', {}); %>
 <%- include('common/bottom', {}); %>
