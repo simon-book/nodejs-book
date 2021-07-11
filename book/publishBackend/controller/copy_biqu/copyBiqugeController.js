@@ -410,8 +410,10 @@ exports.copy_page = async function() {
                     var bookHref = $(item).find("a").attr("href");
                     var originId = bookHref.match(/\/\d+\_\d+\//g)[0].replace(/\//g, "");
                     var savedBook = await bookSequelize.findOneBook({
-                        branchId: branch.branchId,
-                        originId: originId
+                        // branchId: branch.branchId,
+                        // originId: originId
+                        title: $(item).find("dt a").text().replace(/\n|\t|\s/g, ""),
+                        writer: $(item).find("dt span").text().replace(/\n|\t|\s/g, "")
                     })
                     if (!savedBook) {
                         savedBook = await create_book(originId);
@@ -433,8 +435,10 @@ exports.copy_page = async function() {
                         if (!bookHref.match(/\/\d+\_\d+\//g)) continue;
                         var originId = bookHref.match(/\/\d+\_\d+\//g)[0].replace(/\//g, "");
                         var savedBook = await bookSequelize.findOneBook({
-                            branchId: branch.branchId,
-                            originId: originId
+                            // branchId: branch.branchId,
+                            // originId: originId
+                            title: $(item).find(".s2 a").text().replace(/\n|\t|\s/g, ""),
+                            writer: $(item).find(".s5").text().replace(/\n|\t|\s/g, "")
                         })
                         if (!savedBook) {
                             savedBook = await create_book(originId);
@@ -456,8 +460,10 @@ exports.copy_page = async function() {
                     var bookHref = $(item).find("a").attr("href");
                     var originId = bookHref.match(/\/\d+\_\d+\//g)[0].replace(/\//g, "");
                     var savedBook = await bookSequelize.findOneBook({
-                        branchId: branch.branchId,
-                        originId: originId
+                        // branchId: branch.branchId,
+                        // originId: originId
+                        title: $(item).find(".s2 a").text().replace(/\n|\t|\s/g, ""),
+                        writer: $(item).find(".s5").text().replace(/\n|\t|\s/g, "")
                     })
                     if (!savedBook) {
                         savedBook = await create_book(originId);
@@ -492,11 +498,37 @@ exports.copy_page = async function() {
                 var key = $(recommendContents[i]).find("h2").text();
                 if (!key) continue;
                 allRecommendOriginIds[key] = [];
-                $(recommendContents[i]).find("a").each(function(i, ele) {
-                    var originId = $(this).attr("href").match(/\/\d+\_\d+\//g)[0].replace(/\//g, "");
-                    allRecommendOriginIds[key].push(originId);
+                var item = $(recommendContents[i]).find(".top");
+                var bookHref = $(item).find("a").attr("href");
+                var originId = bookHref.match(/\/\d+\_\d+\//g)[0].replace(/\//g, "");
+                var savedBook = await bookSequelize.findOneBook({
+                    title: $(item).find("dt a").text().replace(/\n|\t|\s/g, ""),
+                    writer: $(item).find("dt").text().replace(/\n|\t|\s/g, "").split("著：")[1]
                 })
-                allRecommendOriginIds[key] = _.uniq(allRecommendOriginIds[key]);
+                if (!savedBook) {
+                    savedBook = await create_book(originId);
+                }
+                if (savedBook) allRecommendOriginIds[key].push(savedBook.bookId);
+                var targetItems = $(recommendContents[i]).find("li");
+                for (var j = 0; j < targetItems.length; j++) {
+                    try {
+                        var item = targetItems[j];
+                        var bookHref = $(item).find("a").attr("href");
+                        var originId = bookHref.match(/\/\d+\_\d+\//g)[0].replace(/\//g, "");
+                        var savedBook = await bookSequelize.findOneBook({
+                            title: $(item).find("a").text().replace(/\n|\t|\s/g, ""),
+                            writer: $(item).text().replace(/\n|\t|\s/g, "").split("著：")[1]
+                        })
+                        if (!savedBook) {
+                            savedBook = await create_book(originId);
+                            if (!savedBook) continue;
+                        }
+                        allRecommendOriginIds[key].push(savedBook.bookId);
+                    } catch (err) {
+                        console.log(originId);
+                        console.log(err);
+                    }
+                }
             }
 
 
@@ -513,23 +545,7 @@ exports.copy_page = async function() {
                 var rankBookIds = [];
                 var $ = await commonController.copyHtml(branch.pcCopyUrl, path, branch.charset);
                 if (allRecommendOriginIds[category] && allRecommendOriginIds[category].length) {
-                    for (var i = 0; i < allRecommendOriginIds[category].length; i++) {
-                        try {
-                            var originId = allRecommendOriginIds[category][i];
-                            var savedBook = await bookSequelize.findOneBook({
-                                branchId: branch.branchId,
-                                originId: originId
-                            })
-                            if (!savedBook) {
-                                savedBook = await create_book(originId, branch.category[category][1], category);
-                                if (!savedBook) continue;
-                            }
-                            recommendBookIds.push(savedBook.bookId);
-                        } catch (err) {
-                            console.log(category, originId);
-                            console.log(err);
-                        }
-                    }
+                    recommendBookIds = allRecommendOriginIds[category];
                 }
 
 
@@ -540,8 +556,10 @@ exports.copy_page = async function() {
                         var bookHref = $(item).find("a").attr("href");
                         var originId = bookHref.match(/\/\d+\_\d+\//g)[0].replace(/\//g, "");
                         var savedBook = await bookSequelize.findOneBook({
-                            branchId: branch.branchId,
-                            originId: originId
+                            // branchId: branch.branchId,
+                            // originId: originId
+                            title: $(item).find(".s2 a").text().replace(/\n|\t|\s/g, ""),
+                            writer: $(item).find(".s5").text().replace(/\n|\t|\s/g, "")
                         })
                         if (!savedBook) {
                             savedBook = await create_book(originId, branch.category[category][1], category);
@@ -624,15 +642,17 @@ async function copy_rank_books(token, startIndex, endIndex) {
             // var recommendBookIds = [];
             try {
                 var $ = await commonController.copyHtml(branch.copyUrl, path, branch.charset);
-                var targetItems = $(".list").find(".tjimg");
+                var targetItems = $(".list").find(".tjxs");
                 for (var i = 0; i < targetItems.length; i++) {
                     try {
                         var item = targetItems[i];
                         var bookHref = $(item).find("a").attr("href");
                         var originId = bookHref.replace(/\//g, "");
                         var savedBook = await bookSequelize.findOneBook({
-                            branchId: branch.branchId,
-                            originId: originId
+                            // branchId: branch.branchId,
+                            // originId: originId
+                            title: $(item).find(".xsm a").text().replace(/\n|\t|\s/g, ""),
+                            writer: $(item).find(".xsm").next().text().replace(/\n|\t|\s/g, "").split("：")[1]
                         })
                         if (!savedBook) {
                             savedBook = await create_book(originId);
