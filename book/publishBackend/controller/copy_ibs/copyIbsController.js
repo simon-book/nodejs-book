@@ -382,7 +382,12 @@ async function reset_category_books_copy(category, startIndex, endIndex) {
                                 });
                                 console.log(savedBook.bookId);
                                 if (savedResult[0] > 0) savedBook = savedResult[1][0];
-                                await bookChapterSequelize.destroy({
+                                // await bookChapterSequelize.destroy({
+                                //     bookId: savedBook.bookId
+                                // });
+                                await bookChapterSequelize.update({
+                                    number: -1
+                                }, {
                                     bookId: savedBook.bookId
                                 });
                                 console.log(savedBook.bookId);

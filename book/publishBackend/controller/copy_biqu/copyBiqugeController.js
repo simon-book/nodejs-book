@@ -167,10 +167,10 @@ async function copy_category_books(category, startIndex, endIndex, date) {
                         var bookHref = $(item).find("a").attr("href");
                         var originId = bookHref.replace(/\//g, "");
                         var savedBook = await bookSequelize.findOneBook({
-                            branchId: branch.branchId,
-                            originId: originId
+                            title: $(item).find(".xsm a").text().replace(/\n|\t|\s/g, ""),
+                            writer: $(item).find(".xsm").next().text().replace(/\n|\t|\s/g, "").split("：")[1]
                         })
-                        if (savedBook && savedBook.publishStatus == 2) continue;
+                        if (savedBook && (savedBook.branchId != branch.branchId || savedBook.publishStatus == 2)) continue;
                         if (savedBook) {
                             bookHref = "/" + originId + "/";
                             var $ = await commonController.copyHtml(branch.pcCopyUrl, bookHref, branch.charset);

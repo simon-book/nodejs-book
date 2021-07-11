@@ -107,6 +107,65 @@ exports.updateBookCover = async function(branchId, oldUrl, newUrl) {
     }
 }
 
+// exports.deleteRepeatBooks = async function(branchId) {
+//     try {
+//         var books = await bookSequelize.findAll({
+//             branchId: branchId
+//         }, ["bookId", "title", "writer", "lastChapterId"]);
+//         for (var i = 0; i < books.length; i++) {
+//             var book = books[i];
+//             var anotherBooks = await bookSequelize.findAll({
+//                 title: book.title,
+//                 writer: book.writer,
+//                 branchId: {
+//                     [Op.ne]: branchId
+//                 }
+//             }, ["bookId", "lastChapterId"]);
+//             if (anotherBooks && anotherBooks.length) {
+//                 console.log(i, book.bookId, book.title);
+//                 // await bookChapterSequelize.update({
+//                 //     number: -1
+//                 // }, {
+//                 //     bookId: book.bookId
+//                 // });
+//                 book.set("recommend", -1);
+//                 await book.save();
+//             }
+//         }
+//     } catch (err) {
+//         console.log(err);
+//     }
+// }
+
+exports.deleteRepeatBooks = async function(branchId) {
+    try {
+        var books = await bookSequelize.findAll({
+            branchId: branchId
+        }, ["bookId", "title", "chapterCount", "originId"]);
+        var originIdMap = {};
+        for (var i = 0; i < books.length; i++) {
+            var book = books[i];
+            if (!originIdMap[book.originId]) originIdMap[book.originId] = [];
+            originIdMap[book.originId].push(book);
+        }
+        for (var originId in originIdMap) {
+            if (originIdMap[originId].length > 1) {
+                var maxbook = _.maxBy(originIdMap[originId], "chapterCount");
+                console.log(maxbook.bookId, maxbook.title);
+                _.remove(originIdMap[originId], { bookId: maxbook.bookId });
+                for (var i = 0; i < originIdMap[originId].length; i++) {
+                    var book = originIdMap[originId][i];
+                    console.log(book.bookId, book.title);
+                    book.set("recommend", -1);
+                    await book.save();
+                }
+            }
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 exports.updateBrnchCopyUrl = async function(req, res) {
     var body = req.body;
     if (!body || !body.branchId) {

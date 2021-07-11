@@ -50,6 +50,11 @@ router.post('/updateBookCover', async function(req, res) {
     res.send(true);
 })
 
+router.post('/deleteRepeatBooks', async function(req, res) {
+    await commonController.deleteRepeatBooks(req.body.branchId);
+    res.send(true);
+})
+
 router.post('/updateBrnchCopyUrl', commonController.updateBrnchCopyUrl)
 
 module.exports = router;

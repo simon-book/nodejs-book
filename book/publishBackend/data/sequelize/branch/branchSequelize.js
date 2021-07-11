@@ -54,6 +54,18 @@ exports.findOne = function(where) {
     })
 }
 
+exports.findAll = function(where) {
+    return new Promise(function(resolve, reject) {
+        Branch.findAll({
+            where: where
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
 exports.countBranches = function(where) {
     return new Promise(function(resolve, reject) {
         Branch.unscoped().count(where ? {
