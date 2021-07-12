@@ -37,7 +37,7 @@ exports.findByPk = function(id) {
 exports.findSimpleByPk = function(id) {
     return new Promise(function(resolve, reject) {
         Book.findByPk(id, {
-            attributes: ["bookId", "branchId", "title", "writer", "categoryName", "originId", "copyInfo", "categoryId", "chapterCount"]
+            attributes: ["bookId", "branchId", "title", "writer", "categoryName", "originId", "readCount", "categoryId", "chapterCount"]
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
@@ -119,5 +119,19 @@ exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
         }, reject).catch(function(err) {
             reject(err);
         })
+    })
+}
+
+exports.incrementReadCount = function(bookId) {
+    return new Promise(function(resolve, reject) {
+        Book.increment({
+            readCount: 1
+        }, {
+            bookId: bookId
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
     })
 }

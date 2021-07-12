@@ -68,6 +68,7 @@ exports.chapterDetail = async function(bookId, number) {
         number = parseInt(number);
         bookId = parseInt(bookId);
         var book = await bookSequelize.findSimpleByPk(bookId);
+        bookSequelize.incrementReadCount(bookId);
         book = book.get();
         var chapter = await bookChapterSequelize.findOne({
             number: number,
