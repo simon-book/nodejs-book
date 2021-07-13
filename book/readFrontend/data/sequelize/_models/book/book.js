@@ -28,7 +28,10 @@ var Book = sequelize.define('book', {
     abstractContent: Sequelize.TEXT, //摘要
     chapterCount: Sequelize.INTEGER, //章节数
     recommend: Sequelize.INTEGER, //推荐指数
-    readCount: Sequelize.INTEGER, //阅读数
+    readCount: {
+        type: Sequelize.INTEGER, //阅读数
+        defaultValue: 0
+    },
     lastChapterId: {
         type: Sequelize.BIGINT,
         references: {

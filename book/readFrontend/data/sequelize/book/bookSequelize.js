@@ -124,10 +124,10 @@ exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
 
 exports.incrementReadCount = function(bookId) {
     return new Promise(function(resolve, reject) {
-        Book.increment({
-            readCount: 1
-        }, {
-            bookId: bookId
+        Book.increment("readCount", {
+            where: {
+                bookId: bookId
+            }
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
