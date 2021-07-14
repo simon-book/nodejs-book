@@ -34,7 +34,7 @@ exports.createSitemapFiles = async function(site) {
                 var toUrls = urls.slice(start, start + len);
                 var content = toUrls.join("\n");
                 var fileName = site.replace(/\./g, "") + index;
-                await fsPromises.writeFile("./statics/" + fileName + +".txt", content);
+                await fsPromises.writeFile("./statics/" + fileName + ".txt", content);
                 start += len;
             } catch (err) {
                 console.log(err);
@@ -52,20 +52,21 @@ exports.submitNew = async function(site) {
         var yesterday = moment().subtract(1, 'days');
         var books = await bookSequelize.findAll({
             createdAt: {
-                [Op.bewteen]: [yesterday + " 00:00:00", yesterday + " 23:59:59"]
+                [Op.between]: ["2021-01-01" + " 00:00:00", "2021-07-10" + " 23:59:59"]
             }
         }, ["bookId"], 0, 200000, true);
+        if (!books.length) return false;
         var urls = [];
         for (var i = 0; i < books.length; i++) {
             urls.push(siteInfo.site + "/book/" + books[i].bookId);
         }
         var start = 0;
-        var len = 50000;
+        var len = 2000;
         do {
             try {
                 var toUrls = urls.slice(start, start + len);
                 var content = toUrls.join("\n");
-                var result = await httpGateway.submitUrlsToBaiduStartReq(site, sitemap.token, content);
+                var result = await httpGateway.submitUrlsToBaiduStartReq(site, siteInfo.token, content);
                 console.log(result);
                 start += len;
             } catch (err) {
