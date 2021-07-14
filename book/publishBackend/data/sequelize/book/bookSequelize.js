@@ -83,18 +83,31 @@ exports.findOneBook = function(where) {
     })
 }
 
-exports.findAll = function(where, attributes, offset, limit) {
+exports.findAll = function(where, attributes, offset, limit, raw) {
     return new Promise(function(resolve, reject) {
         Book.findAll({
             where: where,
             attributes: attributes,
             offset: offset || 0,
             limit: limit || 200000,
+            raw: raw || false,
             order: [
                 [
                     "bookId", "asc"
                 ]
             ]
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
+exports.findBookByPk = function(id, attributes) {
+    return new Promise(function(resolve, reject) {
+        Book.findByPk(id, {
+            attributes: attributes
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
