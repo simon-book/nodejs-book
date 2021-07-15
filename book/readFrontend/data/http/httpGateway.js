@@ -74,18 +74,18 @@ exports.mossServerStartReq = function(method, path, body) {
                 if (res.statusCode == 200) {
                     resolve(_data);
                 } else {
-                    reject(false)
+                    resolve(false);
                 }
             });
         });
         req.on('error', function(e) {
             console.log("error", e);
-            reject(e);
+            resolve(false);
         });
         req.on('timeout', function(e) {
             req.abort();
             console.log("timeout", e);
-            reject(false);
+            resolve(false);
         });
         req.write(body ? JSON.stringify(body) : "");
         req.end();
