@@ -659,8 +659,8 @@ async function copy_rank_books(token, startIndex, endIndex) {
                             if (!savedBook) continue;
                         }
                         if (token == "paihangbang_allvisit" && index <= 1000) {
-                            if (!categoryRecommendBooks[savedBook.categoryId]) categoryRecommendBooks[savedBook.categoryId] = [];
-                            categoryRecommendBooks[savedBook.categoryId].push({
+                            if (!categoryRecommendBooks[savedBook.categoryName]) categoryRecommendBooks[savedBook.categoryName] = [];
+                            categoryRecommendBooks[savedBook.categoryName].push({
                                 i: savedBook.bookId,
                                 n: savedBook.title
                             });
@@ -687,10 +687,13 @@ async function copy_rank_books(token, startIndex, endIndex) {
             await savedRank.save();
         }
         if (token == "paihangbang_allvisit") {
-            for (var categoryId in categoryRecommendBooks) {
-                var category = await bookCategorySequelize.findByPk(parseInt(categoryId));
+            for (var categoryName in categoryRecommendBooks) {
+                var category = await bookCategorySequelize.findOne({
+                    branchId: branch.branchId,
+                    name: categoryName
+                });
                 if (category) {
-                    category.set("recommendBooks", categoryRecommendBooks[categoryId]);
+                    category.set("recommendBooks", categoryRecommendBooks[categoryName]);
                     await category.save();
                 }
             }
