@@ -109,7 +109,7 @@ async function copy_category_books(category, startIndex, endIndex, date) {
         var index = startIndex;
         if (branch.isTest) endIndex = startIndex + 5;
         if (date != -1) {
-            if (!date) date = moment().subtract(1, 'days');
+            if (!date) date = moment();
             else date = moment(date);
             date = parseInt(date.format("YYMMDD"));
         }

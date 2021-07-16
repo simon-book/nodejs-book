@@ -26,7 +26,7 @@ exports.auto_schedule_biqu = function() {
     });
 
     //每月全部更新
-    schedule.scheduleJob('0 0 12 15 * *', async function() {
+    schedule.scheduleJob('0 0 12 1 * *', async function() {
         console.log("全量更新biqu数据！");
         await copyBiqugeController.queryBranchInfo();
         copyBiqugeController.copy_all_books(-1);
@@ -41,7 +41,7 @@ exports.auto_schedule_dashen = function() {
         copyDashenController.copy_all_books();
     });
 
-    schedule.scheduleJob('0 0 12 15 * *', async function() {
+    schedule.scheduleJob('0 0 12 11 * *', async function() {
         console.log("全量更新dashen数据！");
         await copyDashenController.queryBranchInfo();
         copyDashenController.copy_all_books(-1);
@@ -58,7 +58,7 @@ exports.auto_schedule_ibs = function() {
 
 
     //每月全部更新
-    schedule.scheduleJob('0 0 12 15 * *', async function() {
+    schedule.scheduleJob('0 0 12 21 * *', async function() {
         console.log("全量更新ibs数据！");
         await copyIbsController.queryBranchInfo();
         copyIbsController.copy_all_books(-1);
