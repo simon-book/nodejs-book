@@ -11,7 +11,8 @@ var branchVisitStat = {};
 router.use(function(req, res, next) {
     req.branchInfo = branchMap.hostMap[req.hostname];
     if (!req.branchInfo) {
-        res.redirect("https://www.99amn.com");
+        // res.redirect("https://www.99amn.com");
+        res.send(false);
         return;
     }
     var sUserAgent = req.headers["user-agent"].toLowerCase();

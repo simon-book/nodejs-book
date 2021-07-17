@@ -11,7 +11,7 @@ var chapterController = require('./chapterController.js');
 var bookSequelize = require('../../data/sequelize/book/bookSequelize.js');
 var bookChapterSequelize = require('../../data/sequelize/book/bookChapterSequelize.js');
 var httpGateway = require('../../data/http/httpGateway.js')
-var MossClient = require('../../service/mossConn.js');
+// var MossClient = require('../../service/mossConn.js');
 
 exports.bookDeail = async function(bookId) {
     try {

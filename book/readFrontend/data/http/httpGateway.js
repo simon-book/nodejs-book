@@ -11,19 +11,19 @@ var iconv = require('iconv-lite')
 var branchUpdateUrl = {
     "1": {
         protocol: "http:",
-        host: "localhost",
+        host: __plat__.mossServer.host,
         port: "3801",
         path: "biquge"
     },
     "2": {
         protocol: "http:",
-        host: "localhost",
+        host: __plat__.mossServer.host,
         port: "3802",
         path: "dashen"
     },
     "3": {
         protocol: "http:",
-        host: "localhost",
+        host: __plat__.mossServer.host,
         port: "3803",
         path: "ibs"
     }
