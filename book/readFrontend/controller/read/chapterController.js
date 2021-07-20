@@ -6,11 +6,6 @@ var cheerio = require('cheerio');
 var util = require('../../util/index.js');
 var httpGateway = require('../../data/http/httpGateway.js')
 
-var charsets = {
-    "m.35wx.com": "GBK",
-    "www.35wx.com": "GBK"
-}
-
 async function copyBiqugeInfoChapterContent(host, path, charset) {
     try {
         var bookHtml = await httpGateway.htmlStartReq(host, path, charset);
@@ -35,16 +30,17 @@ async function copyBiqugeInfoChapterContent(host, path, charset) {
     }
 }
 
-exports.copyChapterContent = async function(host, bookOriginId, chapterOriginId) {
+exports.copyChapterContent = async function(branch, bookOriginId, chapterOriginId) {
     try {
+        var host = branch.pcCopyUrl;
         var content = "";
         var charset = "utf-8";
-        if (/biqu/.test(host)) {
+        if (/biqu/.test(branch.copySrc)) {
             var path = "/" + bookOriginId + "/" + chapterOriginId + ".html";
-        } else if (/dashen/.test(host)) {
+        } else if (/dashen/.test(branch.copySrc)) {
             charset = "gbk"
             var path = "/html/" + bookOriginId.split("_")[0] + "/" + bookOriginId.split("_")[1] + "/" + chapterOriginId + ".html";
-        } else if (/ibs/.test(host)) {
+        } else if (/ibs/.test(branch.copySrc)) {
             var path = "/" + bookOriginId + "/" + chapterOriginId + ".html";
         }
         content = await copyBiqugeInfoChapterContent(host, path, charset);

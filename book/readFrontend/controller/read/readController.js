@@ -98,7 +98,7 @@ exports.chapterDetail = async function(bookId, number) {
                 chapterDetail.content = content;
                 checkSiblingsChapters(book, number, 1);
             } else {
-                content = await chapterController.copyChapterContent(branchMap.includeBranches[book.branchId].pcCopyUrl, book.originId, chapter.originId);
+                content = await chapterController.copyChapterContent(branchMap.includeBranches[book.branchId], book.originId, chapter.originId);
                 chapterDetail.content = content;
                 if (content) {
                     var result = await httpGateway.mossServerStartReq("POST", "/moss/put/" + chapter.branchId + "/" + chapter.bookId + "/" + chapter.number, {
@@ -138,7 +138,7 @@ async function checkSiblingsChapters(book, number, limit) {
             if (!chapter.local) {
                 {
                     await util.sleep(1000);
-                    var content = await chapterController.copyChapterContent(branchMap.includeBranches[book.branchId].pcCopyUrl, book.originId, chapter.originId);
+                    var content = await chapterController.copyChapterContent(branchMap.includeBranches[book.branchId], book.originId, chapter.originId);
                     if (!content) continue;
                     var result = await httpGateway.mossServerStartReq("POST", "/moss/put/" + chapter.branchId + "/" + chapter.bookId + "/" + chapter.number, {
                         content: content

@@ -346,15 +346,16 @@ exports.chapter = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
         var chapter = await readController.chapterDetail(parseInt(req.params.bookId), parseInt(req.params.number));
-        var description = branchInfo.shorttitle + "提供了" + chapter.book.writer + "创作的" + chapter.book.categoryName + "《" + chapter.book.title + "》清爽干净的文字章节：" + chapter.title;
         if (chapter) {
+            branchInfo.description1 = branchInfo.shorttitle + "提供了" + chapter.book.writer + "创作的" + chapter.book.categoryName + "《" + chapter.book.title + "》清爽干净的文字章节：" + chapter.title;
+            branchInfo.keywords1 = chapter.book.title + "," + chapter.title + "," + chapter.book.writer;
             res.render('chapter', {
                 title: chapter.title + "_" + branchInfo.title,
                 branchInfo: branchInfo,
                 user: auth.getUser(req, res),
                 currentRender: "chapter",
-                keywords: chapter.book.title + "," + chapter.title + "," + chapter.book.writer,
-                description: description,
+                // keywords: chapter.book.title + "," + chapter.title + "," + chapter.book.writer,
+                // description: description,
                 pageTitle: chapter.title,
                 chapter: chapter,
                 chapterCount: chapter.book.chapterCount,

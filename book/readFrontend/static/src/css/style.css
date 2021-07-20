@@ -239,6 +239,7 @@ body {
     height: 32px;
     line-height: 32px;
     overflow: hidden;
+    height: 32px;
 }
 
 /*.book-item-2 a {
@@ -330,6 +331,7 @@ body {
     line-height: 32px;
     overflow: hidden;
     list-style-type: none;
+    height: 32px;
 }
 
 .book-item-5>div {

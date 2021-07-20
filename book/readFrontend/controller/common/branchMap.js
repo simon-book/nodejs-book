@@ -36,6 +36,7 @@ exports.queryBranchInfo = async function() {
             var savedBranch = await branchSequelize.findOneById(branchId);
             if (savedBranch && savedBranch.copyParams) {
                 hostMap[url].branchId = savedBranch.branchId;
+                hostMap[url].copySrc = savedBranch.copySrc;
                 hostMap[url].copyUrl = savedBranch.copyParams.copyUrl;
                 hostMap[url].pcCopyUrl = savedBranch.copyParams.pcCopyUrl;
                 hostMap[url].charset = savedBranch.copyParams.charset;
