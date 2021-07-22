@@ -13,12 +13,11 @@ var bodyParser = require('body-parser');
 var properties = require('./config/properties.js')();
 var auto_schedule = require('./controller/autoSchedule/index.js');
 
-// __PGSQL__.schemas.book_publisher = "book_publisher_ibs";
 process.env.NODE_ENV = __G__.NODE_ENV;
 
 var app = express();
 // all environments
-app.set('port', process.env.PORT || 3803);
+app.set('port', process.env.PORT || 3800);
 app.use(favicon(path.join(__dirname, 'statics/src/images/favicon.ico')));
 app.use(bodyParser.json({
     limit: '50mb'
@@ -44,9 +43,13 @@ app.use('*', function(req, res, next) {
     next();
 })
 
-app.use(__G__.CONTEXT || '/api/publisher/ibs', require('./controller/ibsHttpRoutes.js'));
+// app.use(__G__.CONTEXT + "/static", express.static(path.join(__dirname, '/statics')));
+// app.use(__G__.CONTEXT + "/html", express.static(path.join(__dirname, '/html')));
 
-auto_schedule.auto_schedule_ibs();
+app.use(__G__.CONTEXT || '/api/publisher', require('./controller/index.js'));
+app.use(__G__.CONTEXT || '/api/publisher/invshen', require('./controller/invshenHttpRoutes.js'));
+
+auto_schedule.auto_schedule_invshen();
 
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);

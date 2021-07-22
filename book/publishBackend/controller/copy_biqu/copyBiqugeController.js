@@ -238,12 +238,12 @@ async function create_book(originId, categoryId, categoryName) {
         book.publishStatus = $('meta[property="og:novel:status"]').attr("content").indexOf("连载") > -1 ? 1 : 2;
         book.lastUpdatedAt = new Date($(liItems[3]).text().split(/\s+\:/)[1]);
         book.abstractContent = $($("#intro").children()[0]).html().replace(/<br>/g, "\\n");
-        var sameBook = await bookSequelize.findOneBook({
-            branchId: branch.branchId,
-            title: book.title,
-            writer: book.writer
-        })
-        if (sameBook) return true;
+        // var sameBook = await bookSequelize.findOneBook({
+        //     branchId: branch.branchId,
+        //     title: book.title,
+        //     writer: book.writer
+        // })
+        // if (sameBook) return true;
         branch.bookCount++;
         book.sn = util.prefixInteger(branch.bookCount, 8);
         var savedBook = await bookSequelize.create(book);

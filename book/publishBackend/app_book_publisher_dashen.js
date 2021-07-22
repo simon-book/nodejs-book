@@ -13,6 +13,7 @@ var bodyParser = require('body-parser');
 var properties = require('./config/properties.js')();
 var auto_schedule = require('./controller/autoSchedule/index.js');
 
+// __PGSQL__.schemas.book_publisher = "book_publisher_dashen";
 process.env.NODE_ENV = __G__.NODE_ENV;
 
 var app = express();
