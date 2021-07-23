@@ -5,7 +5,7 @@ var sequelize = require("../../../../service/sequelizeConn.js");
 var Tag = require("./tag.js");
 var Model = require("./model.js");
 
-var ModelTags = sequelize.define('picture_tags', {
+var ModelTags = sequelize.define('model_tags', {
     id: {
         type: Sequelize.BIGINT,
         primaryKey: true,
@@ -33,7 +33,7 @@ var ModelTags = sequelize.define('picture_tags', {
     }
 }, {
     schema: __PGSQL__.schemas.picture_publisher,
-    tableName: 'picture_tags',
+    tableName: 'model_tags',
     timestamps: false,
     underscored: true,
     indexes: []
@@ -45,7 +45,7 @@ Model.belongsToMany(Tag, {
     foreignKey: 'modelId'
 })
 
-Tag.belongsToMany(Picture, {
+Tag.belongsToMany(Model, {
     as: 'models',
     through: ModelTags,
     foreignKey: 'tagId'

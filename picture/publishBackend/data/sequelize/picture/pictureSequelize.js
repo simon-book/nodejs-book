@@ -5,6 +5,7 @@ var sequelize = require('../../../service/sequelizeConn.js');
 var Picture = require('../_models/picture/picture.js')
 var Tag = require('../_models/picture/tag.js')
 var PictureTag = require('../_models/picture/pictureTag.js')
+var PictureModel = require('../_models/picture/pictureModel.js')
 
 exports.create = function(obj) {
     return new Promise(function(resolve, reject) {
