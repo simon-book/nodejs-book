@@ -39,10 +39,16 @@ var PictureTags = sequelize.define('picture_tags', {
     indexes: []
 });
 
-Book.hasMany(Tag, {
+Picture.belongsToMany(Tag, {
     as: 'tags',
-    through: BookTags,
+    through: PictureTags,
     foreignKey: 'pictureId'
+})
+
+Tag.belongsToMany(Picture, {
+    as: 'pictures',
+    through: PictureTags,
+    foreignKey: 'tagId'
 })
 
 module.exports = PictureTags;

@@ -13,7 +13,7 @@ var pictureSequelize = require('../../data/sequelize/picture/pictureSequelize.js
 
 var branch = {
     copySrc: "invshen", //www.invshen.net/
-    tagGroups: [
+    originPictureTagGroups: [
         ["国家", 0],
         ["风格", 1],
         ["身材", 2],
@@ -22,7 +22,16 @@ var branch = {
         ["场景", 5],
         ["杂志", 6],
         ["其他", 7]
-    ]
+    ],
+    originModelTagGroups: [
+        ["职业", 0],
+        ["地域", 1],
+        ["身材", 2],
+        ["风格", 3],
+        ["长相", 4],
+        ["团体", 5],
+        ["其他", 6]
+    ],
 }
 
 exports.queryBranchInfo = async function() {
@@ -36,14 +45,16 @@ exports.queryBranchInfo = async function() {
             branch.pcCopyUrl = savedBranch.copyParams.pcCopyUrl;
             branch.charset = savedBranch.copyParams.charset;
             branch.isTest = savedBranch.copyParams.isTest || false;
-            branch.tagGroups = [];
-            var tagGroups = await tagSequelize.findAllTagGroup({
+            branch.pictureTagGroups = [];
+            branch.modelTagGroups = [];
+            var TagGroups = await tagSequelize.findAllTagGroup({
                 branchId: branch.branchId
             })
-            _.forEach(tagGroups, function(tagGroup) {
+            _.forEach(pictureTagGroups, function(tagGroup) {
                 var group = {
                     tagGroupId: tagGroup.tagGroupId,
-                    name: tagGroup.name
+                    name: tagGroup.name,
+                    type: tagGroup.type
                 }
                 group.tags = _.map(tagGroup.tags, function(tag) {
                     return {
@@ -52,7 +63,8 @@ exports.queryBranchInfo = async function() {
                         originId: tag.originId
                     }
                 })
-                branch.tagGroups.push(group);
+                if (group.type == "picture") branch.pictureTagGroups.push(group);
+                else if (group.type == "model") branch.modelTagGroups.push(group);
             })
         }
     } catch (err) {
@@ -62,28 +74,48 @@ exports.queryBranchInfo = async function() {
 
 exports.create_tag_groups = async function() {
     try {
-        for (var i = 0; i < branch.tagGroups.length; i++) {
+        for (var i = 0; i < branch.originPictureTagGroups.length; i++) {
             var savedTagGroup = await tagSequelize.findOneTagGroup({
                 branchId: branch.branchId,
-                name: branch.tagGroups[i][0]
+                name: branch.originPictureTagGroups[i][0]
             })
             if (!savedTagGroup) {
                 await tagSequelize.createTagGroup({
                     branchId: branch.branchId,
-                    name: branch.tagGroups[i][0],
+                    name: branch.originPictureTagGroups[i][0],
+                    type: "picture",
                     orderIndex: i,
                     originId: i
                 })
             }
         }
+        await copy_tags("picture");
+        for (var i = 0; i < branch.originModelTagGroups.length; i++) {
+            var savedTagGroup = await tagSequelize.findOneTagGroup({
+                branchId: branch.branchId,
+                name: branch.originModelTagGroups[i][0]
+            })
+            if (!savedTagGroup) {
+                await tagSequelize.createTagGroup({
+                    branchId: branch.branchId,
+                    name: branch.originModelTagGroups[i][0],
+                    type: "model",
+                    orderIndex: i,
+                    originId: i
+                })
+            }
+        }
+        await copy_tags("model");
     } catch (err) {
         console.log(err);
     }
 }
 
-exports.copy_tags = async function() {
+async function copy_tags(tagGroupType) {
     try {
-        var path = "/gallery/";
+        if (!tagGroupType) return false;
+        if (tagGroupType == "picture") var path = "/gallery/";
+        else if (tagGroupType == "model") var path = "/tag/";
         console.log(path);
         var $ = await commonController.copyHtml(branch.copyUrl, path, branch.charset);
         var tagGroupDivs = $(".tag_div");
@@ -93,7 +125,7 @@ exports.copy_tags = async function() {
                 var tagItems = $(tagGroupDiv).find("a");
                 var savedTagGroup = await tagSequelize.findOneTagGroup({
                     branchId: branch.branchId,
-                    name: branch.tagGroups[i][0]
+                    name: branch.pictureTagGroups[i][0]
                 })
                 if (!savedTagGroup) continue;
                 for (var j = 0; j < tagItems.length; j++) {
@@ -126,8 +158,8 @@ exports.copy_tags = async function() {
 
 exports.copy_all_pictures = async function(tagGroupId) {
     try {
-        for (var i = 0; i < branch.tagGroups.length; i++) {
-            var tagGroup = branch.tagGroups[i];
+        for (var i = 0; i < branch.pictureTagGroups.length; i++) {
+            var tagGroup = branch.pictureTagGroups[i];
             if (tagGroupId && tagGroup.tagGroupId != tagGroupId) continue;
             var totalPage = 100;
             for (var j = 0; j < tagGroup.tags; j++) {
@@ -230,7 +262,8 @@ async function create_picture(originId, picture, tag) {
         var utags = $("#utag").find("li a");
         var girlIds = [];
         var tagIds = [];
-        _.forEach(utags, function(utag) {
+        for (var i = 0; i < utags.length; i++) {
+            var utag = utags[i];
             var tagHref = $(utag).attr("href");
             var tagName = $(utag).text();
             var tagOriginId = tagHref.split("/")[2];
@@ -242,8 +275,7 @@ async function create_picture(originId, picture, tag) {
                 if (!savedModel) {
                     savedModel = await modelSequelize.create({
                         branchId: branch.branchId,
-                        originId: tagOriginId,
-                        nickname: tagName,
+                        originId: tagOriginId
                     })
                 }
                 if (savedModel) girlIds.push(savedModel.modelId);
@@ -254,7 +286,7 @@ async function create_picture(originId, picture, tag) {
                     name: tagName
                 })
                 if (!savedTag) {
-                    var otherGroup = _.find(branch.tagGroups, { name: "其他" });
+                    var otherGroup = _.find(branch.pictureTagGroups, { name: "其他" });
                     savedTag = await tagSequelize.create({
                         branchId: branch.branchId,
                         originId: tagOriginId,
@@ -264,7 +296,7 @@ async function create_picture(originId, picture, tag) {
                 }
                 if (savedTag) tagIds.push(savedTag.tagId);
             }
-        })
+        }
         if (girlIds.length) await savedPicture.addModels(girlIds);
         if (tagIds.length) {
             if (tag && _.indexOf(tagIds, tag.tagId) == -1) tagIds.push(tag.tagId);
@@ -277,6 +309,74 @@ async function create_picture(originId, picture, tag) {
     }
 }
 
+exports.copy_all_models = async function(tagGroupId) {
+    try {
+        for (var i = 0; i < branch.modelTagGroups.length; i++) {
+            var tagGroup = branch.modelTagGroups[i];
+            if (tagGroupId && tagGroup.tagGroupId != tagGroupId) continue;
+            var totalPage = 100;
+            for (var j = 0; j < tagGroup.tags; j++) {
+                var tag = tagGroup.tags[j];
+                try {
+                    console.log(tag);
+                    await copy_category_models(tag, "tag");
+                } catch (err) {
+                    console.log("获取分类totalPage失败", category, err);
+                }
+            }
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function copy_category_models(tag, startPath, startIndex, endIndex) {
+    try {
+        var index = startIndex || 1;
+        if (!endIndex) endIndex = 10000;
+        if (branch.isTest) endIndex = startIndex + 5;
+        var stop = false;
+        do {
+            try {
+                var path = "/" + startPath + "/" + tag.originId + "/";
+                if (index > 1) path += index + ".html";
+                console.log(path);
+                var $ = await commonController.copyHtml(branch.pcCopyUrl, path, branch.charset);
+                var targetItems = $("#listdiv").find("li.beautyli");
+                for (var i = 0; i < targetItems.length; i++) {
+                    try {
+                        var item = targetItems[i];
+                        var modelHref = $($(item).find("a")[1]).attr("href");
+                        if (modelHref.match(/\/girl\//g).length) {
+                            var originId = modelHref.split("/")[2];
+                            var savedModel = await modelSequelize.findOneModel({
+                                branchId: branch.branchId,
+                                originId: originId
+                            })
+                            if (!savedModel) {
+                                savedModel = await modelSequelize.create({
+                                    branchId: branch.branchId,
+                                    originId: originId
+                                })
+                            }
+                        }
+                    } catch (err) {
+                        console.log(index, i, originId);
+                        console.log(err);
+                    }
+                }
+                var pages = $("#listdiv").find(".pagesYY a");
+                if ($(pages[pages.length - 1]).hasClass("cur")) stop = true;
+            } catch (err) {
+                console.log(tag, startPath, index);
+                console.log(err);
+            }
+            index++;
+        } while (index <= endIndex && !stop);
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 exports.complete_all_model_info = async function() {
     try {
@@ -325,7 +425,7 @@ async function complete_one_model_info(model) {
         if (otherInfo.nickname) model.set("nickname", otherInfo.nickname);
         if (otherInfo.remark) model.set("remark", otherInfo.remark);
         await model.save();
-        if ($(".archive_more").length) copy_model_pictures(null, model.originId);
+        if ($(".archive_more").length) await copy_model_pictures(null, model.originId);
         else {
             var targetItems = $(".photo_ul").find("li.igalleryli");
             for (var i = 0; i < targetItems.length; i++) {
@@ -337,7 +437,8 @@ async function complete_one_model_info(model) {
                         branchId: branch.branchId,
                         originId: bookHref
                     })
-                    if (!savedBook) {
+                    if (savedBook) continue;
+                    else {
                         var picture = {
                             branchId: branch.branchId,
                             cover: $(item).find("img").attr("src"),
@@ -350,7 +451,30 @@ async function complete_one_model_info(model) {
                     }
                     if (!result) throw new Error("save picture error.")
                 } catch (err) {
-                    console.log(index, i, originId);
+                    console.log(err);
+                }
+            }
+        }
+        if ($("li.favli").length) {
+            var targetItems = $("li.favli");
+            for (var i = 0; i < targetItems.length; i++) {
+                try {
+                    var item = targetItems[i];
+                    var modelHref = $($(item).find("a")[1]).attr("href");
+                    if (modelHref.match(/\/girl\//g).length) {
+                        var originId = modelHref.split("/")[2];
+                        var savedModel = await modelSequelize.findOneModel({
+                            branchId: branch.branchId,
+                            originId: originId
+                        })
+                        if (!savedModel) {
+                            savedModel = await modelSequelize.create({
+                                branchId: branch.branchId,
+                                originId: originId
+                            })
+                        }
+                    }
+                } catch (err) {
                     console.log(err);
                 }
             }
@@ -360,7 +484,7 @@ async function complete_one_model_info(model) {
     }
 }
 
-function copy_model_pictures(modelId, originId) {
+async function copy_model_pictures(modelId, originId) {
     try {
         if (!originId && modelId) {
             var savedModel = await modelSequelize.findOneModel({
@@ -416,5 +540,13 @@ function copy_model_pictures(modelId, originId) {
         } while (index <= endIndex && !stop);
     } catch (err) {
         console.log(err);
+    }
+}
+
+exports.copy_all_models = async function() {
+    try {
+
+    } catch {
+
     }
 }

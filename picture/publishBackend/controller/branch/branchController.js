@@ -7,27 +7,14 @@ var adminHttpResult = require('../../util/adminHttpResult.js');
 var errHandler = require('../../util/errHandler.js');
 var util = require('../../util/index.js');
 var branchSequelize = require('../../data/sequelize/branch/branchSequelize.js');
-var managerSequelize = require('../../data/sequelize/manager/managerSequelize.js');
 
 exports.createBranch = async function(req, res) {
     try {
         var body = req.body;
-        if (!body.name || !body.administrator || !body.administrator.phone) {
+        if (!body.name) {
             adminHttpResult.jsonFailOut(req, res, "PARAM_INVALID");
             return;
         }
-        var manager = await managerSequelize.findOne({
-            phone: body.administrator.phone
-        });
-        if (manager) {
-            adminHttpResult.jsonFailOut(req, res, "MANAGER_ERROR", "手机号被其他branch占用！");
-            return;
-        }
-        body.administrator.roleType = "administrator";
-        if (!body.administrator.nickname) body.administrator.nickname = body.administrator.phone;
-        body.administrator.password = "123456";
-        body.managers = [body.administrator];
-        delete body.administrator;
         var count = await branchSequelize.countBranches();
         body.sn = util.prefixInteger(count + 1, 8);
         if (body.branchId) delete body.branchId;

@@ -46,7 +46,7 @@ var Page = sequelize.define('page', {
         defaultValue: 1
     }
 }, {
-    schema: __PGSQL__.schemas.book_publisher,
+    schema: __PGSQL__.schemas.picture_publisher,
     tableName: 'page',
     timestamps: true,
     underscored: true,

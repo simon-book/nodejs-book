@@ -16,6 +16,7 @@ var TagGroup = sequelize.define('tag_group', {
         type: Sequelize.TEXT,
         allowNull: false
     },
+    type: Sequelize.TEXT,
     // remark: Sequelize.TEXT,
     branchId: {
         type: Sequelize.BIGINT,

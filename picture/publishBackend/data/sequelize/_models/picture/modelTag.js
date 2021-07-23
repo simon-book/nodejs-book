@@ -2,25 +2,16 @@ var Sequelize = require('sequelize');
 var moment = require('moment');
 var sequelize = require("../../../../service/sequelizeConn.js");
 
+var Tag = require("./tag.js");
 var Model = require("./model.js");
-var Picture = require("./picture.js");
 
-var PictureModels = sequelize.define('picture_models', {
+var ModelTags = sequelize.define('picture_tags', {
     id: {
         type: Sequelize.BIGINT,
         primaryKey: true,
         allowNull: false,
         unique: true,
         autoIncrement: true,
-    },
-    pictureId: {
-        type: Sequelize.BIGINT,
-        references: {
-            model: Picture,
-            key: 'picture_id',
-            deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
-        },
-        allowNull: false
     },
     modelId: {
         type: Sequelize.BIGINT,
@@ -30,25 +21,34 @@ var PictureModels = sequelize.define('picture_models', {
             deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
         },
         allowNull: false
+    },
+    tagId: {
+        type: Sequelize.BIGINT,
+        references: {
+            model: Tag,
+            key: 'tag_id',
+            deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
+        },
+        allowNull: false
     }
 }, {
     schema: __PGSQL__.schemas.picture_publisher,
-    tableName: 'picture_models',
+    tableName: 'picture_tags',
     timestamps: false,
     underscored: true,
     indexes: []
 });
 
-Picture.belongsToMany(Model, {
-    as: 'models',
-    through: PictureModels,
-    foreignKey: 'pictureId'
-})
-
-Model.belongsToMany(Picture, {
-    as: 'pictures',
-    through: PictureModels,
+Model.belongsToMany(Tag, {
+    as: 'tags',
+    through: ModelTags,
     foreignKey: 'modelId'
 })
 
-module.exports = PictureModels;
+Tag.belongsToMany(Picture, {
+    as: 'models',
+    through: ModelTags,
+    foreignKey: 'tagId'
+})
+
+module.exports = ModelTags;

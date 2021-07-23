@@ -45,7 +45,7 @@ var Rank = sequelize.define('rank', {
         defaultValue: 1
     }
 }, {
-    schema: __PGSQL__.schemas.book_publisher,
+    schema: __PGSQL__.schemas.picture_publisher,
     tableName: 'rank',
     timestamps: true,
     underscored: true,

@@ -51,8 +51,6 @@ var Picture = sequelize.define('picture', {
     }, {
         fields: ['title']
     }, {
-        fields: ['model_ids']
-    }, {
         fields: ['last_updated_at']
     }, {
         fields: ['origin_id']

@@ -4,7 +4,7 @@ var Op = Sequelize.Op;
 var moment = require('moment');
 var sequelize = require("../../../../service/sequelizeConn.js");
 
-var PictureModel = sequelize.define('picture_model', {
+var Model = sequelize.define('model', {
     modelId: {
         type: Sequelize.BIGINT,
         primaryKey: true,
@@ -33,14 +33,14 @@ var PictureModel = sequelize.define('picture_model', {
     }
 }, {
     schema: __PGSQL__.schemas.picture_publisher,
-    tableName: 'picture_model',
+    tableName: 'model',
     timestamps: false,
     underscored: true,
     indexes: [{
-        fields: ['nickname', 'branchId']
+        fields: ['nickname', 'branch_id']
     }, {
-        fields: ['originId', 'branchId']
+        fields: ['origin_id', 'branch_id']
     }]
 });
 
-module.exports = PictureModel;
+module.exports = Model;
