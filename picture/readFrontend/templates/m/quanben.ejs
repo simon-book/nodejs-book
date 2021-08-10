@@ -1,0 +1,42 @@
+<%- include('common/top', {}); %>
+<%- include('common/pageHeader', {}); %>
+<nav class="sortChannel_nav">
+    <ul>
+        <li><a href="/quanben/" class="<%= !currentCategoryId?'sel':'' %>">&nbsp;全&nbsp;&nbsp;部&nbsp;</a></li>
+        <% branchInfo.categoryMap.forEach(function(category){ %>
+        <li><a href="/quanben/<%= category[1] %>/1" class="<%= currentCategoryId == category[1]?'sel':'' %>">
+                <%= category[0] %></a></li>
+        <% }); %>
+    </ul>
+</nav>
+<%- include('common/searchForm', {}); %>
+<div class="recommend">
+    <% books.forEach(function(book){ %>
+    <a class="common_sale" href="/book/<%= book.bookId%>/" style="white-space: nowrap;">
+        <span class="sort">
+            <%= '['+book.categoryName+']'%></span>
+        <span class="title">
+            <%= book.title%></span>（<span class="writer">
+            <%= book.writer%></span>）
+    </a>
+    <% }); %>
+    <div class="page">
+        <%  if(pagination.currentPage > 1){ %>
+        <a class="page-btn" href="/quanben/<%= currentCategoryId?currentCategoryId+'/':''%><%= pagination.currentPage-1%>">
+            <</a> <% } %>
+                <span>
+                    <%= pagination.currentPage%> /
+                    <%= pagination.totalPage%></span>
+                <% if(pagination.currentPage < pagination.totalPage){ %>
+                <a class="page-btn" href="/quanben/<%= currentCategoryId?currentCategoryId+'/':''%><%= pagination.currentPage+1%>">></a>
+                <% } %>
+                <input type="number" class="go-page-input" id="go-page-input" min="1" max="<%= pagination.totalPage%>" placeholder="页数" onkeydown="if(event.keyCode==13){goPage(); return false;}">
+                <button type="button" class="go-page-btn" onclick="goPage()">跳转</button>
+    </div>
+</div>
+<script type="text/javascript">
+var currentPage = <%= pagination.currentPage%>;
+var totalPage = <%= pagination.totalPage%>;
+</script>
+<%- include('common/footer', {}); %>
+<%- include('common/bottom', {}); %>

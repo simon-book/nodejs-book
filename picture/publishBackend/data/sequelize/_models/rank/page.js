@@ -34,11 +34,6 @@ var Page = sequelize.define('page', {
     },
     branchId: {
         type: Sequelize.BIGINT,
-        references: {
-            model: Branch,
-            key: 'branch_id',
-            deferrable: Sequelize.Deferrable.INITIALLY_IMMEDIATE
-        },
         allowNull: false
     },
     statusId: {

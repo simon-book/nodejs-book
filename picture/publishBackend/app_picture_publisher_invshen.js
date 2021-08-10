@@ -17,7 +17,7 @@ process.env.NODE_ENV = __G__.NODE_ENV;
 
 var app = express();
 // all environments
-app.set('port', process.env.PORT || 3800);
+app.set('port', process.env.PORT || 4800);
 app.use(favicon(path.join(__dirname, 'statics/src/images/favicon.ico')));
 app.use(bodyParser.json({
     limit: '50mb'

@@ -22,6 +22,7 @@ var ModelTags = sequelize.define('model_tags', {
         },
         allowNull: false
     },
+    modelOriginId: Sequelize.TEXT,
     tagId: {
         type: Sequelize.BIGINT,
         references: {

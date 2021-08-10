@@ -1,0 +1,36 @@
+<%- include('common/top', {}); %>
+<%- include('common/pageHeader', {}); %>
+<div class="searchArea">
+    <h2 class="areaTitle">搜索<font color="red">
+            <%= keywords%>
+        </font>结果</h2>
+    <% books.forEach(function(book, i){ %>
+    <a class="common_sale" href="/book/<%= book.bookId%>/">
+        <span class="title">
+            <%= book.title%></span>（<span class="writer">
+            <%= book.writer%></span>）
+    </a>
+    <% }); %>
+</div>
+<% if(pagination){%>
+<div class="page">
+    <%  if(pagination.currentPage > 1){ %>
+    <a class="page-btn" href="/search?keyword=<%= keywords%>&page=<%= pagination.currentPage-1%>">
+        <</a> <% } %>
+            <span>
+                <%= pagination.currentPage%> /
+                <%= pagination.totalPage%></span>
+            <% if(pagination.currentPage < pagination.totalPage){ %>
+            <a class="page-btn" href="/search?keyword=<%= keywords%>&page=<%= pagination.currentPage+1%>">></a>
+            <% } %>
+            <input type="number" class="go-page-input" id="go-page-input" min="1" max="<%= pagination.totalPage%>" placeholder="页数" onkeydown="if(event.keyCode==13){goPage(); return false;}">
+            <button type="button" class="go-page-btn" onclick="goPage()">跳转</button>
+</div>
+<script type="text/javascript">
+var currentPage = <%= pagination.currentPage%>;
+var totalPage = <%= pagination.totalPage%>;
+</script>
+<% }%>
+<%- include('common/searchForm', {}); %>
+<%- include('common/footer', {}); %>
+<%- include('common/bottom', {}); %>

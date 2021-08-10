@@ -4,6 +4,7 @@ var sequelize = require('../../../service/sequelizeConn.js');
 
 var Model = require('../_models/picture/model.js')
 var Tag = require('../_models/picture/tag.js')
+var Article = require('../_models/picture/article.js')
 var ModelTag = require('../_models/picture/modelTag.js')
 
 exports.create = function(obj) {
@@ -35,6 +36,11 @@ exports.findOneModel = function(where) {
                 as: 'tags',
                 required: false,
                 attributes: ["tagId", "name"]
+            }, {
+                model: Article,
+                as: 'articles',
+                required: false,
+                attributes: ["articleId", "title"]
             }]
         }).then(function(results) {
             resolve(results);
@@ -52,6 +58,11 @@ exports.findByPk = function(id) {
                 as: 'tags',
                 required: false,
                 attributes: ["tagId", "name"]
+            }, {
+                model: Article,
+                as: 'articles',
+                required: false,
+                attributes: ["articleId", "title"]
             }]
         }).then(function(results) {
             resolve(results);
@@ -75,6 +86,11 @@ exports.findAll = function(where, offset, limit, order) {
                 as: 'tags',
                 required: false,
                 attributes: ["tagId", "name"]
+            }, {
+                model: Article,
+                as: 'articles',
+                required: false,
+                attributes: ["articleId", "title"]
             }]
         }).then(function(results) {
             resolve(results);

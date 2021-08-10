@@ -1,0 +1,56 @@
+<%- include('common/top', {}); %>
+<link rel="stylesheet" href="/static/m/css/read.css?v=<%= branchInfo.staticVersion%>" />
+<%- include('common/pageHeader', {}); %>
+<%- include('common/readPager', {}); %>
+<%- include('common/readSetter', {}); %>
+<div id="chaptercontent" class="Readarea ReadAjax_content">
+    <%- chapter.content%>
+    <p class="add-book-label"><a href="javascript:addBookMark('<%- chapter.bookId%>', '<%- chapter.chapterId%>');">『加入书签，方便阅读』</a></p>
+</div>
+<%- include('common/readPager', {}); %>
+<%- include('common/footer', {}); %>
+<script language="javascript" type="text/javascript">
+function readGetSet() {
+    var body = $("body");
+    var light = lastread.getItem("readLight") || "lightDefault";
+    var fontSize = lastread.getItem("readFontSize") || "fontMiddle";
+    body.addClass(light);
+    body.addClass(fontSize);
+    $("#" + light).addClass("on");
+    $("#" + fontSize).addClass("on");
+}
+
+//内容页应用设置
+function readSet(_this, type, value) {
+    var body = $("body");
+    if (type == "light") {
+        body.removeClass("lightDefault lightHuyan lightYejian");
+        body.addClass(value);
+        lastread.setItem("readLight", value);
+    } else if (type == "fontSize") {
+        body.removeClass("fontBig fontMiddle fontSmall");
+        body.addClass(value);
+        lastread.setItem("readFontSize", value);
+    }
+    $(_this).siblings().removeClass("on");
+    $(_this).addClass("on");
+}
+readGetSet();
+</script>
+<script language="javascript" type="text/javascript">
+function addBookMark(bookId, chapterId) {
+    ajaxDo.post("/addBookMark", { bookId: bookId, chapterId: chapterId }, function(data) {
+        alert("这本书已经在书架啦！")
+    }, function(err) {
+        if (err.rtnCode == 10004) {
+            location.href = "/login?o=" + location.pathname;
+        } else if (err.rtnMsg) {
+            alert(err.rtnMsg);
+        }
+    })
+}
+</script>
+<script language="javascript" type="text/javascript">
+lastread.set("<%- chapter.bookId%>", "<%- chapter.number%>", "<%- chapter.book.title%>", "<%- chapter.title%>", "<%- chapter.book.writer%>", "<%- chapter.book.categoryName%>");
+</script>
+<%- include('common/bottom', {}); %>

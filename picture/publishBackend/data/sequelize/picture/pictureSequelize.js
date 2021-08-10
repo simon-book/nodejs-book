@@ -4,6 +4,7 @@ var sequelize = require('../../../service/sequelizeConn.js');
 
 var Picture = require('../_models/picture/picture.js')
 var Tag = require('../_models/picture/tag.js')
+var Model = require('../_models/picture/model.js')
 var PictureTag = require('../_models/picture/pictureTag.js')
 var PictureModel = require('../_models/picture/pictureModel.js')
 
@@ -39,6 +40,11 @@ exports.findOne = function(where) {
                 as: 'tags',
                 required: false,
                 attributes: ["tagId", "name"]
+            }, {
+                model: Model,
+                as: 'models',
+                required: false,
+                attributes: ["modelId", "name"]
             }]
         }).then(function(results) {
             resolve(results);
@@ -59,7 +65,18 @@ exports.findAll = function(where, attributes, offset, limit) {
                 [
                     "lastUpdatedAt", "DESC"
                 ]
-            ]
+            ],
+            include: [{
+                model: Tag,
+                as: 'tags',
+                required: false,
+                attributes: ["tagId", "name"]
+            }, {
+                model: Model,
+                as: 'models',
+                required: false,
+                attributes: ["modelId", "name"]
+            }]
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
@@ -76,6 +93,11 @@ exports.findByPk = function(id) {
                 as: 'tags',
                 required: false,
                 attributes: ["tagId", "name"]
+            }, {
+                model: Model,
+                as: 'models',
+                required: false,
+                attributes: ["modelId", "name"]
             }]
         }).then(function(results) {
             resolve(results);

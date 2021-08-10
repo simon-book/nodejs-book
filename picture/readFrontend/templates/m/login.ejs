@@ -1,0 +1,26 @@
+<%- include('common/top', {}); %>
+<link rel="stylesheet" type="text/css" href="/static/m/css/login.css?v=<%= branchInfo.staticVersion%>" />
+<%- include('common/pageHeader', {}); %>
+<div class="login_box">
+    <form name="form_login" method="post">
+        <div class="login_name">
+            <span class="person_bg"></span>
+            <input type="password" class="name login_nm" name="username" placeholder="请输入用户名">
+        </div>
+        <div class="login_name">
+            <span class="psw_bg"></span>
+            <input type="password" class="name login_psw" name="password" placeholder="请输入密码">
+        </div>
+        <div class="submit_btn">
+            <input type="button" class="reg_bto login_in register_in" onclick="login()" value="立即登录">
+        </div>
+        <!-- <input name="__RequestVerificationToken" type="hidden" value="Nc76lIvSh47SCFmTLE6dwYRgrtmRSIi7IGdhWjwKMaSZOSpEP-sjJtn1_hQ3Gic7zGPkhEck7Ziz3vmZUwGUpDwZbfbmPzAgpNxhu0NzpOs1" /> -->
+    </form>
+    <p class="text_register"> 没有账号？<a id="goto_register" href="/register">立即注册</a><br /></p>
+    <div class="tip_box">
+        <h2>温馨提示：</h2>
+        <p>1、登录成功后，可使用永久书架，保存的书永不丢失；<br />2、手机站与PC站共用一个帐号，可实现书架同步。</p>
+    </div>
+</div>
+<%- include('common/footer', {}); %>
+<%- include('common/bottom', {}); %>

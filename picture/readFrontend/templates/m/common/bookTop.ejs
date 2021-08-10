@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        <%= title%>
+    </title>
+    <meta name="keywords" content="<%= keywords%>" />
+    <meta name="description" content="<%= description%>" />
+    <meta http-equiv="Content-Type" content="application/xhtml+xml;charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+    <meta property="og:type" content="novel" />
+    <meta property="og:title" content="<%= book.title%>" />
+    <meta property="og:description" content="<%= abstractContent%>" />
+    <meta property="og:novel:category" content="<%= book.categoryName%>" />
+    <meta property="og:novel:author" content="<%= book.writer%>" />
+    <meta property="og:novel:book_name" content="<%= book.title%>" />
+    <meta property="og:novel:read_url" content="<%= bookUrl%>" />
+    <meta property="og:novel:status" content="<%= book.publishStatus==1?'连载中':'已完结'%>" />
+    <meta property="og:novel:update_time" content="<%= book.lastUpdatedAt%>" />
+    <meta property="og:novel:latest_chapter_name" content="<%= lastChapterName%>" />
+    <meta property="og:novel:latest_chapter_url" content="<%= lastChapterUrl%>" />
+    <link rel="shortcut icon " type="images/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/static/m/css/common.css?v=<%= branchInfo.staticVersion%>" />
+</head>
+
+<body>
