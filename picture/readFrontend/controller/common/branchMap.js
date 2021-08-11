@@ -4,8 +4,7 @@ var Op = Sequelize.Op;
 var moment = require('moment');
 var util = require('../../util/index.js');
 var branchSequelize = require('../../data/sequelize/branch/branchSequelize.js');
-var bookCategorySequelize = require('../../data/sequelize/book/bookCategorySequelize.js');
-var tagSequelize = require('../../data/sequelize/book/tagSequelize.js');
+var tagSequelize = require('../../data/sequelize/picture/tagSequelize.js');
 var rankSequelize = require('../../data/sequelize/rank/rankSequelize.js');
 
 var testMap = require('./testMap.js');

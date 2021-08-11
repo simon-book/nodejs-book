@@ -3,7 +3,6 @@ var router = express.Router();
 var moment = require('moment');
 var page = require('./page/index.js');
 var branchMap = require('./common/branchMap.js');
-var userController = require("./user/userController.js");
 var visitStatSequelize = require('../data/sequelize/visitStatSequelize.js');
 
 var branchVisitStat = {};

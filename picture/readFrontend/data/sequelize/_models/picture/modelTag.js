@@ -52,12 +52,12 @@ Tag.belongsToMany(Model, {
     foreignKey: 'tagId'
 })
 
-ModelTags.hasOne(Tag, {
+ModelTags.belongsTo(Tag, {
     as: 'tag',
     foreignKey: 'tagId'
 })
 
-ModelTags.hasOne(Model, {
+ModelTags.belongsTo(Model, {
     as: 'model',
     foreignKey: 'modelId'
 })

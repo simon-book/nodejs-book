@@ -414,7 +414,7 @@ exports.complete_all_model_info = async function() {
             statusId: 1
         })
         for (var i = 0; i < models.length; i++) {
-            if (branch.isTest && i > 10) break;
+            // if (branch.isTest && i > 10) break;
             var model = models[i];
             await complete_one_model_info(model)
         }
@@ -836,7 +836,7 @@ async function copy_rank_models(originId) {
         if (originId) ranks = _.filter(ranks, { originId: originId });
         for (var i = 0; i < ranks.length; i++) {
             try {
-                if (branch.isTest && i > 2) break;
+                // if (branch.isTest && i > 2) break;
                 var savedRank = ranks[i];
                 if (savedRank.originId == "homepage") continue;
                 var rankModelIds = [];
@@ -873,6 +873,7 @@ async function copy_rank_models(originId) {
                         if ($(pages[pages.length - 1]).hasClass("cur")) stop = true;
                     } catch (err) {
                         console.log(err);
+                        stop = true;
                     }
                     index++;
                 } while (!stop);

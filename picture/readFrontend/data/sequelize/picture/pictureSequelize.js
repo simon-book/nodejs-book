@@ -117,25 +117,23 @@ exports.findAndCountAllPictureTag = function(where, offset, limit, order) {
                 ['pictureLastUpdatedAt', 'DESC']
             ],
             include: [{
-                {
-                    model: Picture,
-                    as: 'picture',
+                model: Picture,
+                as: 'picture',
+                required: false,
+                attributes: ["pictureId", "title"],
+                include: [{
+                    model: Tag,
+                    as: 'tags',
                     required: false,
-                    attributes: ["pictureId", "title"],
-                    include: [{
-                        model: Tag,
-                        as: 'tags',
-                        required: false,
-                        raw: true,
-                        attributes: ["tagId", "name"]
-                    }, {
-                        model: Model,
-                        as: 'models',
-                        required: false,
-                        raw: true,
-                        attributes: ["modelId", "name"]
-                    }]
-                }
+                    raw: true,
+                    attributes: ["tagId", "name"]
+                }, {
+                    model: Model,
+                    as: 'models',
+                    required: false,
+                    raw: true,
+                    attributes: ["modelId", "name"]
+                }]
             }]
         }).then(function(results) {
             resolve(results);

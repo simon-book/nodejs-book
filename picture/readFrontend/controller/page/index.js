@@ -10,13 +10,6 @@ var modelSequelize = require('../../data/sequelize/picture/modelSequelize.js');
 var pictureSequelize = require('../../data/sequelize/picture/pictureSequelize.js');
 var articleSequelize = require('../../data/sequelize/picture/articleSequelize.js');
 var rankSequelize = require('../../data/sequelize/rank/rankSequelize.js');
-
-// var homeController = require("../read/homeController.js");
-// var bookController = require("../read/bookController.js");
-// var readController = require("../read/readController.js");
-// var rankController = require("../read/rankController.js");
-// var chargeController = require("../read/chargeController.js");
-// var userController = require("../user/userController.js");
 var auth = require('../user/auth.js');
 
 exports.home = async function(req, res) {
@@ -36,7 +29,7 @@ exports.home = async function(req, res) {
         if (rank.rankModelIds && rank.rankModelIds.length) {
             rank.models = await modelSequelize.findAll({
                 modelId: {
-                    [Op.in]: rank.rankModelIds.
+                    [Op.in]: rank.rankModelIds
                 }
             }, null, null, null, ["modelId", "name", "othername", "birthday", "job"]);
             rank.models = _.sortBy(rank.models, function(model) {
@@ -176,7 +169,7 @@ exports.article = async function(req, res) {
     }
 };
 
-exports.pictureTag = async function(req, res) {
+exports.pictureList = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
         var pictureTagGroups = branchInfo.pictureTagGroups;
@@ -283,7 +276,7 @@ exports.picture = async function(req, res) {
     }
 };
 
-exports.modelTag = async function(req, res) {
+exports.modelList = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
         var pictureTagGroups = branchInfo.pictureTagGroups;
@@ -390,7 +383,7 @@ exports.model = async function(req, res) {
     }
 };
 
-exports.todayModel = async function(req, res) {
+exports.todayModelList = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
         var todayModels = await modelSequelize.findAll({
@@ -509,16 +502,16 @@ exports.rankModelList = async function(req, res) {
             pageTitle: rank.name,
             rank: rank,
             ranks: ranks,
-            currentRender: "rankMainPage"
+            currentRender: "rankModelList"
         })
-        // res.render('rankMainPage', {
+        // res.render('rankModelList', {
         //     title: "宅男女神排行榜_" + branchInfo.shorttitle,
         //     branchInfo: branchInfo,
         //     user: auth.getUser(req, res),
         //     pageTitle: "宅男女神排行榜",
         //     ranks: result,
         //     moreRanks: moreRanks,
-        //     currentRender: "rankMainPage"
+        //     currentRender: "rankModelList"
         // });
     } catch (err) {
         console.log(err);
@@ -535,7 +528,7 @@ exports.rankModelList = async function(req, res) {
     }
 };
 
-exports.findModel = async function(req, res) {
+exports.findModelList = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
         var body = req.body;

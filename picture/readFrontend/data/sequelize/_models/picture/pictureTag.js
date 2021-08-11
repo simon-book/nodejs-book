@@ -52,12 +52,12 @@ Tag.belongsToMany(Picture, {
     foreignKey: 'tagId'
 })
 
-PictureTags.hasOne(Tag, {
+PictureTags.belongsTo(Tag, {
     as: 'tag',
     foreignKey: 'tagId'
 })
 
-PictureTags.hasOne(Picture, {
+PictureTags.belongsTo(Picture, {
     as: 'picture',
     foreignKey: 'pictureId'
 })
