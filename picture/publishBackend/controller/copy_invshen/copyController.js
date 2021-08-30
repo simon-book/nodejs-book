@@ -14,7 +14,7 @@ var articleSequelize = require('../../data/sequelize/picture/articleSequelize.js
 var rankSequelize = require('../../data/sequelize/rank/rankSequelize.js');
 
 var branch = {
-    copySrc: "invshen", //www.invshen.net/
+    copySrc: "fnvshen", //www.fnvshen.net/
     originPictureTagGroups: [
         ["国家", 0],
         ["风格", 1],
@@ -510,34 +510,33 @@ async function complete_one_model_info(model) {
                 console.log(err);
             }
         }
-        // }
-        // if ($("li.favli").length) {
-        //     var relatedModelIds = [];
-        //     var targetItems = $("li.favli");
-        //     for (var i = 0; i < targetItems.length; i++) {
-        //         try {
-        //             var item = targetItems[i];
-        //             var modelHref = $($(item).find("a")[1]).attr("href");
-        //             if (modelHref.match(/\/girl\//g).length) {
-        //                 var originId = modelHref.split("/")[2];
-        //                 var savedModel = await modelSequelize.findOneModel({
-        //                     branchId: branch.branchId,
-        //                     originId: originId
-        //                 })
-        //                 if (!savedModel) {
-        //                     savedModel = await modelSequelize.create({
-        //                         branchId: branch.branchId,
-        //                         originId: originId
-        //                     })
-        //                 }
-        //                 if (savedModel) relatedModelIds.push(savedModel.modelId);
-        //             }
-        //         } catch (err) {
-        //             console.log(err);
-        //         }
-        //     }
-        //     if (relatedModelIds.length) model.set("relatedModelIds", relatedModelIds);
-        // }
+        if ($("li.favli").length) {
+            var relatedModelIds = [];
+            var targetItems = $("li.favli");
+            for (var i = 0; i < targetItems.length; i++) {
+                try {
+                    var item = targetItems[i];
+                    var modelHref = $($(item).find("a")[1]).attr("href");
+                    if (modelHref.match(/\/girl\//g).length) {
+                        var originId = modelHref.split("/")[2];
+                        var savedModel = await modelSequelize.findOneModel({
+                            branchId: branch.branchId,
+                            originId: originId
+                        })
+                        if (!savedModel) {
+                            savedModel = await modelSequelize.create({
+                                branchId: branch.branchId,
+                                originId: originId
+                            })
+                        }
+                        if (savedModel) relatedModelIds.push(savedModel.modelId);
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+            if (relatedModelIds.length) model.set("relatedModelIds", relatedModelIds);
+        }
         model.set("statusId", 2);
         await model.save();
     } catch (err) {
@@ -707,13 +706,13 @@ async function create_article(originId) {
                 var originId = href.split("/gallery/")[1].replace("/", "");
                 var pictureTag = _.find(branch.pictureTags, { originId: originId });
                 if (pictureTag) {
-                    $(girlEle).attr("href", "/pictureTag/" + pictureTag.tagId);
+                    $(girlEle).attr("href", "/galleryList/" + pictureTag.tagId);
                 }
             } else if (href.match(/\/tag\//g) && href.match(/\/tag\//g).length) {
-                var originId = href.split("/gallery/")[1].replace("/", "");
+                var originId = href.split("/tag/")[1].replace("/", "");
                 var modelTag = _.find(branch.modelTags, { originId: originId });
                 if (modelTag) {
-                    $(girlEle).attr("href", "/modelTag/" + modelTag.tagId);
+                    $(girlEle).attr("href", "/modelList/" + modelTag.tagId);
                 }
             }
         })
@@ -737,13 +736,13 @@ async function create_article(originId) {
                     var originId = href.split("/gallery/")[1].replace("/", "");
                     var pictureTag = _.find(branch.pictureTags, { originId: originId });
                     if (pictureTag) {
-                        $(girlEle).attr("href", "/galleryTag/" + pictureTag.tagId);
+                        $(girlEle).attr("href", "/galleryList/" + pictureTag.tagId);
                     }
                 } else if (href.match(/\/tag\//g) && href.match(/\/tag\//g).length) {
-                    var originId = href.split("/gallery/")[1].replace("/", "");
+                    var originId = href.split("/tag/")[1].replace("/", "");
                     var modelTag = _.find(branch.modelTags, { originId: originId });
                     if (modelTag) {
-                        $(girlEle).attr("href", "/modelTag/" + modelTag.tagId);
+                        $(girlEle).attr("href", "/modelList/" + modelTag.tagId);
                     }
                 }
             })
