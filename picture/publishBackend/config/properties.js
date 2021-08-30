@@ -53,9 +53,9 @@ module.exports = function() {
         };
         global.__PGSQL__ = {
             host: "localhost",
-            user: "picture",
-            password: "picture",
-            database: "picture",
+            user: "amn",
+            password: "amn",
+            database: "amn",
             port: "5432",
             timezone: "Asia/Shanghai",
             schemas: {
