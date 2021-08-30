@@ -17,19 +17,19 @@ var hostMap = isProd ? prodMap.hostMap : testMap.hostMap;
 exports.hostMap = hostMap;
 exports.queryBranchInfo = async function() {
     try {
-        var includeBranches = await branchSequelize.findAll()
-        hostMap.includeBranches = {};
-        _.forEach(includeBranches, function(branch) {
-            hostMap.includeBranches[branch.branchId] = {
-                branchId: branch.branchId,
-                name: branch.name,
-                copySrc: branch.copySrc,
-                charset: branch.charset,
-                copyUrl: branch.copyParams.copyUrl,
-                pictureUrl: branch.copyParams.pictureUrl,
-                pcCopyUrl: branch.copyParams.pcCopyUrl
-            }
-        })
+        // var includeBranches = await branchSequelize.findAll()
+        // hostMap.includeBranches = {};
+        // _.forEach(includeBranches, function(branch) {
+        //     hostMap.includeBranches[branch.branchId] = {
+        //         branchId: branch.branchId,
+        //         name: branch.name,
+        //         copySrc: branch.copySrc,
+        //         charset: branch.charset,
+        //         copyUrl: branch.copyParams.copyUrl,
+        //         pictureUrl: branch.copyParams.pictureUrl,
+        //         pcCopyUrl: branch.copyParams.pcCopyUrl
+        //     }
+        // })
         for (var url in hostMap) {
             var branchId = hostMap[url].branchId;
             var savedBranch = await branchSequelize.findOneById(branchId);
@@ -45,6 +45,7 @@ exports.queryBranchInfo = async function() {
                 hostMap[url].modelTagGroups = [];
                 hostMap[url].pictureTags = [];
                 hostMap[url].modelTags = [];
+                hostMap[url].rankMap = [];
                 var TagGroups = await tagSequelize.findAllTagGroup({
                     branchId: hostMap[url].branchId
                 })
@@ -78,9 +79,15 @@ exports.queryBranchInfo = async function() {
                     return item.orderIndex || 0;
                 })
                 _.forEach(ranks, function(item) {
-                    hostMap[url].rankMap.push([item.name, item.rankId])
+                    hostMap[url].rankMap.push({
+                        rankId: item.rankId,
+                        name: item.name,
+                        originId: item.originId,
+                        rankModelIds: item.rankModelIds,
+                        orderIndex: item.orderIndex,
+                    })
                 })
-                hostMap[url].includeBranches = hostMap.includeBranches;
+                // hostMap[url].includeBranches = hostMap.includeBranches;
             }
         }
     } catch (err) {

@@ -5,6 +5,7 @@ var sequelize = require('../../../service/sequelizeConn.js');
 var Model = require('../_models/picture/model.js')
 var Tag = require('../_models/picture/tag.js')
 var Article = require('../_models/picture/article.js')
+var Picture = require('../_models/picture/picture.js')
 var ModelTag = require('../_models/picture/modelTag.js')
 
 exports.findOneModel = function(where) {
@@ -15,11 +16,13 @@ exports.findOneModel = function(where) {
                 model: Tag,
                 as: 'tags',
                 required: false,
+                raw: true,
                 attributes: ["tagId", "name"]
             }, {
                 model: Article,
                 as: 'articles',
                 required: false,
+                raw: true,
                 attributes: ["articleId", "title"]
             }]
         }).then(function(results) {
@@ -42,7 +45,14 @@ exports.findByPk = function(id) {
                 model: Article,
                 as: 'articles',
                 required: false,
+                raw: true,
                 attributes: ["articleId", "title"]
+            }, {
+                model: Picture,
+                as: 'pictures',
+                required: false,
+                raw: true,
+                attributes: ["pictureId", "title", "imgHost", "cover"]
             }]
         }).then(function(results) {
             resolve(results);
@@ -71,7 +81,7 @@ exports.findByPk = function(id) {
 //     })
 // }
 
-exports.findAll = function(where, offset, limit, order) {
+exports.findAll = function(where, offset, limit, order, attributes) {
     return new Promise(function(resolve, reject) {
         Model.findAll({
             where: where,
@@ -80,13 +90,15 @@ exports.findAll = function(where, offset, limit, order) {
             order: order || [
                 ['originId', 'DESC']
             ],
-            include: [{
-                model: Tag,
-                as: 'tags',
-                required: false,
-                raw: true,
-                attributes: ["tagId", "name"]
-            }]
+            raw: true,
+            // include: [{
+            //     model: Tag,
+            //     as: 'tags',
+            //     required: false,
+            //     raw: true,
+            //     attributes: ["tagId", "name"]
+            // }],
+            attributes: attributes || ["modelId", "name", "othername", "birthyear", "birthday", "birthIn", "job", "originId", "cover"]
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
@@ -97,7 +109,7 @@ exports.findAll = function(where, offset, limit, order) {
 
 exports.findTagModels = function(where, offset, limit, order) {
     return new Promise(function(resolve, reject) {
-        ModelTag.findAll({
+        ModelTag.findAndCountAll({
             where: where,
             limit: limit || 10000,
             offset: offset || 0,
@@ -106,10 +118,10 @@ exports.findTagModels = function(where, offset, limit, order) {
             ],
             include: [{
                 model: Model,
-                as: 'models',
+                as: 'model',
                 required: false,
                 raw: true,
-                attributes: ["modelId", "name", "othername", "birthday", "job"]
+                attributes: ["modelId", "name", "othername", "birthyear", "birthday", "birthIn", "job", "originId", "cover"]
             }]
         }).then(function(results) {
             resolve(results);
@@ -119,35 +131,35 @@ exports.findTagModels = function(where, offset, limit, order) {
     })
 }
 
-exports.findAndCountAllPictureTag = function(where, offset, limit, order) {
-    return new Promise(function(resolve, reject) {
-        PictureTag.findAndCountAll({
-            where: where,
-            limit: limit || 10000,
-            offset: offset || 0,
-            order: order || [
-                ['modelOriginId', 'DESC']
-            ],
-            include: [{
-                model: Picture,
-                as: 'picture',
-                required: false,
-                attributes: ["modelId", "name", "othername", "birthday", "job"],
-                include: [{
-                    model: Tag,
-                    as: 'tags',
-                    required: false,
-                    raw: true,
-                    attributes: ["tagId", "name"]
-                }]
-            }]
-        }).then(function(results) {
-            resolve(results);
-        }, reject).catch(function(err) {
-            reject(err);
-        })
-    })
-}
+// exports.findAndCountAllPictureTag = function(where, offset, limit, order) {
+//     return new Promise(function(resolve, reject) {
+//         PictureTag.findAndCountAll({
+//             where: where,
+//             limit: limit || 10000,
+//             offset: offset || 0,
+//             order: order || [
+//                 ['modelOriginId', 'DESC']
+//             ],
+//             include: [{
+//                 model: Picture,
+//                 as: 'picture',
+//                 required: false,
+//                 attributes: ["modelId", "name", "othername", "birthday", "job"],
+//                 include: [{
+//                     model: Tag,
+//                     as: 'tags',
+//                     required: false,
+//                     raw: true,
+//                     attributes: ["tagId", "name"]
+//                 }]
+//             }]
+//         }).then(function(results) {
+//             resolve(results);
+//         }, reject).catch(function(err) {
+//             reject(err);
+//         })
+//     })
+// }
 
 exports.findAndCountAll = function(where, offset, limit, order) {
     return new Promise(function(resolve, reject) {
@@ -158,14 +170,15 @@ exports.findAndCountAll = function(where, offset, limit, order) {
             order: order || [
                 ['originId', 'DESC']
             ],
-            attributes: ["modelId", "name", "othername", "birthday", "job"],
-            include: [{
-                model: Tag,
-                as: 'tags',
-                required: false,
-                raw: true,
-                attributes: ["tagId", "name"]
-            }]
+            raw: true,
+            attributes: ["modelId", "name", "othername", "birthyear", "birthday", "birthIn", "job", "originId", "cover"],
+            // include: [{
+            //     model: Tag,
+            //     as: 'tags',
+            //     required: false,
+            //     raw: true,
+            //     attributes: ["tagId", "name"]
+            // }]
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {

@@ -1,0 +1,94 @@
+<%- include('common/top', {}); %>
+<%- include('common/mainHeader', {}); %>
+<div class="container">
+    <div class="row ">
+        <div class="col-xs-12 book-box">
+            <div class="border book-list-box">
+                <h2 class="book-list-header">现在位置：<a href="/">首页</a> &raquo; <a href="/galleryList/">美女图片</a>
+                    &raquo; <span>
+                        <%= picture.title%></span>
+                </h2>
+                <div class="book-list">
+                    <div class="gallery-detail-header">
+                        <div class="gallery-detail-title">
+                            <%= picture.title%>
+                        </div>
+                        <% if(picture.tags && picture.tags.length){ %>
+                        <div class="gallery-detail-tags">
+                            <% picture.models.forEach(function(model){ %>
+                            <a href="/model/<%= model.modelId%>" target="_blank">
+                                <%= model.name%></a>
+                            <% }); %>
+                            <% picture.tags.forEach(function(tag){ %>
+                            <a href="/galleryList/<%= tag.tagId%>/1" target="_blank">
+                                <%= tag.name%></a>
+                            <% }); %>
+                        </div>
+                        <% } %>
+                        <div class="gallery-detail-remark">
+                            <%= picture.abstractContent%>
+                        </div>
+                        <div class="gallery-detail-other">
+                            该图集包含
+                            <%= picture.count%> 张照片，在
+                            <%= moment(picture.lastUpdatedAt).format("YYYY-MM-DD") %> 创建。
+                        </div>
+                    </div>
+                    <div class="gallery-detail-content">
+                        <% pics.forEach(function(pic){%>
+                        <div class="gallery-detail-img">
+                            <img src="<%= picture.imgHost+pic%>">
+                        </div>
+                        <% }); %>
+                    </div>
+                </div>
+                <nav aria-label="Page navigation" class="pagination-box">
+                    <ul class="pagination">
+                        <% if(pagination.currentPage>1){%>
+                        <li>
+                            <a href="/gallery/<%= picture.pictureId%>/<%= pagination.currentPage-1%>/" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <% } %>
+                        <% pagination.pages.forEach(function(page){ %>
+                        <li class=<%=page==pagination.currentPage?"active":""%>><a href="/gallery/<%= picture.pictureId%>/<%= page%>/">
+                                <%= page%></a></li>
+                        <% }); %>
+                        <% if(pagination.currentPage<pagination.totalPage){%>
+                        <li>
+                            <a href="/gallery/<%= picture.pictureId%>/<%= pagination.currentPage+1%>/" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        <% } %>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="col-md-12 col-xs-12 book-box">
+            <div class="border book-list-box">
+                <h2 class="book-list-title">热门图集推荐</h2>
+                <div class="book-list">
+                    <% recommendPictures.forEach(function(picture){ %>
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                        <a class="gallery-item" href="/gallery/<%= picture.pictureId%>" target="_blank">
+                            <div class="gallery-cover"><img src="<%= picture.imgHost+picture.cover%>" alt="<%= picture.title%>"></div>
+                            <div class="gallery-title hidden-xs hidden-sm">
+                                <%= picture.title%>
+                            </div>
+                            <div class="gallery-title-1 hidden-lg hidden-md">
+                                <%= picture.title%>
+                            </div>
+                        </a>
+                    </div>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+</script>
+<%- include('common/footer', {}); %>
+<%- include('common/bottom', {}); %>

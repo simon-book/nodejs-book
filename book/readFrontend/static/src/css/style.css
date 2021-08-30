@@ -220,7 +220,6 @@ body {
 
 .book-item-1 .book-abstract {
     line-height: 20px;
-    overflow: hidden;
     /*text-indent: 2em;*/
     padding: 7px 0 0;
     overflow: hidden;

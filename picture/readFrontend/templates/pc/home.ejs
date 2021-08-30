@@ -2,129 +2,234 @@
 <%- include('common/mainHeader', {}); %>
 <div class="container">
     <div class="row ">
-        <div class="col-md-9 border book-list-box home-banner-box" style="padding: 5px;">
+        <div class="col-md-9 padding-0 row">
             <div class="row">
-                <% firstBlock.recommendBooks.forEach(function(book){ %>
-                <div class="col-xs-12 col-sm-6 book-item-1">
-                    <div class="book-image">
-                        <a href="/book/<%= book.bookId%>">
-                            <img onerror="src='/static/src/images/noimg.jpg'" src="<%= branchInfo.includeBranches[book.branchId].coverUrl+book.cover%>" alt="<%= book.title%>"></a>
-                    </div>
-                    <dl>
-                        <dt>
-                            <span class="book-author">
-                                <%= book.writer%> </span>
-                            <a class="book-title" href="/book/<%= book.bookId%>">
-                                <%= book.title%> </a>
-                        </dt>
-                        <dd class="book-abstract">
-                            <a href="/book/<%= book.bookId%>">
-                                <%= book.abstractContent?book.abstractContent.replace(/\\n/g, '').replace(/\s+/g, ''):''%></a>
-                        </dd>
-                    </dl>
-                </div>
-                <% }); %>
-            </div>
-        </div>
-        <div class="col-md-3 border book-list-box">
-            <h2 class="book-list-title">经典推荐</h2>
-            <ul class="book-list">
-                <% firstBlock.hotBooks.forEach(function(book){ %>
-                <li class="book-item-2">
-                    <span class="book-category">[
-                        <%= book.categoryName%>]</span>
-                    <span class="book-author">
-                        <%= book.writer%> </span>
-                    <span class="book-title"><a class="book-title" href="/book/<%= book.bookId%>">
-                            <%= book.title%> </a></span>
-                </li>
-                <% }); %>
-            </ul>
-        </div>
-        <div class="col-md-12 border book-list-box" style="padding-bottom: 0;">
-            <div class="row">
-                <% otherBlocks.forEach(function(block){ %>
-                <div class="col-md-4 padding-0 book-list-box-decoration">
-                    <h2 class="book-list-title">
-                        <%= block.name%>
-                    </h2>
-                    <% var book=block.recommendBooks[0] %>
-                    <div class="book-item-3">
-                        <div class="book-image">
-                            <a href="/book/<%= book.bookId%>">
-                                <img onerror="src='/static/src/images/noimg.jpg'" src="<%= branchInfo.includeBranches[book.branchId].coverUrl+book.cover%>" alt="重返1988"></a>
+                <div class="col-xs-12 col-md-7 book-box">
+                    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner" role="listbox">
+                            <% newArticles.slice(0,3).forEach(function(article,index){ %>
+                            <a class="item <%= !index?'active':''%>" href="/article/<%= article.articleId%>">
+                                <img src="<%= branchInfo.pictureUrl+article.cover%>">
+                                <div class="carousel-caption">
+                                    <%= article.title%>
+                                </div>
+                            </a>
+                            <% }); %>
                         </div>
-                        <dl>
-                            <dt>
-                                <a class="book-title" href="/book/<%= book.bookId%>">
-                                    <%= book.title%> </a>
-                                <span class="book-author">/
-                                    <%= book.writer%></span>
-                            </dt>
-                            <dd class="book-abstract">
-                                <a href="/book/<%= book.bookId%>">
-                                    <%= book.abstractContent?book.abstractContent.replace(/\\n/g, '').replace(/\s+/g, ''):''%></a>
-                            </dd>
-                        </dl>
+                        <!-- Controls -->
+                        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
                     </div>
-                    <% var books=block.recommendBooks.slice(1) %>
-                    <ul class="book-list">
-                        <% books.forEach(function(book){ %>
-                        <li class="book-item-4"><a href="/book/<%= book.bookId%>">
-                                <%= book.title%></a>/
-                            <%= book.writer%>
-                        </li>
-                        <% }); %>
-                    </ul>
                 </div>
-                <% }); %>
+                <div class="col-xs-12 col-md-5 book-box">
+                    <div class="border book-list-box">
+                        <h2 class="book-list-title">热点推荐</h2>
+                        <div class="book-list">
+                            <div class="row">
+                                <% newArticles.slice(3).forEach(function(article){ %>
+                                <a class="article-item" href="/article/<%= article.articleId%>" title="<%= article.title%>">
+                                    <div class="article-title">
+                                        <%= article.title%>
+                                    </div>
+                                </a>
+                                <% }); %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-xs-12 book-box">
+                <div class="border book-list-box">
+                    <h2 class="book-list-title">最近更新</h2>
+                    <div class="book-list">
+                        <% newModels.forEach(function(model){ %>
+                        <div class="col-md-2 col-sm-3 col-xs-4">
+                            <a class="model-item-1" href="/model/<%= model.modelId%>">
+                                <div class="model-cover"><img src="<%= branchInfo.pictureUrl+model.cover%>" alt="<%= model.name%>"></div>
+                                <div class="model-name">
+                                    <%= model.name%>
+                                </div>
+                            </a>
+                        </div>
+                        <% }); %>
+                    </div>
+                    <div class="book-list-footer">
+                        <a class="btn btn-primary btn-xs btn-more" href="/modelList/">更多</a>
+                    </div>
+                </div>
+            </div>
+            <% modelTags.forEach(function(tag){ %>
+            <div class="col-md-6 col-xs-12">
+                <div>
+                    <div class="book-box">
+                        <div class="border book-list-box">
+                            <h2 class="book-list-title">
+                                <%= tag.name%>
+                            </h2>
+                            <div class="book-list book-list-padding">
+                                <% tag.models.forEach(function(model,index){ %>
+                                <% if(index==0){ %>
+                                <a class="model-item-2" href="/model/<%= model.modelId%>">
+                                    <div class="model-cover"><img src="<%= branchInfo.pictureUrl+model.cover%>" alt="<%= model.name%>"></div>
+                                    <div class="model-name">
+                                        <%= model.name+"，"+(model.birthday?moment(model.birthday).format("YYYY年MM月DD日"):"")+(model.birthIn?"出生于"+model.birthIn.replace(/\s/g,""):"")+(model.birthyear?"，现龄"+(moment().year()-model.birthyear):"")+(model.job?"。职业是"+model.job:"")%>
+                                    </div>
+                                </a>
+                                <% }else{%>
+                                <a class="model-item-3" href="/model/<%= model.modelId%>">
+                                    <span class="model-name">
+                                        <%= model.name+"（"+(model.birthyear?(moment().year()-model.birthyear)+"岁":"")+(model.job?"，"+model.job:"")+"）"%></span>
+                                </a>
+                                <% } %>
+                                <% }); %>
+                            </div>
+                            <div class="book-list-footer">
+                                <a class="btn btn-primary btn-xs btn-more" href="/modelList/<%= tag.tagId%>/1">更多</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% }); %>
+            <div class="col-xs-12 book-box">
+                <div class="border book-list-box">
+                    <h2 class="book-list-title">今日女神</h2>
+                    <div class="book-list">
+                        <% todayModels.forEach(function(model){ %>
+                        <div class="col-md-2 col-sm-3 col-xs-4 ">
+                            <a class="model-item-1" href="/model/<%= model.modelId%>">
+                                <div class="model-cover"><img src="<%= branchInfo.pictureUrl+model.cover%>" alt="<%= model.name%>"></div>
+                                <div class="model-name">
+                                    <%= model.name%>
+                                </div>
+                                <div class="model-birth">
+                                    <%= model.birthyear?(moment().year()-model.birthyear)+"岁生日":""%>
+                                </div>
+                            </a>
+                        </div>
+                        <% }); %>
+                    </div>
+                    <% if(todayModels.length>6){ %>
+                    <div class="book-list-footer">
+                        <a class="btn btn-primary btn-xs btn-more" href="/jinrinvshen/">更多</a>
+                    </div>
+                    <% } %>
+                </div>
             </div>
         </div>
-        <div class="col-md-9 border book-list-box home-banner-box">
-            <h2 class="book-list-title">最近更新小说列表</h2>
-            <ul class="book-list">
-                <% lastUpdatedBooks.forEach(function(book){ %>
-                <li class="book-item-5 row">
-                    <div class="col-xs-9 col-md-4">
-                        <span class="book-category">[
-                            <%= book.categoryName%>]</span>
-                        <span class="book-title">
-                            <a href="/book/<%= book.bookId%>">
-                                <%= book.title%></a>
-                        </span>
-                    </div>
-                    <div class="col-md-5 hidden-xs hidden-sm">
-                        <% if(book.lastChapter){%>
-                        <span class="book-new-chapter"><a href="/book/<%= book.bookId%>/<%= book.lastChapter.number%>">
-                                <%= book.lastChapter.title%></a></span>
-                        <% } %>
-                    </div>
-                    <div class="col-xs-3 col-md-3">
-                        <span class="book-updated hidden-xs hidden-sm">
-                            <%= book.lastUpdatedAt.split(" ")[0]%></span>
-                        <span class="book-author text-right">
-                            <%= book.writer%></span>
-                    </div>
-                </li>
-                <% }); %>
+        <div class="col-md-3 home-right-box">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab" style="background: #cea533;">本周排行</a></li>
+                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab" style="background: #c53727;">新晋排行</a></li>
+                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab" style="background: #4a82c0;">推荐排行</a></li>
             </ul>
-        </div>
-        <div class="col-md-3 border book-list-box">
-            <h2 class="book-list-title">最新入库小说</h2>
-            <ul class="book-list">
-                <% firstBlock.rankBooks.forEach(function(book){ %>
-                <li class="book-item-2">
-                    <span class="book-category">[
-                        <%= book.categoryName%>]</span>
-                    <span class="book-author">
-                        <%= book.writer%></span>
-                    <span class="book-title"><a href="/book/<%= book.bookId%>">
-                            <%= book.title%></a></span>
-                </li>
-                <% }); %>
-            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="home">
+                    <% homeRank.models.slice(0,15).forEach(function(model,index){ %>
+                    <a class="model-item-4" href="/model/<%= model.modelId%>">
+                        <div class="model-cover"><img src="<%= branchInfo.pictureUrl+model.cover%>" alt="<%= model.name%>"></div>
+                        <div class="model-info">
+                            <div class="model-name">
+                                <%= model.name %>
+                            </div>
+                            <% if(model.nickname){ %>
+                            <div class="model-other">
+                                别名：
+                                <%= model.nickname %>
+                            </div>
+                            <% } %>
+                            <% if(model.birthyear){ %>
+                            <div class="model-other">
+                                年龄：
+                                <%= (moment().year()-model.birthyear)+"岁" %>
+                            </div>
+                            <% } %>
+                            <% if(model.job){ %>
+                            <div class="model-other">
+                                职业：
+                                <%= model.job %>
+                            </div>
+                            <% } %>
+                        </div>
+                    </a>
+                    <% }); %>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="profile">
+                    <% homeRank.models.slice(15,30).forEach(function(model,index){ %>
+                    <a class="model-item-4" href="/model/<%= model.modelId%>">
+                        <div class="model-cover"><img src="<%= branchInfo.pictureUrl+model.cover%>" alt="<%= model.name%>"></div>
+                        <div class="model-info">
+                            <div class="model-name">
+                                <%= model.name %>
+                            </div>
+                            <% if(model.nickname){ %>
+                            <div class="model-other">
+                                别名：
+                                <%= model.nickname %>
+                            </div>
+                            <% } %>
+                            <% if(model.birthyear){ %>
+                            <div class="model-other">
+                                年龄：
+                                <%= (moment().year()-model.birthyear)+"岁" %>
+                            </div>
+                            <% } %>
+                            <% if(model.job){ %>
+                            <div class="model-other">
+                                职业：
+                                <%= model.job %>
+                            </div>
+                            <% } %>
+                        </div>
+                    </a>
+                    <% }); %>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="messages">
+                    <% homeRank.models.slice(30,45).forEach(function(model,index){ %>
+                    <a class="model-item-4" href="/model/<%= model.modelId%>">
+                        <div class="model-cover"><img src="<%= branchInfo.pictureUrl+model.cover%>" alt="<%= model.name%>"></div>
+                        <div class="model-info">
+                            <div class="model-name">
+                                <%= model.name %>
+                            </div>
+                            <% if(model.nickname){ %>
+                            <div class="model-other">
+                                别名：
+                                <%= model.nickname %>
+                            </div>
+                            <% } %>
+                            <% if(model.birthyear){ %>
+                            <div class="model-other">
+                                年龄：
+                                <%= (moment().year()-model.birthyear)+"岁" %>
+                            </div>
+                            <% } %>
+                            <% if(model.job){ %>
+                            <div class="model-other">
+                                职业：
+                                <%= model.job %>
+                            </div>
+                            <% } %>
+                        </div>
+                    </a>
+                    <% }); %>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <%- include('common/footer', {}); %>
+<script type="text/javascript">
+$('.carousel').carousel({
+    interval: 2000
+})
+</script>
 <%- include('common/bottom', {}); %>

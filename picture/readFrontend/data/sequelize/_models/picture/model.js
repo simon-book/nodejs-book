@@ -17,12 +17,12 @@ var Model = sequelize.define('model', {
     nickname: Sequelize.TEXT, //艺名，别名，昵称
     cover: Sequelize.TEXT, //头像
     birthyear: Sequelize.INTEGER,
-    birthday: Sequelize.DATEONLY,
+    birthday: Sequelize.TEXT,
     zodiac: Sequelize.TEXT, //属相
     constellation: Sequelize.TEXT, //星座
     bloodType: Sequelize.TEXT, //血型
-    height: Sequelize.TEXT,
-    weight: Sequelize.TEXT,
+    height: Sequelize.INTEGER,
+    weight: Sequelize.INTEGER,
     cup: Sequelize.TEXT, //身材
     bustline: Sequelize.INTEGER,
     waistline: Sequelize.INTEGER,

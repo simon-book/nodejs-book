@@ -1,0 +1,286 @@
+<%- include('common/top', {}); %>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+<%- include('common/mainHeader', {}); %>
+<div class="container">
+    <div class="row ">
+        <div class="col-md-9 padding-0 row">
+            <div class="col-xs-12 book-box">
+                <div class="border book-list-box">
+                    <h2 class="book-list-header">现在位置：<a href="/">首页</a> &raquo; <a href="/findModel/">女神专区</a>&raquo; 找美女</h2>
+                    <div class="book-list">
+                        <form class="form-horizontal">
+                            <div class="form-group col-lg-4 col-sm-6 col-xs-12">
+                                <label class="col-sm-2 col-xs-3 control-label">年龄</label>
+                                <div class="col-sm-10 col-xs-9 selector-slider">
+                                    <div class="selector-slider-box" id="slider-age"></div>
+                                    <div class="selector-slider-text"><input type="text" id="slider-result-age"></div>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-4 col-sm-6 col-xs-12">
+                                <label class="col-sm-2 col-xs-3 control-label">身高</label>
+                                <div class="col-sm-10 col-xs-9 selector-slider">
+                                    <div class="selector-slider-box" id="slider-height"></div>
+                                    <div class="selector-slider-text"><input type="text" id="slider-result-height"></div>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-4 col-sm-6 col-xs-12">
+                                <label class="col-sm-2 col-xs-3 control-label">Cup</label>
+                                <div class="col-sm-10 col-xs-9 selector-slider">
+                                    <div class="selector-slider-box" id="slider-cup"></div>
+                                    <div class="selector-slider-text"><input type="text" id="slider-result-cup"></div>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-4 col-sm-6 col-xs-12">
+                                <label class="col-sm-2 col-xs-3 control-label">胸围</label>
+                                <div class="col-sm-10 col-xs-9 selector-slider">
+                                    <div class="selector-slider-box" id="slider-bustline"></div>
+                                    <div class="selector-slider-text"><input type="text" id="slider-result-bustline"></div>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-4 col-sm-6 col-xs-12">
+                                <label class="col-sm-2 col-xs-3 control-label">腰围</label>
+                                <div class="col-sm-10 col-xs-9 selector-slider">
+                                    <div class="selector-slider-box" id="slider-waistline"></div>
+                                    <div class="selector-slider-text"><input type="text" id="slider-result-waistline"></div>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-4 col-sm-6 col-xs-12">
+                                <label class="col-sm-2 col-xs-3 control-label">臀围</label>
+                                <div class="col-sm-10 col-xs-9 selector-slider">
+                                    <div class="selector-slider-box" id="slider-hipline"></div>
+                                    <div class="selector-slider-text"><input type="text" id="slider-result-hipline"></div>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-2 col-sm-3 col-xs-6">
+                                <label for="selector-country" class="col-xs-4 control-label">国家</label>
+                                <div class="col-xs-8 selector-select">
+                                    <select id="selCountry">
+                                        <option value="">请选择</option>
+                                        <option value="中国">中国大陆</option>
+                                        <option value="台湾">中国台湾</option>
+                                        <option value="香港">中国香港</option>
+                                        <option value="日本">日本</option>
+                                        <option value="韩国">韩国</option>
+                                        <option value="新加坡">新加坡</option>
+                                        <option value="马来西亚">马来西亚</option>
+                                        <option value="泰国">泰国</option>
+                                        <option value="越南">越南</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-2 col-sm-3 col-xs-6">
+                                <label for="selector-bloodType" class="col-xs-4 control-label">职业</label>
+                                <div class="col-xs-8 selector-select">
+                                    <select id="selJob">
+                                        <option value="">请选择</option>
+                                        <option value="演员">演员</option>
+                                        <option value="歌手">歌手</option>
+                                        <option value="主播">主播&amp;主持人</option>
+                                        <option value="写真">写真偶像</option>
+                                        <option value="声优">配音&amp;声优</option>
+                                        <option value="模特">模特</option>
+                                        <option value="车模">车模</option>
+                                        <option value="showgirl">Showgirl</option>
+                                        <option value="cosplayer">Cosplayer</option>
+                                        <option value="运动员">体坛</option>
+                                        <option value="网络">网络美女</option>
+                                        <option value="OL">Cosplayer</option>
+                                        <option value="艾薇女优">艾薇女优</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-2 col-sm-3 col-xs-6">
+                                <label for="selector-job" class="col-xs-4 control-label">星座</label>
+                                <div class="col-xs-8 selector-select">
+                                    <select id="selXingzuo">
+                                        <option value="">请选择</option>
+                                        <option value="白羊座">白羊座</option>
+                                        <option value="金牛座">金牛座</option>
+                                        <option value="双子座">双子座</option>
+                                        <option value="巨蟹座">巨蟹座</option>
+                                        <option value="狮子座">狮子座</option>
+                                        <option value="处女座">处女座</option>
+                                        <option value="天秤座">天秤座</option>
+                                        <option value="天蝎座">天蝎座</option>
+                                        <option value="射手座">射手座</option>
+                                        <option value="魔羯座">魔羯座</option>
+                                        <option value="水瓶座">水瓶座</option>
+                                        <option value="双鱼座">双鱼座</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-2 col-sm-3 col-xs-6">
+                                <label for="selector-constellation" class="col-xs-4 control-label">血型</label>
+                                <div class="col-xs-8 selector-select">
+                                    <select id="selBloodType">
+                                        <option value="">请选择</option>
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="O">O</option>
+                                        <option value="AB">AB</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 book-box" id="findModelResult">
+            </div>
+        </div>
+        <div class="col-md-3 home-right-box">
+            <div class="border book-list-box">
+                <h2 class="book-list-header">热门标签</h2>
+                <div class="book-list">
+                    <% branchInfo.modelTags.forEach(function(tag){ %>
+                    <a class="right-box-tag" href="/modelList/<%= tag.tagId%>/1">
+                        <%= tag.name%> </a>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('common/footer', {}); %>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script type="text/javascript">
+var filterValues = {
+    page: 1,
+    pageSize: 24
+};
+
+function filterValuesChange() {
+    console.log(filterValues);
+    $.ajax({
+        type: 'POST',
+        url: '/findModel',
+        data: JSON.stringify(filterValues),
+        contentType: 'application/json',
+        timeout: 10000,
+        success: function(data) {
+            // console.log(data);
+            $("#findModelResult").html(data);
+        },
+        error: function(xhr, type) {
+            alert("服务错误！")
+        }
+    })
+}
+
+function pageChange(page) {
+    filterValues.page = page;
+    filterValuesChange();
+}
+
+$(function() {
+    $("#slider-age").slider({
+        range: true,
+        min: 18,
+        max: 50,
+        values: [22, 45],
+        slide: function(event, ui) {
+            $("#slider-result-age").val(ui.values[0] + "-" + ui.values[1] + "岁");
+        },
+        change: function(event, ui) {
+            filterValues.age = ui.values;
+            filterValuesChange();
+        }
+    });
+    $("#slider-result-age").val($("#slider-age").slider("values", 0) + "-" + $("#slider-age").slider("values", 1) + "岁");
+
+    $("#slider-height").slider({
+        range: true,
+        min: 145,
+        max: 180,
+        values: [150, 170],
+        slide: function(event, ui) {
+            $("#slider-result-height").val(ui.values[0] + "-" + ui.values[1] + "cm");
+        },
+        change: function(event, ui) {
+            filterValues.height = ui.values;
+            filterValuesChange();
+        }
+    });
+    $("#slider-result-height").val($("#slider-height").slider("values", 0) + "-" + $("#slider-height").slider("values", 1) + "cm");
+
+    var cups = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"]
+    $("#slider-cup").slider({
+        range: true,
+        min: 0,
+        max: cups.length - 1,
+        values: [3, 6],
+        slide: function(event, ui) {
+            $("#slider-result-cup").val(cups[ui.values[0]] + "-" + cups[ui.values[1]]);
+        },
+        change: function(event, ui) {
+            filterValues.cup = [cups[ui.values[0]], cups[ui.values[1]]];
+            filterValuesChange();
+        }
+    });
+    $("#slider-result-cup").val(cups[$("#slider-cup").slider("values", 0)] + "-" + cups[$("#slider-cup").slider("values", 1)]);
+
+    $("#slider-bustline").slider({
+        range: true,
+        min: 70,
+        max: 110,
+        values: [80, 90],
+        slide: function(event, ui) {
+            $("#slider-result-bustline").val(ui.values[0] + "-" + ui.values[1] + "cm");
+        },
+        change: function(event, ui) {
+            filterValues.bustline = ui.values;
+            filterValuesChange();
+        }
+    });
+    $("#slider-result-bustline").val($("#slider-bustline").slider("values", 0) + "-" + $("#slider-bustline").slider("values", 1) + "cm");
+
+    $("#slider-waistline").slider({
+        range: true,
+        min: 50,
+        max: 60,
+        values: [52, 58],
+        slide: function(event, ui) {
+            $("#slider-result-waistline").val(ui.values[0] + "-" + ui.values[1] + "cm");
+        },
+        change: function(event, ui) {
+            filterValues.waistline = ui.values;
+            filterValuesChange();
+        }
+    });
+    $("#slider-result-waistline").val($("#slider-waistline").slider("values", 0) + "-" + $("#slider-waistline").slider("values", 1) + "cm");
+
+    $("#slider-hipline").slider({
+        range: true,
+        min: 70,
+        max: 110,
+        values: [80, 90],
+        slide: function(event, ui) {
+            $("#slider-result-hipline").val(ui.values[0] + "-" + ui.values[1] + "cm");
+        },
+        change: function(event, ui) {
+            filterValues.hipline = ui.values;
+            filterValuesChange();
+        }
+    });
+    $("#slider-result-hipline").val($("#slider-hipline").slider("values", 0) + "-" + $("#slider-hipline").slider("values", 1) + "cm");
+
+    $("#selCountry").on("change", function(event) {
+        filterValues.country = this.value;
+        filterValuesChange();
+    })
+    $("#selBloodType").on("change", function(event) {
+        filterValues.bloodType = this.value;
+        filterValuesChange();
+    })
+    $("#selXingzuo").on("change", function(event) {
+        filterValues.constellation = this.value;
+        filterValuesChange();
+    })
+    $("#selJob").on("change", function(event) {
+        filterValues.job = this.value;
+        filterValuesChange();
+    })
+
+});
+</script>
+<%- include('common/bottom', {}); %>

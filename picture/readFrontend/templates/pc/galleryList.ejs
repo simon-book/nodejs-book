@@ -1,0 +1,92 @@
+<%- include('common/top', {}); %>
+<%- include('common/mainHeader', {}); %>
+<div class="container">
+    <div class="row ">
+        <div class="col-xs-12 book-box">
+            <div class="border book-list-box">
+                <h2 class="book-list-header">现在位置：<a href="/">首页</a> &raquo; <a href="/galleryList/">美女图片</a>
+                    <% if(tag){ %>
+                    &raquo; <a href="/galleryList/<%= tag.tagId%>/1">
+                        <%= tag.name%></a>
+                    <% } %>
+                </h2>
+                <div class="book-list">
+                    <div class="tag-header">
+                        <div class="tag-name">
+                            <%= tag?tag.name:"美女图片"%>
+                        </div>
+                        <div class="tag-remark">
+                            <%= tag?tag.remark:"分享海量国内美女高清套图(推女郎、美媛馆等)，日韩高清美女图片写真，以及女神博客的生活照和素颜照，并提供强大的检索功能。"%>
+                            <% if(branchInfo.isMobileDevice){%><a class="tag-collapse" href="javascript:void(0)" data-toggle="collapse" data-target="#demo">展开过滤</a>
+                            <% } %>
+                        </div>
+                    </div>
+                    <div id="demo" class="collapse <%= branchInfo.isMobileDevice?'':'in'%>">
+                        <% branchInfo.pictureTagGroups.forEach(function(group){ if(group.tags.length){%>
+                        <div class="tag-group">
+                            <% group.tags.forEach(function(gtag){ %>
+                            <a class="tag-item <%= tag && tag.tagId == gtag.tagId?'active':''%>" href="/galleryList/<%= gtag.tagId%>/1">
+                                <%= gtag.name%> </a>
+                            <% }); %>
+                        </div>
+                        <% }}); %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-xs-12 book-box">
+            <div class="border book-list-box">
+                <h2 class="book-list-title">
+                    <%= tag?tag.name:"美女图片"%>
+                </h2>
+                <div class="book-list">
+                    <% pictures.forEach(function(picture){ %>
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                        <a class="gallery-item" href="/gallery/<%= picture.pictureId%>" target="_blank">
+                            <div class="gallery-cover"><img src="<%= picture.imgHost+picture.cover%>" alt="<%= picture.title%>"></div>
+                            <div class="gallery-title hidden-xs hidden-sm">
+                                <%= picture.title%>
+                            </div>
+                            <div class="gallery-title-1 hidden-lg hidden-md">
+                                <%= picture.title%>
+                            </div>
+                        </a>
+                    </div>
+                    <% }); %>
+                </div>
+                <nav aria-label="Page navigation" class="pagination-box">
+                    <ul class="pagination">
+                        <% if(pagination.currentPage>1){%>
+                        <li>
+                            <a href="/galleryList/<%= (tag?tag.tagId+'/':'')+ pagination.currentPage-1%>/" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <% } %>
+                        <% pagination.pages.forEach(function(page){ %>
+                        <li class=<%=page==pagination.currentPage?"active":""%>><a href="/galleryList/<%= (tag?tag.tagId+'/':'')+ page%>/">
+                                <%= page%></a></li>
+                        <% }); %>
+                        <% if(pagination.currentPage<pagination.totalPage){%>
+                        <li>
+                            <a href="/galleryList/<%= (tag?tag.tagId+'/':'')+ pagination.currentPage+1%>/" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        <% } %>
+                        <% if(pagination.pages[pagination.pages.length-1]<pagination.totalPage){%>
+                        <li><a href="/galleryList/<%= (tag?tag.tagId+'/':'')+ pagination.totalPage%>/">...
+                                <%= pagination.totalPage%></a></li>
+                        <% } %>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+var currentPage = <%= pagination.currentPage%>;
+var totalPage = <%= pagination.totalPage%>;
+</script>
+<%- include('common/footer', {}); %>
+<%- include('common/bottom', {}); %>

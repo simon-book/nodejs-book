@@ -44,13 +44,13 @@ exports.findAllTagGroup = function(where, offset, limit, order) {
             limit: limit || 10000,
             offset: offset || 0,
             order: order || [
-                ['tagGroupId', 'DESC']
+                ['orderIndex', 'asc']
             ],
             include: [{
                 model: Tag,
                 as: 'tags',
                 required: false,
-                attributes: ["tagId", "name", "originId"]
+                attributes: ["tagId", "name", "originId", "remark"]
             }]
         }).then(function(results) {
             resolve(results);

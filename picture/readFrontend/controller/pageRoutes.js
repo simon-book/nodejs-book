@@ -24,9 +24,11 @@ router.use(function(req, res, next) {
     // var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
     var isLocalhost = /^(localhost)/.test(req.hostname);
     var isM = /^(m\.)/.test(req.hostname);
-    if ((bIsIpad || bIsIphoneOs || bIsUc7 || bIsUc || bIsAndroid) && !isM && !isLocalhost) {
+    var isMobileDevice = bIsIpad || bIsIphoneOs || bIsUc7 || bIsUc || bIsAndroid;
+    if (isMobileDevice && !isM && !isLocalhost) {
         res.redirect(req.protocol + "://" + req.hostname.replace(/^(www)/, "m") + req.originalUrl)
     } else {
+        req.branchInfo.isMobileDevice = isMobileDevice;
         next();
     }
 });
@@ -86,29 +88,40 @@ router.use(async function(req, res, next) {
 // });
 
 router.get('/', page.home);
-router.get('/article/', page.articleList);
-router.get('/article/:page', page.articleList);
+router.get('/articles/', page.articleList);
+router.get('/articles/:page', page.articleList);
 router.get('/article/:articleId/', page.article);
+router.get('/article/:articleId/:page', page.article);
 
-router.get('/pictureTag/', page.pictureList);
-router.get('/pictureTag/:page', page.pictureList);
-router.get('/pictureTag/:tagId/', page.pictureList);
-router.get('/pictureTag/:tagId/:page', page.pictureList);
-router.get('/picture/:pictureId/', page.picture);
+router.get('/galleryList/', page.galleryList);
+router.get('/galleryList/:page', page.galleryList);
+// router.get('/galleryList/:tagId/', page.galleryList);
+router.get('/galleryList/:tagId/:page', page.galleryList);
+router.get('/gallery/:pictureId/', page.gallery);
+router.get('/gallery/:pictureId/:page', page.gallery);
 
-router.get('/modelTag/', page.modelList);
-router.get('/modelTag/:tagId/', page.modelList);
-router.get('/modelTag/:tagId/:page', page.modelList);
+router.get('/modelList/', page.modelList);
+router.get('/modelList/:page', page.modelList);
+router.get('/modelList/:tagId/:page', page.modelList);
 router.get('/model/:modelId/', page.model);
-router.get('/todayModel', page.todayModelList);
+router.get('/model/:modelId/modelAlbum', page.modelAlbum);
+router.get('/model/:modelId/modelAlbum/:page', page.modelAlbum);
+router.get('/jinrinvshen', page.todayModelList);
+router.get('/findModel', page.findModel);
 router.post('/findModel', page.findModelList);
+// router.get('/findModel/:page', page.findModelList);
+// router.post('/findModel', page.findModelList);
 // router.post('/findModel/:page', page.findModelList);
 
-router.get('/modelRank/', page.rankMainPage);
-router.get('/modelRank/:rankId/', page.rankModelList);
-router.get('/modelRank/:rankId/:page', page.rankModelList);
+router.get('/paihang/', page.paihang);
+router.get('/paihang/:rankId/', page.rankModelList);
+router.get('/paihang/:rankId/:page', page.rankModelList);
 
 router.get('/search', page.search);
+router.get('/searchModel', page.searchModel);
+router.get('/searchModel/:page', page.searchModel);
+router.get('/searchGallery', page.searchGallery);
+router.get('/searchGallery/:page', page.searchGallery);
 router.get('/error', page.error);
 
 module.exports = router;

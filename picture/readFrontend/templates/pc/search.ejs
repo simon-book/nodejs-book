@@ -1,94 +1,75 @@
 <%- include('common/top', {}); %>
 <%- include('common/mainHeader', {}); %>
 <div class="container">
-    <br />
-    <br />
     <div class="row ">
-        <div class="col-md-12 border book-list-box" style="margin-top: 0;">
-            <h2 class="book-list-title">
-                <%= pageTitle%>
-            </h2>
-            <ul class="book-list">
-                <li class="book-item-5 row">
-                    <div class="col-xs-2 col-md-1">
-                        <span>类型</span>
-                    </div>
-                    <div class="col-xs-5 col-md-2">
-                        <span>小说名称</span>
-                    </div>
-                    <div class="col-xs-5 col-md-2">
-                        <span>作者</span>
-                    </div>
-                    <div class="col-xs-12 col-md-4">
-                        <span>最新章节</span>
-                    </div>
-                    <div class="col-xs-6 col-md-2">
-                        <span>最近更新时间</span>
-                    </div>
-                    <div class="col-xs-6 col-md-1 text-center">
-                        <span>状态</span>
-                    </div>
-                </li>
-                <% books.forEach(function(book){ %>
-                <li class="book-item-5 row">
-                    <div class="col-xs-3 col-md-1">
-                        <span>[
-                            <%= book.categoryName%>]</span>
-                    </div>
-                    <div class="col-xs-5 col-md-2">
-                        <span>
-                            <a href="/book/<%= book.bookId%>">
-                                <%= book.title%></a>
-                        </span>
-                    </div>
-                    <div class="col-xs-4 col-md-2">
-                        <span>
-                            <%= book.writer%></span>
-                    </div>
-                    <div class="col-xs-12 col-md-4">
-                        <% if(book.lastChapter){%>
-                        <span><a href="/book/<%= book.bookId%>/<%= book.lastChapter.number%>">
-                                <%= book.lastChapter.title%></a></span>
-                        <% } %>
-                    </div>
-                    <div class="col-xs-8 col-md-2">
-                        <span>
-                            <%= book.lastUpdatedAt%></span>
-                    </div>
-                    <div class="col-xs-4 col-md-1  text-center">
-                        <span>
-                            <%= book.publishStatus == 1?'连载中':'已完结'%></span>
-                    </div>
-                </li>
-                <% }); %>
-            </ul>
-            <% if(pagination){%>
-            <div class="pagination-box text-center">
-                <ul class="pagination">
-                    <% if(pagination.currentPage > 1){%>
-                    <li title="上一页"><a href="/search?keyword=<%= keywords%>&page=<%= pagination.currentPage-1%>">
-                            <</a> </li> <% }%>
-                    <li class="hd"><span>
-                            <%= pagination.currentPage%>/
-                            <%= pagination.totalPage%></span></li>
-                    <% if(pagination.currentPage < pagination.totalPage){%>
-                    <li title="下一页"><a href="/search?keyword=<%= keywords%>&page=<%= pagination.currentPage+1%>">></a></li>
-                    <% }%>
-                    <li>
-                        <div class="go-page">
-                            <input type="number" class="go-page-input" id="go-page-input" min="1" max="<%= pagination.totalPage%>" placeholder="页数" onkeydown="if(event.keyCode==13){goPage(); return false;}">
-                            <button type="button" class="go-page-btn" onclick="goPage()">跳转</button>
+        <div class="col-md-9 padding-0 row">
+            <div class="col-xs-12 book-box">
+                <div class="border book-list-box">
+                    <h2 class="book-list-header">现在位置：<a href="/">首页</a> &raquo; 包含
+                        <span style="color: #c53727">
+                            <%= searchContent%></span> 的搜索结果
+                    </h2>
+                    <h2 class="book-list-title">女神列表</h2>
+                    <div class="book-list">
+                        <% models.forEach(function(model){ %>
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                            <a class="model-item-1" href="/model/<%= model.modelId%>" target="_blank">
+                                <div class="model-cover"><img src="<%= branchInfo.pictureUrl+model.cover%>" alt="<%= model.name%>"></div>
+                                <div class="model-name">
+                                    <%= model.name%>
+                                </div>
+                                <div class="model-job">
+                                    <%= model.job?model.job:"模特"%>
+                                </div>
+                            </a>
                         </div>
-                    </li>
-                </ul>
+                        <% }); %>
+                    </div>
+                    <% if(modelCount>24){ %>
+                    <div class="book-list-footer">
+                        <a class="btn btn-primary btn-xs btn-more" href="/searchModel?keyword=<%= searchContent%>">更多女神</a>
+                    </div>
+                    <% } %>
+                </div>
             </div>
-            <% }%>
+            <div class="col-xs-12 book-box">
+                <div class="border book-list-box">
+                    <h2 class="book-list-title">图集列表</h2>
+                    <div class="book-list">
+                        <% pictures.forEach(function(picture){ %>
+                        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                            <a class="gallery-item" href="/gallery/<%= picture.pictureId%>" target="_blank">
+                                <div class="gallery-cover"><img src="<%= picture.imgHost+picture.cover%>" alt="<%= picture.title%>"></div>
+                                <div class="gallery-title hidden-xs hidden-sm">
+                                    <%= picture.title%>
+                                </div>
+                                <div class="gallery-title-1 hidden-lg hidden-md">
+                                    <%= picture.title%>
+                                </div>
+                            </a>
+                        </div>
+                        <% }); %>
+                    </div>
+                    <% if(pictureCount>24){ %>
+                    <div class="book-list-footer">
+                        <a class="btn btn-primary btn-xs btn-more" href="/searchGallery?keyword=<%= searchContent%>">更多图集</a>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 home-right-box">
+            <div class="border book-list-box">
+                <h2 class="book-list-header">热门标签</h2>
+                <div class="book-list">
+                    <% branchInfo.modelTags.forEach(function(tag){ %>
+                    <a class="right-box-tag" href="/modelList/<%= tag.tagId%>/1">
+                        <%= tag.name%> </a>
+                    <% }); %>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<script type="text/javascript">
-var currentPage = <%= pagination?pagination.currentPage:0%>;
-var totalPage = <%= pagination?pagination.totalPage:0%>;
-</script>
 <%- include('common/footer', {}); %>
 <%- include('common/bottom', {}); %>

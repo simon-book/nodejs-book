@@ -1,0 +1,73 @@
+<%- include('common/top', {}); %>
+<%- include('common/mainHeader', {}); %>
+<div class="container">
+    <div class="row ">
+        <div class="col-md-9 padding-0 row">
+            <div class="col-xs-12 book-box">
+                <div class="border book-list-box">
+                    <h2 class="book-list-header">现在位置：<a href="/">首页</a> &raquo; <a href="/search?keyword=<%= searchContent%>">包含
+                            <span style="color: #c53727">
+                                <%= searchContent%></span> 的搜索结果</a> &raquo; 包含
+                        <span style="color: #c53727">
+                            <%= searchContent%></span> 的图集
+                    </h2>
+                    <h2 class="book-list-title">图集列表</h2>
+                    <div class="book-list">
+                        <% pictures.forEach(function(picture){ %>
+                        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                            <a class="gallery-item" href="/gallery/<%= picture.pictureId%>" target="_blank">
+                                <div class="gallery-cover"><img src="<%= picture.imgHost+picture.cover%>" alt="<%= picture.title%>"></div>
+                                <div class="gallery-title hidden-xs hidden-sm">
+                                    <%= picture.title%>
+                                </div>
+                                <div class="gallery-title-1 hidden-lg hidden-md">
+                                    <%= picture.title%>
+                                </div>
+                            </a>
+                        </div>
+                        <% }); %>
+                    </div>
+                    <nav aria-label="Page navigation" class="pagination-box">
+                        <ul class="pagination">
+                            <% if(pagination.currentPage>1){%>
+                            <li>
+                                <a href="/searchGallery/<%= pagination.currentPage-1%>?keyword=<%= searchContent%>" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <% } %>
+                            <% pagination.pages.forEach(function(page){ %>
+                            <li class=<%=page==pagination.currentPage?"active":""%>><a href="/searchGallery/<%= page%>?keyword=<%= searchContent%>">
+                                    <%= page%></a></li>
+                            <% }); %>
+                            <% if(pagination.currentPage<pagination.totalPage){%>
+                            <li>
+                                <a href="/searchGallery/<%= pagination.currentPage+1%>?keyword=<%= searchContent%>" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                            <% } %>
+                            <% if(pagination.pages[pagination.pages.length-1]<pagination.totalPage){%>
+                            <li><a href="/searchGallery/<%= pagination.totalPage%>?keyword=<%= searchContent%>">...
+                                    <%= pagination.totalPage%></a></li>
+                            <% } %>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 home-right-box">
+            <div class="border book-list-box">
+                <h2 class="book-list-header">热门标签</h2>
+                <div class="book-list">
+                    <% branchInfo.modelTags.forEach(function(tag){ %>
+                    <a class="right-box-tag" href="/modelList/<%= tag.tagId%>/1">
+                        <%= tag.name%> </a>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('common/footer', {}); %>
+<%- include('common/bottom', {}); %>

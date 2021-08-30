@@ -18,9 +18,10 @@ exports.findOne = function(where) {
     })
 }
 
-exports.findByPk = function(id) {
+exports.findByPk = function(id, attributes) {
     return new Promise(function(resolve, reject) {
         Article.findByPk(id, {
+            attributes: attributes,
             include: [{
                 model: Model,
                 as: 'models',
@@ -65,6 +66,18 @@ exports.findAndCountAll = function(where, offset, limit, order, attributes) {
                 ['lastUpdatedAt', 'DESC']
             ],
             attributes: attributes
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
+exports.count = function(where) {
+    return new Promise(function(resolve, reject) {
+        Article.count({
+            where: where
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {

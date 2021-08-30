@@ -232,8 +232,10 @@ async function copy_category_pictures(tag, startPath, startIndex, endIndex) {
                                 title: $(item).find("a.caption").text(),
                                 originId: originId
                             }
-                            if (/^(https)/.test(picture.cover)) picture.cover = picture.cover.replace(/https:\/\/[^\/]+/, "");
-                            else if (/^(http)/.test(picture.cover)) picture.cover = picture.cover.replace(/http:\/\/[^\/]+/, "");
+                            picture.imgHost = picture.cover.match(/http(s?):\/\/[^\/]+/g)[0];
+                            picture.cover = picture.cover.replace(picture.imgHost, "");
+                            // if (/^(https)/.test(picture.cover)) picture.cover = picture.cover.replace(/https:\/\/[^\/]+/, "");
+                            // else if (/^(http)/.test(picture.cover)) picture.cover = picture.cover.replace(/http:\/\/[^\/]+/, "");
                             savedPicture = await create_picture(originId, picture, tag);
                         }
                         if (!savedPicture.tags || _.findIndex(savedPicture.tags, { tagId: tag.tagId }) == -1) {
@@ -368,6 +370,14 @@ async function copy_category_models(tag, startPath, startIndex, endIndex) {
                 if (index > 1) path += index + ".html";
                 console.log(path);
                 var $ = await commonController.copyHtml(branch.pcCopyUrl, path, branch.charset);
+                if (index == 1 && !tag.remark) {
+                    var tagRemark = $("#ddesc").text();
+                    if (tagRemark) {
+                        await tagSequelize.update({ remark: tagRemark }, {
+                            tagId: tag.tagId
+                        })
+                    }
+                }
                 var targetItems = $("#listdiv").find("li.beautyli");
                 for (var i = 0; i < targetItems.length; i++) {
                     try {
@@ -452,8 +462,8 @@ async function complete_one_model_info(model) {
         }
         if (otherInfo["星座"]) model.set("constellation", otherInfo["星座"]);
         if (otherInfo["血型"]) model.set("bloodType", otherInfo["血型"]);
-        if (otherInfo["身高"]) model.set("height", otherInfo["身高"]);
-        if (otherInfo["体重"]) model.set("weight", otherInfo["体重"]);
+        if (otherInfo["身高"]) model.set("height", parseInt(otherInfo["身高"]));
+        if (otherInfo["体重"]) model.set("weight", parseInt(otherInfo["体重"]));
         if (otherInfo["三围"]) {
             var lines = otherInfo["三围"].match(/\d+/g);
             model.set("bustline", lines[0]);
@@ -469,63 +479,65 @@ async function complete_one_model_info(model) {
         if (otherInfo.cover) model.set("cover", otherInfo.cover);
         if (otherInfo.name) model.set("name", otherInfo.name);
         if (otherInfo.remark) model.set("remark", otherInfo.remark);
-        if ($(".archive_more").length) await copy_model_pictures(null, model.originId);
-        else {
-            var targetItems = $(".photo_ul").find("li.igalleryli");
-            for (var i = 0; i < targetItems.length; i++) {
-                try {
-                    var item = targetItems[i];
-                    var bookHref = $(item).find("a").attr("href");
-                    var originId = bookHref.match(/\d+/g)[0];
-                    var savedBook = await pictureSequelize.findOne({
+        // if ($(".archive_more").length) await copy_model_pictures(null, model.originId);
+        // else {
+        var targetItems = $(".photo_ul").find("li.igalleryli");
+        for (var i = 0; i < targetItems.length; i++) {
+            try {
+                var item = targetItems[i];
+                var bookHref = $(item).find("a").attr("href");
+                var originId = bookHref.match(/\d+/g)[0];
+                var savedBook = await pictureSequelize.findOne({
+                    branchId: branch.branchId,
+                    originId: originId
+                })
+                if (savedBook) continue;
+                else {
+                    var picture = {
                         branchId: branch.branchId,
+                        cover: $(item).find("img").attr("data-original"),
+                        title: $(item).find("a.caption").text(),
                         originId: originId
-                    })
-                    if (savedBook) continue;
-                    else {
-                        var picture = {
-                            branchId: branch.branchId,
-                            cover: $(item).find("img").attr("data-original"),
-                            title: $(item).find("a.caption").text(),
-                            originId: originId
-                        }
-                        if (/^(https)/.test(picture.cover)) picture.cover = picture.cover.replace(/https:\/\/[^\/]+/, "");
-                        else if (/^(http)/.test(picture.cover)) picture.cover = picture.cover.replace(/http:\/\/[^\/]+/, "");
-                        var result = await create_picture(originId, picture);
                     }
-                    if (!result) throw new Error("save picture error.")
-                } catch (err) {
-                    console.log(err);
+                    picture.imgHost = picture.cover.match(/http(s?):\/\/[^\/]+/g)[0];
+                    picture.cover = picture.cover.replace(picture.imgHost, "");
+                    // if (/^(https)/.test(picture.cover)) picture.cover = picture.cover.replace(/https:\/\/[^\/]+/, "");
+                    // else if (/^(http)/.test(picture.cover)) picture.cover = picture.cover.replace(/http:\/\/[^\/]+/, "");
+                    var result = await create_picture(originId, picture);
                 }
+                if (!result) throw new Error("save picture error.")
+            } catch (err) {
+                console.log(err);
             }
         }
-        if ($("li.favli").length) {
-            var relatedModelIds = [];
-            var targetItems = $("li.favli");
-            for (var i = 0; i < targetItems.length; i++) {
-                try {
-                    var item = targetItems[i];
-                    var modelHref = $($(item).find("a")[1]).attr("href");
-                    if (modelHref.match(/\/girl\//g).length) {
-                        var originId = modelHref.split("/")[2];
-                        var savedModel = await modelSequelize.findOneModel({
-                            branchId: branch.branchId,
-                            originId: originId
-                        })
-                        if (!savedModel) {
-                            savedModel = await modelSequelize.create({
-                                branchId: branch.branchId,
-                                originId: originId
-                            })
-                        }
-                        if (savedModel) relatedModelIds.push(savedModel.modelId);
-                    }
-                } catch (err) {
-                    console.log(err);
-                }
-            }
-            if (relatedModelIds.length) model.set("relatedModelIds", relatedModelIds);
-        }
+        // }
+        // if ($("li.favli").length) {
+        //     var relatedModelIds = [];
+        //     var targetItems = $("li.favli");
+        //     for (var i = 0; i < targetItems.length; i++) {
+        //         try {
+        //             var item = targetItems[i];
+        //             var modelHref = $($(item).find("a")[1]).attr("href");
+        //             if (modelHref.match(/\/girl\//g).length) {
+        //                 var originId = modelHref.split("/")[2];
+        //                 var savedModel = await modelSequelize.findOneModel({
+        //                     branchId: branch.branchId,
+        //                     originId: originId
+        //                 })
+        //                 if (!savedModel) {
+        //                     savedModel = await modelSequelize.create({
+        //                         branchId: branch.branchId,
+        //                         originId: originId
+        //                     })
+        //                 }
+        //                 if (savedModel) relatedModelIds.push(savedModel.modelId);
+        //             }
+        //         } catch (err) {
+        //             console.log(err);
+        //         }
+        //     }
+        //     if (relatedModelIds.length) model.set("relatedModelIds", relatedModelIds);
+        // }
         model.set("statusId", 2);
         await model.save();
     } catch (err) {
@@ -569,8 +581,10 @@ async function copy_model_pictures(modelId, originId) {
                                 title: $(item).find("a.caption").text(),
                                 originId: originId
                             }
-                            if (/^(https)/.test(picture.cover)) picture.cover = picture.cover.replace(/https:\/\/[^\/]+/, "");
-                            else if (/^(http)/.test(picture.cover)) picture.cover = picture.cover.replace(/http:\/\/[^\/]+/, "");
+                            picture.imgHost = picture.cover.match(/http(s?):\/\/[^\/]+/g)[0];
+                            picture.cover = picture.cover.replace(picture.imgHost, "");
+                            // if (/^(https)/.test(picture.cover)) picture.cover = picture.cover.replace(/https:\/\/[^\/]+/, "");
+                            // else if (/^(http)/.test(picture.cover)) picture.cover = picture.cover.replace(/http:\/\/[^\/]+/, "");
                             var result = await create_picture(originId, picture);
                         }
                     } catch (err) {
@@ -723,7 +737,7 @@ async function create_article(originId) {
                     var originId = href.split("/gallery/")[1].replace("/", "");
                     var pictureTag = _.find(branch.pictureTags, { originId: originId });
                     if (pictureTag) {
-                        $(girlEle).attr("href", "/pictureTag/" + pictureTag.tagId);
+                        $(girlEle).attr("href", "/galleryTag/" + pictureTag.tagId);
                     }
                 } else if (href.match(/\/tag\//g) && href.match(/\/tag\//g).length) {
                     var originId = href.split("/gallery/")[1].replace("/", "");

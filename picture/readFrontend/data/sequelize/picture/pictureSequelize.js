@@ -54,27 +54,28 @@ exports.findOne = function(where) {
     })
 }
 
-exports.findAll = function(where, attributes, offset, limit) {
+exports.findAll = function(where, offset, limit, attributes) {
     return new Promise(function(resolve, reject) {
         Picture.findAll({
             where: where,
-            attributes: attributes,
+            attributes: attributes || ["pictureId", "title", "cover", "imgHost", "lastUpdatedAt"],
             offset: offset || 0,
             limit: limit || 200000,
+            raw: true,
             order: [
                 ["lastUpdatedAt", "DESC"]
             ],
-            include: [{
-                model: Tag,
-                as: 'tags',
-                required: false,
-                attributes: ["tagId", "name"]
-            }, {
-                model: Model,
-                as: 'models',
-                required: false,
-                attributes: ["modelId", "name"]
-            }]
+            // include: [{
+            //     model: Tag,
+            //     as: 'tags',
+            //     required: false,
+            //     attributes: ["tagId", "name"]
+            // }, {
+            //     model: Model,
+            //     as: 'models',
+            //     required: false,
+            //     attributes: ["modelId", "name"]
+            // }]
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
@@ -120,20 +121,20 @@ exports.findAndCountAllPictureTag = function(where, offset, limit, order) {
                 model: Picture,
                 as: 'picture',
                 required: false,
-                attributes: ["pictureId", "title"],
-                include: [{
-                    model: Tag,
-                    as: 'tags',
-                    required: false,
-                    raw: true,
-                    attributes: ["tagId", "name"]
-                }, {
-                    model: Model,
-                    as: 'models',
-                    required: false,
-                    raw: true,
-                    attributes: ["modelId", "name"]
-                }]
+                attributes: ["pictureId", "title", "imgHost", "cover", "lastUpdatedAt"],
+                // include: [{
+                //     model: Tag,
+                //     as: 'tags',
+                //     required: false,
+                //     raw: true,
+                //     attributes: ["tagId", "name"]
+                // }, {
+                //     model: Model,
+                //     as: 'models',
+                //     required: false,
+                //     raw: true,
+                //     attributes: ["modelId", "name"]
+                // }]
             }]
         }).then(function(results) {
             resolve(results);
@@ -152,24 +153,36 @@ exports.findAndCountAll = function(where, offset, limit, order) {
             order: order || [
                 ['lastUpdatedAt', 'DESC']
             ],
-            attributes: ["pictureId", "title"],
-            include: [{
-                model: Tag,
-                as: 'tags',
-                required: false,
-                raw: true,
-                attributes: ["tagId", "name"]
-            }, {
-                model: Model,
-                as: 'models',
-                required: false,
-                raw: true,
-                attributes: ["modelId", "name"]
-            }]
+            attributes: ["pictureId", "title", "imgHost", "cover", "lastUpdatedAt"],
+            // include: [{
+            //     model: Tag,
+            //     as: 'tags',
+            //     required: false,
+            //     raw: true,
+            //     attributes: ["tagId", "name"]
+            // }, {
+            //     model: Model,
+            //     as: 'models',
+            //     required: false,
+            //     raw: true,
+            //     attributes: ["modelId", "name"]
+            // }]
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
             reject(err);
         })
+    })
+}
+
+exports.count = function(where) {
+    return new Promise(function(resolve, reject) {
+        Picture.count({
+            where: where
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
     })
 }

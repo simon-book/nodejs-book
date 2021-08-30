@@ -19,6 +19,7 @@ var Picture = sequelize.define('picture', {
         allowNull: false
     },
     // modelIds: Sequelize.ARRAY(Sequelize.BIGINT), //模特
+    imgHost: Sequelize.TEXT,
     cover: Sequelize.TEXT, //竖向封面
     horiCover: Sequelize.TEXT, //横向封面
     abstractContent: Sequelize.TEXT, //摘要

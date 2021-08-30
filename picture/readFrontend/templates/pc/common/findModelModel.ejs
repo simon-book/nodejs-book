@@ -1,0 +1,41 @@
+<div class="border book-list-box">
+    <h2 class="book-list-title">结果列表</h2>
+    <div class="book-list">
+        <% models.forEach(function(model){ %>
+        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+            <a class="model-item-1" href="/model/<%= model.modelId%>" target="_blank">
+                <div class="model-cover"><img src="<%= branchInfo.pictureUrl+model.cover%>" alt="<%= model.name%>"></div>
+                <div class="model-name">
+                    <%= model.name%>
+                </div>
+            </a>
+        </div>
+        <% }); %>
+    </div>
+    <nav aria-label="Page navigation" class="pagination-box">
+        <ul class="pagination">
+            <% if(pagination.currentPage>1){%>
+            <li>
+                <a href="javascript:void(0)" aria-label="Previous" onclick="pageChange(<%= pagination.currentPage-1%>)">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <% } %>
+            <% pagination.pages.forEach(function(page){ %>
+            <li class=<%=page==pagination.currentPage?"active":""%>><a href="javascript:void(0)" onclick="pageChange(<%= page%>)">
+                    <%= page%></a></li>
+            <% }); %>
+            <% if(pagination.currentPage<pagination.totalPage){%>
+            <li>
+                <a href="javascript:void(0)" aria-label="Next" onclick="pageChange(<%= pagination.currentPage+1%>)">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            <% } %>
+            <% if(pagination.pages[pagination.pages.length-1]<pagination.totalPage){%>
+            <li><a href="javascript:void(0)" onclick="pageChange(<%= pagination.totalPage%>)">...
+                    <%= pagination.totalPage%></a></li>
+            <% } %>
+        </ul>
+    </nav>
+</div>

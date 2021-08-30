@@ -1,0 +1,186 @@
+<%- include('common/top', {}); %>
+<%- include('common/mainHeader', {}); %>
+<div class="container">
+    <div class="row ">
+        <div class="col-md-9 padding-0 row">
+            <div class="col-xs-12 book-box">
+                <div class="border book-list-box">
+                    <h2 class="book-list-header">现在位置：<a href="/">首页</a> &raquo; <a href="/modelList/">倾城·美人榜</a>
+                        &raquo;
+                        <%= model.name%>
+                    </h2>
+                    <div class="book-list">
+                        <div class="model-item-6">
+                            <div class="model-name">
+                                <%= model.name+(model.othername?"（"+model.othername+"）":"") %>
+                            </div>
+                            <div class="model-detail">
+                                <div class="model-cover"><img src="<%= branchInfo.pictureUrl+model.cover%>" alt="<%= model.name%>"></div>
+                                <div class="model-info">
+                                    <% if(model.nickname){ %>
+                                    <div class="model-other">
+                                        别名：
+                                        <span>
+                                            <%= model.nickname %></span>
+                                    </div>
+                                    <% } %>
+                                    <% if(model.birthyear){ %>
+                                    <div class="model-other">
+                                        年龄：
+                                        <span>
+                                            <%= moment().year()-model.birthyear+(model.zodiac?"（"+model.zodiac +"）":"") %></span>
+                                    </div>
+                                    <% } %>
+                                    <% if(model.birthday){ %>
+                                    <div class="model-other">
+                                        生日：
+                                        <span>
+                                            <%= model.birthday %></span>
+                                    </div>
+                                    <% } %>
+                                    <% if(model.constellation){ %>
+                                    <div class="model-other">
+                                        星座：
+                                        <span>
+                                            <%= model.constellation %></span>
+                                    </div>
+                                    <% } %>
+                                    <% if(model.bloodType){ %>
+                                    <div class="model-other">
+                                        血型：
+                                        <span>
+                                            <%= model.bloodType %></span>
+                                    </div>
+                                    <% } %>
+                                    <% if(model.height){ %>
+                                    <div class="model-other">
+                                        身高：
+                                        <span>
+                                            <%= model.height %>cm</span>
+                                    </div>
+                                    <% } %>
+                                    <% if(model.weight){ %>
+                                    <div class="model-other">
+                                        体重：
+                                        <span>
+                                            <%= model.weight %>kg</span>
+                                    </div>
+                                    <% } %>
+                                    <% if(model.bustline && model.waistline && model.hipline){ %>
+                                    <div class="model-other">
+                                        三围：
+                                        <span>
+                                            <%= "B"+model.bustline + (model.cup?"("+model.cup+")":"") +" W"+model.waistline+" H"+model.hipline%></span>
+                                    </div>
+                                    <% } %>
+                                    <% if(model.birthIn){ %>
+                                    <div class="model-other">
+                                        出生：
+                                        <span>
+                                            <%= model.birthIn %></span>
+                                    </div>
+                                    <% } %>
+                                    <% if(model.job){ %>
+                                    <div class="model-other">
+                                        职业：
+                                        <span>
+                                            <%= model.job %></span>
+                                    </div>
+                                    <% } %>
+                                    <% if(model.interests){ %>
+                                    <div class="model-other">
+                                        兴趣：
+                                        <span>
+                                            <%= model.interests %></span>
+                                    </div>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 book-box">
+                <div class="border book-list-box">
+                    <h2 class="book-list-title">详细资料</h2>
+                    <div class="book-list model-remark">
+                        <%= model.remark %>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 book-box">
+                <div class="border book-list-box">
+                    <h2 class="book-list-title">女神图集</h2>
+                    <div class="book-list">
+                        <% relatedPictures.forEach(function(picture){ %>
+                        <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
+                            <a class="gallery-item" href="/gallery/<%= picture.pictureId%>" target="_blank">
+                                <div class="gallery-cover"><img src="<%= picture.imgHost+picture.cover%>" alt="<%= picture.title%>"></div>
+                                <div class="gallery-title hidden-xs hidden-sm" style="width: 100%;">
+                                    <%= picture.title%>
+                                </div>
+                                <div class="gallery-title-1 hidden-lg hidden-md">
+                                    <%= picture.title%>
+                                </div>
+                            </a>
+                        </div>
+                        <% }); %>
+                    </div>
+                    <% if(relatedPicturesCount>12){ %>
+                    <div class="book-list-footer">
+                        <a class="btn btn-primary btn-xs btn-more" href="/modelAlbum/">更多</a>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+            <div class="col-xs-12 book-box">
+                <div class="border book-list-box">
+                    <h2 class="book-list-title">女神资讯</h2>
+                    <div class="book-list">
+                        <% relatedArticles.forEach(function(article){ %>
+                        <a class="article-item" href="/article/<%= article.articleId%>" title="<%= article.title%>">
+                            <div class="article-title">
+                                <%= article.title%>
+                            </div>
+                        </a>
+                        <% }); %>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 book-box">
+                <div class="border book-list-box">
+                    <h2 class="book-list-title">最近热门</h2>
+                    <div class="book-list">
+                        <% relatedModels.forEach(function(model){ %>
+                        <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                            <a class="model-item-1" href="/model/<%= model.modelId%>" target="_blank">
+                                <div class="model-cover"><img src="<%= branchInfo.pictureUrl+model.cover%>" alt="<%= model.name%>"></div>
+                                <div class="model-name">
+                                    <%= model.name%>
+                                </div>
+                            </a>
+                        </div>
+                        <% }); %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 home-right-box">
+            <div class="border book-list-box">
+                <h2 class="book-list-header">热点资讯</h2>
+                <div class="book-list">
+                    <% recommendArticles.forEach(function(article){ %>
+                    <a class="article-item-2 article-item-3" href="/article/<%= article.articleId%>" title="<%= article.title%>">
+                        <div class="article-cover"><img src="<%= branchInfo.pictureUrl+article.cover%>"></div>
+                        <div class="article-title">
+                            <%= article.title%>
+                        </div>
+                    </a>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include('common/footer', {}); %>
+<%- include('common/bottom', {}); %>

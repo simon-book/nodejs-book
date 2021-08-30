@@ -1,0 +1,68 @@
+<%- include('common/top', {}); %>
+<%- include('common/mainHeader', {}); %>
+<div class="container">
+    <div class="row ">
+        <div class="col-md-9 padding-0 row">
+            <div class="col-xs-12 book-box">
+                <div class="border book-list-box">
+                    <h2 class="book-list-header">现在位置：<a href="/">首页</a> &raquo; <a href="/articles/">女神情报</a></h2>
+                    <div class="book-list">
+                        <div class="row">
+                            <% articles.forEach(function(article){ %>
+                            <a class="col-md-3 col-sm-4 col-xs-6 article-item-2" href="/article/<%= article.articleId%>" target="_blank">
+                                <div class="article-cover"><img src="<%= branchInfo.pictureUrl+article.cover%>"></div>
+                                <div class="article-title">
+                                    <%= article.title%>
+                                </div>
+                            </a>
+                            <% }); %>
+                        </div>
+                    </div>
+                    <nav aria-label="Page navigation" class="pagination-box">
+                        <ul class="pagination">
+                            <% if(pagination.currentPage>1){%>
+                            <li>
+                                <a href="/articles/<%= pagination.currentPage-1%>/" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <% } %>
+                            <% pagination.pages.forEach(function(page){ %>
+                            <li class=<%=page==pagination.currentPage?"active":""%>><a href="/articles/<%= page%>/">
+                                    <%= page%></a></li>
+                            <% }); %>
+                            <% if(pagination.currentPage<pagination.totalPage){%>
+                            <li>
+                                <a href="/articles/<%= pagination.currentPage+1%>/" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                            <% } %>
+                            <% if(pagination.pages[pagination.pages.length-1]<pagination.totalPage){%>
+                            <li><a href="/articles/<%= pagination.totalPage%>/">...
+                                    <%= pagination.totalPage%></a></li>
+                            <% } %>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 home-right-box">
+            <div class="border book-list-box">
+                <h2 class="book-list-header">热门标签</h2>
+                <div class="book-list">
+                    <% branchInfo.modelTags.forEach(function(tag){ %>
+                    <a class="right-box-tag" href="/modelList/<%= tag.tagId%>/1">
+                        <%= tag.name%> </a>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+var currentPage = <%= pagination.currentPage%>;
+var totalPage = <%= pagination.totalPage%>;
+</script>
+<%- include('common/footer', {}); %>
+<%- include('common/bottom', {}); %>

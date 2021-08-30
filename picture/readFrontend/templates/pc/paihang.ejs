@@ -1,88 +1,101 @@
 <%- include('common/top', {}); %>
 <%- include('common/mainHeader', {}); %>
 <div class="container">
-    <ul class="child-nav">
-        <% branchInfo.rankMap.forEach(function(rank){ %>
-        <li><a href="/paihang/<%= rank[1]%>/1" title="<%= rank[0]%>">
-                <%= rank[0]%></a></li>
-        <% }); %>
-    </ul>
     <div class="row ">
-        <div class="col-md-12 border book-list-box" style="margin-top: 0;">
-            <h2 class="book-list-title">
-                <%= pageTitle%>小说列表</h2>
-            <ul class="book-list">
-                <li class="book-item-5 row">
-                    <div class="col-xs-2 col-md-1">
-                        <span>类型</span>
+        <div class="col-md-9 padding-0 row">
+            <div class="col-xs-12 book-box">
+                <div class="border book-list-box">
+                    <h2 class="book-list-header">现在位置：<a href="/">首页</a> &raquo; <a href="/paihangs/">女神情报</a>&raquo; <a href="/paihang/<%= rank.rankId %>">
+                            <%= rank.name %></a></h2>
+                    <div class="book-list-remark">
+                        <%= rank.name %>第
+                        <%= (pagination.currentPage-1)*pagination.pageSize+1 %>～
+                        <%= pagination.currentPage*pagination.pageSize %>位
                     </div>
-                    <div class="col-xs-5 col-md-2">
-                        <span>小说名称</span>
-                    </div>
-                    <div class="col-xs-5 col-md-2">
-                        <span>作者</span>
-                    </div>
-                    <div class="col-xs-12 col-md-4">
-                        <span>最新章节</span>
-                    </div>
-                    <div class="col-xs-6 col-md-2">
-                        <span>最近更新时间</span>
-                    </div>
-                    <div class="col-xs-6 col-md-1 text-center">
-                        <span>状态</span>
-                    </div>
-                </li>
-                <% books.forEach(function(book){ %>
-                <li class="book-item-5 row">
-                    <div class="col-xs-3 col-md-1">
-                        <span>[
-                            <%= book.categoryName%>]</span>
-                    </div>
-                    <div class="col-xs-5 col-md-2">
-                        <span>
-                            <a href="/book/<%= book.bookId%>">
-                                <%= book.title%></a>
-                        </span>
-                    </div>
-                    <div class="col-xs-4 col-md-2">
-                        <span>
-                            <%= book.writer%></span>
-                    </div>
-                    <div class="col-xs-12 col-md-4">
-                        <% if(book.lastChapter){%>
-                        <span><a href="/book/<%= book.bookId%>/<%= book.lastChapter.number%>">
-                                <%= book.lastChapter.title%></a></span>
-                        <% } %>
-                    </div>
-                    <div class="col-xs-8 col-md-2">
-                        <span>
-                            <%= book.lastUpdatedAt%></span>
-                    </div>
-                    <div class="col-xs-4 col-md-1  text-center">
-                        <span>
-                            <%= book.publishStatus == 1?'连载中':'已完结'%></span>
-                    </div>
-                </li>
-                <% }); %>
-            </ul>
-            <div class="pagination-box text-center">
-                <ul class="pagination">
-                    <% if(pagination.currentPage > 1){%>
-                    <li title="上一页"><a href="/paihang/<%= currentRankId%>/<%= pagination.currentPage-1%>">
-                            <</a> </li> <% }%>
-                    <li class="hd"><span>
-                            <%= pagination.currentPage%>/
-                            <%= pagination.totalPage%></span></li>
-                    <% if(pagination.currentPage < pagination.totalPage){%>
-                    <li title="下一页"><a href="/paihang/<%= currentRankId%>/<%= pagination.currentPage+1%>">></a></li>
-                    <% }%>
-                    <li>
-                        <div class="go-page">
-                            <input type="number" class="go-page-input" id="go-page-input" min="1" max="<%= pagination.totalPage%>" placeholder="页数" onkeydown="if(event.keyCode==13){goPage(); return false;}">
-                            <button type="button" class="go-page-btn" onclick="goPage()">跳转</button>
+                    <div class="book-list">
+                        <div class="row">
+                            <% models.forEach(function(model,index){ %>
+                            <div class="col-sm-6 col-xs-12">
+                                <a class="model-item-4 model-item-7" href="/model/<%= model.modelId%>" target="_blank">
+                                    <div class="model-cover"><img src="<%= branchInfo.pictureUrl+model.cover%>" alt="<%= model.name%>"></div>
+                                    <div class="model-info">
+                                        <div class="model-name">
+                                            <span style="font-size: 30px;color: #c00;">
+                                                <%= (pagination.currentPage-1)*pagination.pageSize+1+index%>.</span>
+                                            <%= model.name %>
+                                        </div>
+                                        <% if(model.nickname){ %>
+                                        <div class="model-other">
+                                            别名：
+                                            <%= model.nickname %>
+                                        </div>
+                                        <% } %>
+                                        <% if(model.birthyear){ %>
+                                        <div class="model-other">
+                                            年龄：
+                                            <%= (moment().year()-model.birthyear)+"岁" %>
+                                        </div>
+                                        <% } %>
+                                        <% if(model.bustline && model.waistline && model.hipline){ %>
+                                        <div class="model-other">
+                                            三围：
+                                            <span>
+                                                <%= "B"+model.bustline + (model.cup?"("+model.cup+")":"") +" W"+model.waistline+" H"+model.hipline%></span>
+                                        </div>
+                                        <% } %>
+                                        <% if(model.job){ %>
+                                        <div class="model-other">
+                                            职业：
+                                            <%= model.job %>
+                                        </div>
+                                        <% } %>
+                                    </div>
+                                </a>
+                            </div>
+                            <% }); %>
                         </div>
-                    </li>
-                </ul>
+                    </div>
+                    <nav aria-label="Page navigation" class="pagination-box">
+                        <ul class="pagination">
+                            <% if(pagination.currentPage>1){%>
+                            <li>
+                                <a href="/paihang/<%= rank.rankId %>/<%= pagination.currentPage-1%>/" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <% } %>
+                            <% pagination.pages.forEach(function(page){ %>
+                            <li class=<%=page==pagination.currentPage?"active":""%>><a href="/paihang/<%= rank.rankId %>/<%= page%>/">
+                                    <%= page%></a></li>
+                            <% }); %>
+                            <% if(pagination.currentPage<pagination.totalPage){%>
+                            <li>
+                                <a href="/paihang/<%= rank.rankId %>/<%= pagination.currentPage+1%>/" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                            <% } %>
+                            <% if(pagination.pages[pagination.pages.length-1]<pagination.totalPage){%>
+                            <li><a href="/paihang/<%= rank.rankId %>/<%= pagination.totalPage%>/">...
+                                    <%= pagination.totalPage%></a></li>
+                            <% } %>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 home-right-box">
+            <div class="border book-list-box">
+                <h2 class="book-list-header">热门标签</h2>
+                <div class="book-list">
+                    <% ranks.forEach(function(rank){ %>
+                    <a class="article-item" href="/paihang/<%= rank.rankId %>/" title="<%= rank.name%>" style="line-height: 40px;">
+                        <div class="article-title">
+                            <%= rank.name%>
+                        </div>
+                    </a>
+                    <% }); %>
+                </div>
             </div>
         </div>
     </div>

@@ -1,0 +1,43 @@
+<%- include('common/top', {}); %>
+<%- include('common/mainHeader', {}); %>
+<div class="container">
+    <div class="row ">
+        <% ranks.forEach(function(rank){ %>
+        <div class="col-md-4 col-sm-6 col-xs-12">
+            <div>
+                <div class="book-box">
+                    <div class="border book-list-box">
+                        <h2 class="book-list-title">
+                            <%= rank.name%>
+                        </h2>
+                        <div class="book-list book-list-padding">
+                            <% rank.models.forEach(function(model,index){ %>
+                            <% if(index==0){ %>
+                            <a class="model-item-2" href="/model/<%= model.modelId%>">
+                                <div class="model-cover"><img src="<%= branchInfo.pictureUrl+model.cover%>" alt="<%= model.name%>"></div>
+                                <div class="model-name">
+                                    <%= model.name+"，"+(model.birthday?moment(model.birthday).format("YYYY年MM月DD日"):"")+(model.birthIn?"出生于"+model.birthIn.replace(/\s/g,""):"")+(model.birthyear?"，现龄"+(moment().year()-model.birthyear):"")+(model.job?"。职业是"+model.job:"")%>
+                                </div>
+                            </a>
+                            <% }else{%>
+                            <a class="model-item-3" href="/model/<%= model.modelId%>">
+                                <span class="model-name">
+                                    <%= model.name+"（"+(model.birthyear?(moment().year()-model.birthyear)+"岁":"")+(model.job?"，"+model.job:"")+"）"%></span>
+                            </a>
+                            <% } %>
+                            <% }); %>
+                        </div>
+                        <div class="book-list-footer">
+                            <a class="btn btn-primary btn-xs btn-more" href="/paihang/<%= rank.rankId%>">更多</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% }); %>
+    </div>
+</div>
+<script type="text/javascript">
+</script>
+<%- include('common/footer', {}); %>
+<%- include('common/bottom', {}); %>

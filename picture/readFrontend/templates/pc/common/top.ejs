@@ -5,8 +5,8 @@
     <title>
         <%= title%>
     </title>
-    <meta name="keywords" content="<%= currentRender=='chapter'?branchInfo.keywords1:branchInfo.keywords%>" />
-    <meta name="description" content="<%= currentRender=='chapter'?branchInfo.description1:branchInfo.description%>" />
+    <meta name="keywords" content="<%= keywords?keywords:branchInfo.keywords%>" />
+    <meta name="description" content="<%= description?description:branchInfo.description%>" />
     <meta http-equiv="Content-Type" content="application/xhtml+xml;charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
     <link rel="shortcut icon " type="images/x-icon" href="/favicon.ico">

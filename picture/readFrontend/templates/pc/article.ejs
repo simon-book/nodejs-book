@@ -1,0 +1,92 @@
+<%- include('common/top', {}); %>
+<%- include('common/mainHeader', {}); %>
+<div class="container">
+    <div class="row ">
+        <div class="col-md-9 padding-0 row">
+            <div class="col-xs-12 book-box">
+                <div class="border book-list-box">
+                    <h2 class="book-list-header">现在位置：<a href="/">首页</a> &raquo; <a href="/articles/">女神情报</a>&raquo; <a href="/article/<%= article.articleId%>">
+                            <%= article.title%></a></h2>
+                    <div class="book-list">
+                        <div class="article-detail">
+                            <h3 class="article-header">
+                                <div class="article-title">
+                                    <%= article.title%>
+                                </div>
+                                <div class="article-time">
+                                    <%= article.lastUpdatedAt%>
+                                </div>
+                            </h3>
+                            <div class="article-content">
+                                <%- article.content[currentPage-1].replace(/\*{4}pictureUrl\*{3}/g,branchInfo.pictureUrl)%>
+                                <nav aria-label="Page navigation" class="pagination-box">
+                                    <ul class="pagination">
+                                        <% article.content.forEach(function(con,page){ %>
+                                        <li class=<%=page+1==currentPage?"active":""%>><a href="/article/<%= article.articleId%>/<%= page+1%>/">
+                                                <%= page+1%></a></li>
+                                        <% }); %>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="book-list-footer">
+                        <% if(prevArticle){%>
+                        <div class="article-item article-item-1">
+                            <a class="article-title" href="/article/
+                                <%= prevArticle.articleId%>" title="
+                                <%= prevArticle.title%>">上一篇：
+                                <%= prevArticle.title%></a>
+                        </div>
+                        <% } %>
+                        <% if(nextArticle){%>
+                        <div class="article-item article-item-1">
+                            <a class="article-title" href="/article/
+                                <%= nextArticle.articleId%>" title="
+                                <%= nextArticle.title%>">下一篇：
+                                <%= nextArticle.title%></a>
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            <% if(relatedModels){%>
+            <div class="col-md-12 col-xs-12 book-box">
+                <div class="border book-list-box">
+                    <h2 class="book-list-title">相关女神</h2>
+                    <div class="book-list">
+                        <% relatedModels.forEach(function(model){ %>
+                        <div class="col-md-2 col-sm-3 col-xs-4">
+                            <div class="model-item-1">
+                                <div class="model-cover"><img src="<%= branchInfo.pictureUrl+model.cover%>" alt="<%= model.name%>"></div>
+                                <div class="model-name"><a class="book-title" href="/book/<%= model.modelId%>">
+                                        <%= model.name%> </a></div>
+                            </div>
+                        </div>
+                        <% }); %>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div>
+        <div class="col-md-3 home-right-box">
+            <div class="border book-list-box">
+                <h2 class="book-list-header">热点资讯</h2>
+                <div class="book-list">
+                    <% recommendArticles.forEach(function(article){ %>
+                    <a class="article-item-2 article-item-3" href="/article/<%= article.articleId%>" title="<%= article.title%>">
+                        <div class="article-cover"><img src="<%= branchInfo.pictureUrl+article.cover%>"></div>
+                        <div class="article-title">
+                            <%= article.title%>
+                        </div>
+                    </a>
+                    <% }); %>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+</script>
+<%- include('common/footer', {}); %>
+<%- include('common/bottom', {}); %>

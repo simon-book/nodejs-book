@@ -57,13 +57,14 @@ branchMap.queryBranchInfo();
 
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    res.render('error', {
-        title: "出错了",
-        keywords: "出错了",
-        description: "出错了",
-        message: err.message,
-        error: {}
-    });
+    res.send(err.message || err);
+    // res.render('error', {
+    //     title: "出错了",
+    //     keywords: "出错了",
+    //     description: "出错了",
+    //     message: err.message,
+    //     error: {}
+    // });
 });
 app.listen(app.get('port'), function() {
     console.log('Express server listening on port ' + app.get('port'));

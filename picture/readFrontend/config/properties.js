@@ -32,7 +32,7 @@ module.exports = function() {
             port: "5432",
             timezone: "Asia/Shanghai",
             schemas: {
-                book_publisher: 'book_publisher'
+                picture_publisher: 'picture_publisher'
             }
         };
         global.__MOSS__ = {
@@ -67,7 +67,7 @@ module.exports = function() {
             port: "5432",
             timezone: "Asia/Shanghai",
             schemas: {
-                book_publisher: 'book_publisher'
+                picture_publisher: 'picture_publisher'
             }
         };
         global.__MOSS__ = {
