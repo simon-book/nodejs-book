@@ -14,7 +14,7 @@ var articleSequelize = require('../../data/sequelize/picture/articleSequelize.js
 var rankSequelize = require('../../data/sequelize/rank/rankSequelize.js');
 
 var branch = {
-    copySrc: "invshen", //www.invshen.net/
+    copySrc: "fnvshen", //www.fnvshen.com/
     originPictureTagGroups: [
         ["国家", 0],
         ["风格", 1],
@@ -198,7 +198,7 @@ async function copy_category_pictures(tag, startPath, startIndex, endIndex) {
     try {
         if (!startIndex) startIndex = 1;
         var index = startIndex;
-        if (!endIndex) endIndex = 10000;
+        if (!endIndex) endIndex = 100;
         if (branch.isTest) endIndex = startIndex + 2;
         var stop = false;
         do {
@@ -240,9 +240,9 @@ async function copy_category_pictures(tag, startPath, startIndex, endIndex) {
                             // else if (/^(http)/.test(picture.cover)) picture.cover = picture.cover.replace(/http:\/\/[^\/]+/, "");
                             savedPicture = await create_picture(originId, picture, tag);
                         }
-                        if (!savedPicture.tags || _.findIndex(savedPicture.tags, {
+                        if (savedPicture && (!savedPicture.tags || _.findIndex(savedPicture.tags, {
                                 tagId: tag.tagId
-                            }) == -1) {
+                            }) == -1)) {
                             await savedPicture.addTags([tag.tagId], {
                                 through: {
                                     pictureLastUpdatedAt: savedPicture.lastUpdatedAt
