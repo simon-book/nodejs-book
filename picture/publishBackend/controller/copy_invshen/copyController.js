@@ -14,7 +14,7 @@ var articleSequelize = require('../../data/sequelize/picture/articleSequelize.js
 var rankSequelize = require('../../data/sequelize/rank/rankSequelize.js');
 
 var branch = {
-    copySrc: "fnvshen", //www.fnvshen.net/
+    copySrc: "fnvshen", //www.fnvshen.com/
     originPictureTagGroups: [
         ["国家", 0],
         ["风格", 1],
@@ -198,7 +198,7 @@ async function copy_category_pictures(tag, startPath, startIndex, endIndex) {
     try {
         if (!startIndex) startIndex = 1;
         var index = startIndex;
-        if (!endIndex) endIndex = 10000;
+        if (!endIndex) endIndex = 100;
         if (branch.isTest) endIndex = startIndex + 2;
         var stop = false;
         do {
@@ -210,7 +210,9 @@ async function copy_category_pictures(tag, startPath, startIndex, endIndex) {
                 if (index == 1 && !tag.remark) {
                     var tagRemark = $("#ddesc").text();
                     if (tagRemark) {
-                        await tagSequelize.update({ remark: tagRemark }, {
+                        await tagSequelize.update({
+                            remark: tagRemark
+                        }, {
                             tagId: tag.tagId
                         })
                     }
@@ -238,8 +240,14 @@ async function copy_category_pictures(tag, startPath, startIndex, endIndex) {
                             // else if (/^(http)/.test(picture.cover)) picture.cover = picture.cover.replace(/http:\/\/[^\/]+/, "");
                             savedPicture = await create_picture(originId, picture, tag);
                         }
-                        if (!savedPicture.tags || _.findIndex(savedPicture.tags, { tagId: tag.tagId }) == -1) {
-                            await savedPicture.addTags([tag.tagId], { through: { pictureLastUpdatedAt: savedPicture.lastUpdatedAt } });
+                        if (savedPicture && (!savedPicture.tags || _.findIndex(savedPicture.tags, {
+                                tagId: tag.tagId
+                            }) == -1)) {
+                            await savedPicture.addTags([tag.tagId], {
+                                through: {
+                                    pictureLastUpdatedAt: savedPicture.lastUpdatedAt
+                                }
+                            });
                         }
                     } catch (err) {
                         console.log(index, i, originId);
@@ -313,7 +321,9 @@ async function create_picture(originId, picture, tag) {
                     name: tagName
                 })
                 if (!savedTag) {
-                    var otherGroup = _.find(branch.pictureTagGroups, { name: "其他" });
+                    var otherGroup = _.find(branch.pictureTagGroups, {
+                        name: "其他"
+                    });
                     savedTag = await tagSequelize.create({
                         branchId: branch.branchId,
                         originId: tagOriginId,
@@ -327,7 +337,11 @@ async function create_picture(originId, picture, tag) {
         if (girlIds.length) await savedPicture.addModels(_.uniq(girlIds));
         if (tagIds.length) {
             if (tag && _.indexOf(tagIds, tag.tagId) == -1) tagIds.push(tag.tagId);
-            await savedPicture.addTags(_.uniq(tagIds), { through: { pictureLastUpdatedAt: savedPicture.lastUpdatedAt } });
+            await savedPicture.addTags(_.uniq(tagIds), {
+                through: {
+                    pictureLastUpdatedAt: savedPicture.lastUpdatedAt
+                }
+            });
         }
         return savedPicture;
     } catch (err) {
@@ -373,7 +387,9 @@ async function copy_category_models(tag, startPath, startIndex, endIndex) {
                 if (index == 1 && !tag.remark) {
                     var tagRemark = $("#ddesc").text();
                     if (tagRemark) {
-                        await tagSequelize.update({ remark: tagRemark }, {
+                        await tagSequelize.update({
+                            remark: tagRemark
+                        }, {
                             tagId: tag.tagId
                         })
                     }
@@ -395,8 +411,14 @@ async function copy_category_models(tag, startPath, startIndex, endIndex) {
                                     originId: originId
                                 })
                             }
-                            if (savedModel && (!savedModel.tags || _.findIndex(savedModel.tags, { tagId: tag.tagId }) == -1)) {
-                                await savedModel.addTags([tag.tagId], { through: { modelOriginId: savedModel.originId } });
+                            if (savedModel && (!savedModel.tags || _.findIndex(savedModel.tags, {
+                                    tagId: tag.tagId
+                                }) == -1)) {
+                                await savedModel.addTags([tag.tagId], {
+                                    through: {
+                                        modelOriginId: savedModel.originId
+                                    }
+                                });
                             }
                         }
                     } catch (err) {
@@ -540,7 +562,7 @@ async function complete_one_model_info(model) {
         model.set("statusId", 2);
         await model.save();
     } catch (err) {
-        console.log(i, err);
+        console.log(err);
     }
 }
 
@@ -634,7 +656,7 @@ exports.copy_articles = async function(modelId, originId) {
                         console.log(err);
                     }
                 }
-                var pages = $("#post_entry").find(".pagesYY a");
+                var pages = $(".post_entry").find(".pagesYY a");
                 if ($(pages[pages.length - 1]).hasClass("cur")) stop = true;
             } catch (err) {
                 console.log(originId, index);
@@ -698,13 +720,17 @@ async function create_article(originId) {
             var href = $(girlEle).attr("href");
             if (href.match(/\/girl\//g) && href.match(/\/girl\//g).length) {
                 var originId = href.split("/girl/")[1].replace("/", "");
-                var model = _.find(relatedModels, { originId: originId });
+                var model = _.find(relatedModels, {
+                    originId: originId
+                });
                 if (model) {
                     $(girlEle).attr("href", "/model/" + model.modelId);
                 }
             } else if (href.match(/\/gallery\//g) && href.match(/\/gallery\//g).length) {
                 var originId = href.split("/gallery/")[1].replace("/", "");
-                var pictureTag = _.find(branch.pictureTags, { originId: originId });
+                var pictureTag = _.find(branch.pictureTags, {
+                    originId: originId
+                });
                 if (pictureTag) {
                     $(girlEle).attr("href", "/galleryList/" + pictureTag.tagId);
                 }
@@ -728,13 +754,17 @@ async function create_article(originId) {
                 var href = $(girlEle).attr("href");
                 if (href.match(/\/girl\//g) && href.match(/\/girl\//g).length) {
                     var originId = href.split("/girl/")[1].replace("/", "");
-                    var model = _.find(relatedModels, { originId: originId });
+                    var model = _.find(relatedModels, {
+                        originId: originId
+                    });
                     if (model) {
                         $(girlEle).attr("href", "/model/" + model.modelId);
                     }
                 } else if (href.match(/\/gallery\//g) && href.match(/\/gallery\//g).length) {
                     var originId = href.split("/gallery/")[1].replace("/", "");
-                    var pictureTag = _.find(branch.pictureTags, { originId: originId });
+                    var pictureTag = _.find(branch.pictureTags, {
+                        originId: originId
+                    });
                     if (pictureTag) {
                         $(girlEle).attr("href", "/galleryList/" + pictureTag.tagId);
                     }
@@ -846,7 +876,9 @@ async function copy_rank_models(originId) {
         var ranks = await rankSequelize.findAll({
             branchId: branch.branchId
         })
-        if (originId) ranks = _.filter(ranks, { originId: originId });
+        if (originId) ranks = _.filter(ranks, {
+            originId: originId
+        });
         for (var i = 0; i < ranks.length; i++) {
             try {
                 // if (branch.isTest && i > 2) break;

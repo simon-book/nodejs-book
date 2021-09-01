@@ -25,12 +25,12 @@ router.use(function(req, res, next) {
     var isLocalhost = /^(localhost)/.test(req.hostname);
     var isM = /^(m\.)/.test(req.hostname);
     var isMobileDevice = bIsIpad || bIsIphoneOs || bIsUc7 || bIsUc || bIsAndroid;
-    if (isMobileDevice && !isM && !isLocalhost) {
-        res.redirect(req.protocol + "://" + req.hostname.replace(/^(www)/, "m") + req.originalUrl)
-    } else {
-        req.branchInfo.isMobileDevice = isMobileDevice;
-        next();
-    }
+    // if (isMobileDevice && !isM && !isLocalhost) {
+    //     res.redirect(req.protocol + "://" + req.hostname.replace(/^(www)/, "m") + req.originalUrl)
+    // } else {
+    req.branchInfo.isMobileDevice = isMobileDevice;
+    next();
+    // }
 });
 
 //ajax请求
