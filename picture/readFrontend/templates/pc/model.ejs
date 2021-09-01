@@ -14,9 +14,13 @@
                             <div class="model-name">
                                 <%= model.name+(model.othername?"（"+model.othername+"）":"") %>
                             </div>
-                            <div class="model-detail">
-                                <div class="model-cover"><img src="<%= branchInfo.pictureUrl+model.cover%>" alt="<%= model.name%>"></div>
-                                <div class="model-info">
+                            <div class="model-detail row">
+                                <div class="col-md-3 col-sm-4 col-xs-5">
+                                    <div class="model-cover">
+                                        <img src="<%= branchInfo.pictureUrl+model.cover%>" alt="<%= model.name%>">
+                                    </div>
+                                </div>
+                                <div class="model-info col-md-9 col-sm-8 col-xs-7">
                                     <% if(model.nickname){ %>
                                     <div class="model-other">
                                         别名：
@@ -170,7 +174,7 @@
                 <h2 class="book-list-header">热点资讯</h2>
                 <div class="book-list">
                     <% recommendArticles.forEach(function(article){ %>
-                    <a class="article-item-2 article-item-3" href="/article/<%= article.articleId%>" title="<%= article.title%>">
+                    <a class="col-md-12 col-xs-6 col-sm-4 article-item-2" href="/article/<%= article.articleId%>" target="_blank">
                         <div class="article-cover"><img src="<%= branchInfo.pictureUrl+article.cover%>"></div>
                         <div class="article-title">
                             <%= article.title%>

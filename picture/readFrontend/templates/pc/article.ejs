@@ -57,11 +57,12 @@
                     <div class="book-list">
                         <% relatedModels.forEach(function(model){ %>
                         <div class="col-md-2 col-sm-3 col-xs-4">
-                            <div class="model-item-1">
+                            <a class="model-item-1" href="/model/<%= model.modelId%>" target="_blank">
                                 <div class="model-cover"><img src="<%= branchInfo.pictureUrl+model.cover%>" alt="<%= model.name%>"></div>
-                                <div class="model-name"><a class="book-title" href="/book/<%= model.modelId%>">
-                                        <%= model.name%> </a></div>
-                            </div>
+                                <div class="model-name">
+                                    <%= model.name%>
+                                </div>
+                            </a>
                         </div>
                         <% }); %>
                     </div>
@@ -74,7 +75,7 @@
                 <h2 class="book-list-header">热点资讯</h2>
                 <div class="book-list">
                     <% recommendArticles.forEach(function(article){ %>
-                    <a class="article-item-2 article-item-3" href="/article/<%= article.articleId%>" title="<%= article.title%>">
+                    <a class="col-md-12 col-xs-6 col-sm-4 article-item-2" href="/article/<%= article.articleId%>" target="_blank">
                         <div class="article-cover"><img src="<%= branchInfo.pictureUrl+article.cover%>"></div>
                         <div class="article-title">
                             <%= article.title%>

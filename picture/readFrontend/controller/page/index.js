@@ -39,7 +39,7 @@ exports.home = async function(req, res) {
                 [Op.endsWith]: moment().format("MM-DD")
             },
             statusId: 2
-        }, 0, 10);
+        }, 0, 7);
         var modelTags = _.filter(branchInfo.modelTags, function(tag) {
             return _.indexOf(["taiwan", "neidi", "qizhi", "mote"], tag.originId) > -1;
         })
@@ -541,11 +541,14 @@ exports.paihang = async function(req, res) {
             var rank = ranks[i];
             if (i >= 18) moreRanks.push(rank);
             else {
-                rank.models = await modelSequelize.findAll({
+                var models = await modelSequelize.findAll({
                     modelId: {
                         [Op.in]: rank.rankModelIds.slice(0, 10)
                     }
                 }, 0, 10);
+                rank.models = _.sortBy(models, function(model) {
+                    return _.indexOf(rank.rankModelIds.slice(0, 10), model.modelId);
+                })
                 result.push(rank);
             }
         }

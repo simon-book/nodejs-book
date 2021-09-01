@@ -49,7 +49,12 @@ var Model = sequelize.define('model', {
         fields: ['birthday', 'branch_id']
     }, {
         fields: ['origin_id', 'branch_id']
-    }]
+    }],
+    defaultScope: {
+        where: {
+            statusId: 2
+        }
+    }
 });
 
 module.exports = Model;
