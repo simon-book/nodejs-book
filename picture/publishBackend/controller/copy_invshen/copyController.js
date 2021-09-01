@@ -532,38 +532,37 @@ async function complete_one_model_info(model) {
                 console.log(err);
             }
         }
-        // }
-        // if ($("li.favli").length) {
-        //     var relatedModelIds = [];
-        //     var targetItems = $("li.favli");
-        //     for (var i = 0; i < targetItems.length; i++) {
-        //         try {
-        //             var item = targetItems[i];
-        //             var modelHref = $($(item).find("a")[1]).attr("href");
-        //             if (modelHref.match(/\/girl\//g).length) {
-        //                 var originId = modelHref.split("/")[2];
-        //                 var savedModel = await modelSequelize.findOneModel({
-        //                     branchId: branch.branchId,
-        //                     originId: originId
-        //                 })
-        //                 if (!savedModel) {
-        //                     savedModel = await modelSequelize.create({
-        //                         branchId: branch.branchId,
-        //                         originId: originId
-        //                     })
-        //                 }
-        //                 if (savedModel) relatedModelIds.push(savedModel.modelId);
-        //             }
-        //         } catch (err) {
-        //             console.log(err);
-        //         }
-        //     }
-        //     if (relatedModelIds.length) model.set("relatedModelIds", relatedModelIds);
-        // }
+        if ($("li.favli").length) {
+            var relatedModelIds = [];
+            var targetItems = $("li.favli");
+            for (var i = 0; i < targetItems.length; i++) {
+                try {
+                    var item = targetItems[i];
+                    var modelHref = $($(item).find("a")[1]).attr("href");
+                    if (modelHref.match(/\/girl\//g).length) {
+                        var originId = modelHref.split("/")[2];
+                        var savedModel = await modelSequelize.findOneModel({
+                            branchId: branch.branchId,
+                            originId: originId
+                        })
+                        if (!savedModel) {
+                            savedModel = await modelSequelize.create({
+                                branchId: branch.branchId,
+                                originId: originId
+                            })
+                        }
+                        if (savedModel) relatedModelIds.push(savedModel.modelId);
+                    }
+                } catch (err) {
+                    console.log(err);
+                }
+            }
+            if (relatedModelIds.length) model.set("relatedModelIds", relatedModelIds);
+        }
         model.set("statusId", 2);
         await model.save();
     } catch (err) {
-        console.log(i, err);
+        console.log(err);
     }
 }
 
