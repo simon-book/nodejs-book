@@ -75,7 +75,7 @@
                 <h2 class="book-list-header">热点资讯</h2>
                 <div class="book-list">
                     <% recommendArticles.forEach(function(article){ %>
-                    <a class="col-md-12 col-xs-6 col-sm-4 article-item-2" href="/article/<%= article.articleId%>" target="_blank">
+                    <a class="col-md-12 col-xs-6 col-sm-4 article-item-2" href="/article/<%= article.articleId%>">
                         <div class="article-cover"><img src="<%= branchInfo.pictureUrl+article.cover%>"></div>
                         <div class="article-title">
                             <%= article.title%>
