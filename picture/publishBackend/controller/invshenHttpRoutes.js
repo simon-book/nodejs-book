@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var autoSchedule = require('./autoSchedule/index.js');
 var copyController = require('./copy_invshen/copyController.js');
 var commonController = require('./copy_invshen/commonController.js');
 
@@ -51,6 +52,11 @@ router.post('/copy_rank_models', async function(req, res) {
 router.post('/check_all_models', async function(req, res) {
     await copyController.queryBranchInfo();
     copyController.check_all_models();
+    res.send(true);
+})
+router.post('/trigger_invshen_scheduele', async function(req, res) {
+    await copyController.queryBranchInfo();
+    autoSchedule.trigger_invshen_scheduele();
     res.send(true);
 })
 

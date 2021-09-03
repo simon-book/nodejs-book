@@ -182,7 +182,7 @@ exports.copy_all_pictures = async function(tagGroupId) {
                 var tag = tagGroup.tags[j];
                 try {
                     console.log(tag);
-                    await copy_category_pictures(tag, "gallery");
+                    await copy_category_pictures(tag);
                 } catch (err) {
                     console.log("获取分类totalPage失败", category, err);
                 }
@@ -194,7 +194,7 @@ exports.copy_all_pictures = async function(tagGroupId) {
 }
 
 
-async function copy_category_pictures(tag, startPath, startIndex, endIndex) {
+async function copy_category_pictures(tag, startIndex, endIndex, isUpdate) {
     try {
         if (!startIndex) startIndex = 1;
         var index = startIndex;
@@ -203,11 +203,12 @@ async function copy_category_pictures(tag, startPath, startIndex, endIndex) {
         var stop = false;
         do {
             try {
-                var path = "/" + startPath + "/" + tag.originId + "/";
+                var path = "/gallery/";
+                if (tag) path = path + tag.originId + "/";
                 if (index > 1) path += index + ".html";
                 console.log(path);
                 var $ = await commonController.copyHtml(branch.pcCopyUrl, path, branch.charset);
-                if (index == 1 && !tag.remark) {
+                if (tag && index == 1 && !tag.remark) {
                     var tagRemark = $("#ddesc").text();
                     if (tagRemark) {
                         await tagSequelize.update({
@@ -227,6 +228,10 @@ async function copy_category_pictures(tag, startPath, startIndex, endIndex) {
                             branchId: branch.branchId,
                             originId: originId
                         })
+                        if (savedPicture && isUpdate) {
+                            stop = true;
+                            break;
+                        }
                         if (!savedPicture) {
                             var picture = {
                                 branchId: branch.branchId,
@@ -240,7 +245,7 @@ async function copy_category_pictures(tag, startPath, startIndex, endIndex) {
                             // else if (/^(http)/.test(picture.cover)) picture.cover = picture.cover.replace(/http:\/\/[^\/]+/, "");
                             savedPicture = await create_picture(originId, picture, tag);
                         }
-                        if (savedPicture && (!savedPicture.tags || _.findIndex(savedPicture.tags, {
+                        if (tag && savedPicture && (!savedPicture.tags || _.findIndex(savedPicture.tags, {
                                 tagId: tag.tagId
                             }) == -1)) {
                             await savedPicture.addTags([tag.tagId], {
@@ -257,7 +262,7 @@ async function copy_category_pictures(tag, startPath, startIndex, endIndex) {
                 var pages = $("#listdiv").find(".pagesYY a");
                 if ($(pages[pages.length - 1]).hasClass("cur")) stop = true;
             } catch (err) {
-                console.log(tag, startPath, index);
+                console.log(tag, index);
                 console.log(err);
             }
             index++;
@@ -266,6 +271,8 @@ async function copy_category_pictures(tag, startPath, startIndex, endIndex) {
         console.log(err);
     }
 }
+
+exports.copy_category_pictures = copy_category_pictures;
 
 async function create_picture(originId, picture, tag) {
     try {
@@ -360,7 +367,7 @@ exports.copy_all_tag_models = async function(tagGroupId) {
                 var tag = tagGroup.tags[j];
                 try {
                     console.log(tag);
-                    await copy_category_models(tag, "tag");
+                    await copy_category_models(tag);
                 } catch (err) {
                     console.log("获取分类totalPage失败", category, err);
                 }
@@ -371,7 +378,7 @@ exports.copy_all_tag_models = async function(tagGroupId) {
     }
 }
 
-async function copy_category_models(tag, startPath, startIndex, endIndex) {
+async function copy_category_models(tag, startIndex, endIndex, isUpdate) {
     try {
         if (!startIndex) startIndex = 1;
         var index = 1;
@@ -380,11 +387,12 @@ async function copy_category_models(tag, startPath, startIndex, endIndex) {
         var stop = false;
         do {
             try {
-                var path = "/" + startPath + "/" + tag.originId + "/";
+                var path = "/tag/";
+                if (tag) path = path + tag.originId + "/";
                 if (index > 1) path += index + ".html";
                 console.log(path);
                 var $ = await commonController.copyHtml(branch.pcCopyUrl, path, branch.charset);
-                if (index == 1 && !tag.remark) {
+                if (tag && index == 1 && !tag.remark) {
                     var tagRemark = $("#ddesc").text();
                     if (tagRemark) {
                         await tagSequelize.update({
@@ -405,13 +413,17 @@ async function copy_category_models(tag, startPath, startIndex, endIndex) {
                                 branchId: branch.branchId,
                                 originId: originId
                             })
+                            if (savedModel && isUpdate) {
+                                stop = true;
+                                break;
+                            }
                             if (!savedModel) {
                                 savedModel = await modelSequelize.create({
                                     branchId: branch.branchId,
                                     originId: originId
                                 })
                             }
-                            if (savedModel && (!savedModel.tags || _.findIndex(savedModel.tags, {
+                            if (tag && savedModel && (!savedModel.tags || _.findIndex(savedModel.tags, {
                                     tagId: tag.tagId
                                 }) == -1)) {
                                 await savedModel.addTags([tag.tagId], {
@@ -429,7 +441,7 @@ async function copy_category_models(tag, startPath, startIndex, endIndex) {
                 var pages = $("#listdiv").find(".pagesYY a");
                 if ($(pages[pages.length - 1]).hasClass("cur")) stop = true;
             } catch (err) {
-                console.log(tag, startPath, index);
+                console.log(tag, index);
                 console.log(err);
             }
             index++;
@@ -438,6 +450,8 @@ async function copy_category_models(tag, startPath, startIndex, endIndex) {
         console.log(err);
     }
 }
+
+exports.copy_category_models = copy_category_models;
 
 exports.complete_all_model_info = async function() {
     try {
@@ -563,6 +577,8 @@ async function complete_one_model_info(model) {
         await model.save();
     } catch (err) {
         console.log(err);
+        model.set("statusId", 3);
+        await model.save();
     }
 }
 
@@ -626,7 +642,7 @@ async function copy_model_pictures(modelId, originId) {
     }
 }
 
-exports.copy_articles = async function(modelId, originId) {
+exports.copy_articles = async function(isUpdate) {
     try {
         var index = 1;
         var endIndex = 10000;
@@ -648,6 +664,10 @@ exports.copy_articles = async function(modelId, originId) {
                             branchId: branch.branchId,
                             originId: originId
                         })
+                        if (savedBook && isUpdate) {
+                            stop = true;
+                            break;
+                        }
                         if (!savedBook) {
                             savedBook = await create_article(originId);
                         }
