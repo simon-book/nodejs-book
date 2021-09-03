@@ -19,15 +19,15 @@
                             </h3>
                             <div class="article-content">
                                 <%- article.content[currentPage-1].replace(/\*{4}pictureUrl\*{3}/g,branchInfo.pictureUrl)%>
-                                <nav aria-label="Page navigation" class="pagination-box">
-                                    <ul class="pagination">
-                                        <% article.content.forEach(function(con,page){ %>
-                                        <li class=<%=page+1==currentPage?"active":""%>><a href="/article/<%= article.articleId%>/<%= page+1%>/">
-                                                <%= page+1%></a></li>
-                                        <% }); %>
-                                    </ul>
-                                </nav>
                             </div>
+                            <nav aria-label="Page navigation" class="pagination-box">
+                                <ul class="pagination">
+                                    <% article.content.forEach(function(con,page){ %>
+                                    <li class=<%=page+1==currentPage?"active":""%>><a href="/article/<%= article.articleId%>/<%= page+1%>/">
+                                            <%= page+1%></a></li>
+                                    <% }); %>
+                                </ul>
+                            </nav>
                         </div>
                     </div>
                     <div class="book-list-footer">
