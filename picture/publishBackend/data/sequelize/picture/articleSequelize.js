@@ -63,7 +63,22 @@ exports.findAll = function(where, offset, limit, order) {
             offset: offset || 0,
             order: order || [
                 ['lastUpdatedAt', 'DESC']
-            ],
+            ]
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
+exports.findAllWithoutTags = function(where, attributes) {
+    return new Promise(function(resolve, reject) {
+        Article.findAll({
+            where: where,
+            limit: 100000,
+            offset: 0,
+            attributes: attributes
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {

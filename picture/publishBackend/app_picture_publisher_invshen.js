@@ -50,6 +50,7 @@ app.use(__G__.CONTEXT + "/static", express.static(path.join(__dirname, '/statics
 app.use(__G__.CONTEXT + "/html", express.static(path.join(__dirname, '/html')));
 
 app.use(__G__.CONTEXT || '/page/stat', require('./controller/statHttpRoutes.js'));
+app.use(__G__.CONTEXT || '/seo', require('./controller/seoHttpRoutes.js'));
 app.use(__G__.CONTEXT || '/api/publisher', require('./controller/index.js'));
 app.use(__G__.CONTEXT || '/api/publisher/invshen', require('./controller/invshenHttpRoutes.js'));
 

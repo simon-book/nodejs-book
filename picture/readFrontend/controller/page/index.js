@@ -289,9 +289,16 @@ exports.gallery = async function(req, res) {
                 [Op.in]: relatedIds
             }
         }, 0, 12)
+        var tagNames = [];
+        _.forEach(picture.tags, function(tag) {
+            tagNames.push(tag.name);
+        })
+        _.forEach(picture.models, function(model) {
+            tagNames.push(model.name);
+        })
         res.render('gallery', {
             title: picture.title + "_" + branchInfo.shorttitle,
-            keywords: picture.title + "-爱女神，宅男女神图片",
+            keywords: picture.title + (tagNames.length ? "，" + tagNames.join("，") : "") + "-爱女神，宅男女神图片",
             description: picture.abstractContent || "",
             branchInfo: branchInfo,
             user: auth.getUser(req, res),

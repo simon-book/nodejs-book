@@ -85,6 +85,21 @@ exports.findAll = function(where, attributes, offset, limit) {
     })
 }
 
+exports.findAllWithoutTags = function(where, attributes) {
+    return new Promise(function(resolve, reject) {
+        Picture.findAll({
+            where: where,
+            limit: 100000,
+            offset: 0,
+            attributes: attributes
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
 exports.findByPk = function(id) {
     return new Promise(function(resolve, reject) {
         Picture.findByPk(id, {

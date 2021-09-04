@@ -55,7 +55,6 @@ router.post('/check_all_models', async function(req, res) {
     res.send(true);
 })
 router.post('/trigger_invshen_scheduele', async function(req, res) {
-    await copyController.queryBranchInfo();
     autoSchedule.trigger_invshen_scheduele();
     res.send(true);
 })
