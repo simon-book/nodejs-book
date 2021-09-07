@@ -81,7 +81,7 @@ exports.submitAll = async function(site) {
         var siteInfo = sitemap[site];
         var urls = [];
         var pictures = await pictureSequelize.findAllWithoutTags({}, ["pictureId"]);
-        for (var i = 0; i < pictures; i++) {
+        for (var i = 0; i < pictures.length; i++) {
             urls.push(siteInfo.site + "/gallery/" + pictures[i].pictureId);
         }
         var models = await modelSequelize.findAllWithoutTags({
@@ -113,33 +113,54 @@ exports.submitAll = async function(site) {
     }
 }
 
-exports.submitNew = async function(site) {
+exports.submitNew = async function(site, startDate, endDate) {
     try {
+        if (__G__.NODE_ENV != "deploy") return false;
         if (!site || !sitemap[site]) return false;
         var siteInfo = sitemap[site];
-        var yesterday = moment().subtract(1, 'days');
-        // var books = await bookSequelize.findAll({
-        //     createdAt: {
-        //         [Op.between]: ["2021-01-01" + " 00:00:00", "2021-07-10" + " 23:59:59"]
-        //     }
-        // }, ["bookId"], 0, 200000, true);
-        // if (!books.length) return false;
-        // var urls = [];
-        // for (var i = 0; i < books.length; i++) {
-        //     urls.push(siteInfo.site + "/book/" + books[i].bookId);
-        // }
+        if (!startDate || !endDate) {
+            startDate = moment().format("YYYY-MM-DD");
+            endDate = startDate;
+        }
+        var urls = [];
+        var pictures = await pictureSequelize.findAllWithoutTags({
+            createdAt: {
+                [Op.between]: [startDate + " 00:00:00", endDate + " 23:59:59"]
+            }
+        }, ["pictureId"]);
+        for (var i = 0; i < pictures.length; i++) {
+            urls.push(siteInfo.site + "/gallery/" + pictures[i].pictureId);
+        }
+        var models = await modelSequelize.findAllWithoutTags({
+            createdAt: {
+                [Op.between]: [startDate + " 00:00:00", endDate + " 23:59:59"]
+            },
+            statusId: 2
+        }, ["modelId"]);
+        for (var i = 0; i < models.length; i++) {
+            urls.push(siteInfo.site + "/model/" + models[i].modelId);
+        }
+        var articles = await articleSequelize.findAll({
+            createdAt: {
+                [Op.between]: [startDate + " 00:00:00", endDate + " 23:59:59"]
+            }
+        }, 0, 10000, null, ["articleId"]);
+        for (var i = 0; i < articles.length; i++) {
+            urls.push(siteInfo.site + "/article/" + articles[i].articleId);
+        }
         var start = 0;
         var len = 2000;
         do {
             try {
                 var toUrls = urls.slice(start, start + len);
                 var content = toUrls.join("\n");
+                console.log(content);
                 var result = await httpGateway.submitUrlsToBaiduStartReq(siteInfo.site, siteInfo.token, content);
                 console.log(result);
-                start += len;
             } catch (err) {
                 console.log(err);
             }
+            start += len;
         } while (start < urls.length)
     } catch (err) {
         console.log(err);

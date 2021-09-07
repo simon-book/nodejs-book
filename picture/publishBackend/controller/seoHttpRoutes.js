@@ -11,7 +11,7 @@ router.post('/submitAll', async function(req, res) {
     res.send(true);
 });
 router.post('/submitNew', async function(req, res) {
-    await baiduController.submitNew(req.body.site);
+    await baiduController.submitNew(req.body.site, req.body.startDate, req.body.endDate);
     res.send(true);
 });
 

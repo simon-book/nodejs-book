@@ -41,7 +41,8 @@ var Model = sequelize.define('model', {
 }, {
     schema: __PGSQL__.schemas.picture_publisher,
     tableName: 'model',
-    timestamps: false,
+    createdAt: "createdAt",
+    updatedAt: false,
     underscored: true,
     indexes: [{
         fields: ['name', 'branch_id']

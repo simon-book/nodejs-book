@@ -37,7 +37,7 @@ var Article = sequelize.define('article', {
 }, {
     schema: __PGSQL__.schemas.picture_publisher,
     tableName: 'article',
-    createdAt: true,
+    createdAt: "createdAt",
     updatedAt: false,
     underscored: true,
     indexes: [{
