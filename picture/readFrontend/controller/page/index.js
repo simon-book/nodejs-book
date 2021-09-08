@@ -16,10 +16,10 @@ exports.home = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
         var newArticles = await articleSequelize.findAll({
-            ////branchId: branchInfo.branchId
+            branchId: branchInfo.branchId
         }, 0, 11, null, ["articleId", "title", "cover"]);
         var newModels = await modelSequelize.findAll({
-            ////branchId: branchInfo.branchId,
+            branchId: branchInfo.branchId,
             statusId: 2
         }, 0, 18);
         var rank = _.find(branchInfo.rankMap, { originId: "homepage" });
@@ -34,7 +34,7 @@ exports.home = async function(req, res) {
             })
         }
         var todayModels = await modelSequelize.findAll({
-            //branchId: branchInfo.branchId,
+            branchId: branchInfo.branchId,
             birthday: {
                 [Op.endsWith]: moment().format("MM-DD")
             },
@@ -116,7 +116,7 @@ exports.articleList = async function(req, res) {
         var pageSize = 24;
         var offset = (currentPage - 1) * pageSize;
         var result = await articleSequelize.findAndCountAll({
-            //branchId: branchInfo.branchId
+            branchId: branchInfo.branchId
         }, offset, pageSize, null, ["articleId", "title", "cover", "lastUpdatedAt"])
         res.render('articleList', {
             title: "女神情报_" + branchInfo.title,
@@ -150,11 +150,11 @@ exports.articleList = async function(req, res) {
     }
 };
 
-async function getSiblings(totalNum, length) {
+async function getSiblings(allIds, length) {
     if (!length) length = 20;
     var articleIds = [];
     for (var i = 0; i < length; i++) {
-        articleIds.push(parseInt(Math.random() * totalNum));
+        articleIds.push(allIds[parseInt(Math.random() * allIds.length)]);
     }
     return _.uniq(articleIds);
 }
@@ -174,10 +174,26 @@ exports.article = async function(req, res) {
                 return _.indexOf(article.relatedModelIds, model.modelId);
             })
         }
-        var prevArticle = await articleSequelize.findByPk(articleId - 1, ["articleId", "title"]);
-        var nextArticle = await articleSequelize.findByPk(articleId + 1, ["articleId", "title"]);
-        var totalNum = await articleSequelize.count();
-        var relatedIds = await getSiblings(totalNum);
+        var prevArticle = await articleSequelize.findOne({
+            branchId: branchInfo.branchId,
+            lastUpdatedAt: {
+                [Op.lt]: article.lastUpdatedAt
+            }
+        }, [
+            ["lastUpdatedAt", "desc"]
+        ], ["articleId", "title"]);
+        var nextArticle = await articleSequelize.findOne({
+            branchId: branchInfo.branchId,
+            lastUpdatedAt: {
+                [Op.gt]: article.lastUpdatedAt
+            }
+        }, [
+            ["lastUpdatedAt", "asc"]
+        ], ["articleId", "title"]);
+        var allIds = await articleSequelize.findAllIds({
+            branchId: branchInfo.branchId,
+        });
+        var relatedIds = await getSiblings(allIds);
         var recommendArticles = await articleSequelize.findAll({
             //branchId: branchInfo.branchId,
             articleId: {
@@ -226,7 +242,7 @@ exports.galleryList = async function(req, res) {
         var offset = (currentPage - 1) * pageSize;
         if (!tagId) {
             var result = await pictureSequelize.findAndCountAll({
-                //branchId: branchInfo.branchId
+                branchId: branchInfo.branchId
             }, offset, pageSize);
             var count = result.count;
             var rows = result.rows;
@@ -282,8 +298,10 @@ exports.gallery = async function(req, res) {
         var currentPage = parseInt(req.params.page || 1);
         var pageSize = 5;
         if (!picture) throw new Error("找不到资源");
-        var totalNum = await pictureSequelize.count();
-        var relatedIds = await getSiblings(totalNum);
+        var allIds = await pictureSequelize.findAllIds({
+            branchId: branchInfo.branchId
+        });
+        var relatedIds = await getSiblings(allIds);
         var recommendPictures = await pictureSequelize.findAll({
             pictureId: {
                 [Op.in]: relatedIds
@@ -340,7 +358,7 @@ exports.modelList = async function(req, res) {
         var offset = (currentPage - 1) * pageSize;
         if (!tagId) {
             var result = await modelSequelize.findAndCountAll({
-                //branchId: branchInfo.branchId
+                branchId: branchInfo.branchId
             }, offset, pageSize);
             var count = result.count;
             var rows = result.rows;
@@ -410,8 +428,10 @@ exports.model = async function(req, res) {
                 return _.indexOf(model.relatedModelIds, model.modelId);
             })
         }
-        var totalNum = await articleSequelize.count();
-        var relatedIds = await getSiblings(totalNum);
+        var allIds = await articleSequelize.findAllIds({
+            branchId: branchInfo.branchId
+        });
+        var relatedIds = await getSiblings(allIds);
         var recommendArticles = await articleSequelize.findAll({
             //branchId: branchInfo.branchId,
             articleId: {
@@ -457,8 +477,10 @@ exports.modelAlbum = async function(req, res) {
         var pageSize = 24;
         var model = await modelSequelize.findByPk(modelId);
         if (!model) throw new Error("找不到资源");
-        var totalNum = await pictureSequelize.count();
-        var relatedIds = await getSiblings(totalNum);
+        var allIds = await pictureSequelize.findAllIds({
+            branchId: branchInfo.branchId
+        });
+        var relatedIds = await getSiblings(allIds);
         var recommendPictures = await pictureSequelize.findAll({
             pictureId: {
                 [Op.in]: relatedIds
@@ -502,7 +524,7 @@ exports.todayModelList = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
         var todayModels = await modelSequelize.findAll({
-            //branchId: branchInfo.branchId,
+            branchId: branchInfo.branchId,
             birthday: {
                 [Op.endsWith]: moment().format("MM-DD")
             },
@@ -538,6 +560,7 @@ exports.paihang = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
         var ranks = await rankSequelize.findAll({
+            branchId: branchInfo.branchId,
             originId: {
                 [Op.not]: "homepage"
             }
@@ -593,6 +616,7 @@ exports.rankModelList = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
         var ranks = await rankSequelize.findAll({
+            branchId: branchInfo.branchId,
             originId: {
                 [Op.not]: "homepage"
             }
@@ -668,7 +692,9 @@ exports.findModelList = async function(req, res) {
         var currentPage = parseInt(req.body.page || 1);
         var pageSize = parseInt(req.body.pageSize || 30);
         var offset = (currentPage - 1) * pageSize;
-        var where = {};
+        var where = {
+            branchId: branchInfo.branchId
+        };
         if (body.country) where.birthIn = {
             [Op.like]: '%' + body.country + '%'
         }
@@ -745,7 +771,7 @@ exports.search = async function(req, res) {
         if (!req.query.keyword) throw new Error("缺少搜索参数");
         var searchContent = req.query.keyword.replace(/^\s+|\s+$/g, "");
         var modelResult = await modelSequelize.findAndCountAll({
-            //branchId: branchInfo.branchId,
+            branchId: branchInfo.branchId,
             [Op.or]: [{
                 name: {
                     [Op.like]: '%' + searchContent + '%'
@@ -761,7 +787,7 @@ exports.search = async function(req, res) {
             }]
         }, 0, 24)
         var pictureResult = await pictureSequelize.findAndCountAll({
-            //branchId: branchInfo.branchId,
+            branchId: branchInfo.branchId,
             title: {
                 [Op.like]: '%' + searchContent + '%'
             }
@@ -803,7 +829,7 @@ exports.searchModel = async function(req, res) {
         var offset = (currentPage - 1) * pageSize;
         var searchContent = req.query.keyword.replace(/^\s+|\s+$/g, "");
         var result = await modelSequelize.findAndCountAll({
-            //branchId: branchInfo.branchId,
+            branchId: branchInfo.branchId,
             [Op.or]: [{
                 name: {
                     [Op.like]: '%' + searchContent + '%'
@@ -859,7 +885,7 @@ exports.searchGallery = async function(req, res) {
         var offset = (currentPage - 1) * pageSize;
         var searchContent = req.query.keyword.replace(/^\s+|\s+$/g, "");
         var result = await pictureSequelize.findAndCountAll({
-            //branchId: branchInfo.branchId,
+            branchId: branchInfo.branchId,
             title: {
                 [Op.like]: '%' + searchContent + '%'
             }

@@ -1,15 +1,18 @@
 var Sequelize = require('sequelize');
 var Op = Sequelize.Op;
+var _ = require('lodash');
 var sequelize = require('../../../service/sequelizeConn.js');
 
 var Article = require('../_models/picture/article.js')
 var Model = require('../_models/picture/model.js')
 var ArticleModel = require('../_models/picture/articleModel.js')
 
-exports.findOne = function(where) {
+exports.findOne = function(where, order, attributes) {
     return new Promise(function(resolve, reject) {
         Article.findOne({
             where: where,
+            order: order,
+            attributes: attributes
         }).then(function(results) {
             resolve(results);
         }, reject).catch(function(err) {
@@ -74,12 +77,14 @@ exports.findAndCountAll = function(where, offset, limit, order, attributes) {
     })
 }
 
-exports.count = function(where) {
+exports.findAllIds = function(where) {
     return new Promise(function(resolve, reject) {
-        Article.count({
-            where: where
+        Article.findAll({
+            where: where,
+            attributes: ["articleId"],
+            raw: true
         }).then(function(results) {
-            resolve(results);
+            resolve(_.map(results, "articleId"));
         }, reject).catch(function(err) {
             reject(err);
         });

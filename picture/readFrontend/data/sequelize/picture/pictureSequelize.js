@@ -1,5 +1,6 @@
 var Sequelize = require('sequelize');
 var Op = Sequelize.Op;
+var _ = require('lodash');
 var sequelize = require('../../../service/sequelizeConn.js');
 
 var Picture = require('../_models/picture/picture.js')
@@ -175,12 +176,14 @@ exports.findAndCountAll = function(where, offset, limit, order) {
     })
 }
 
-exports.count = function(where) {
+exports.findAllIds = function(where) {
     return new Promise(function(resolve, reject) {
-        Picture.count({
-            where: where
+        Picture.findAll({
+            where: where,
+            attributes: ["pictureId"],
+            raw: true
         }).then(function(results) {
-            resolve(results);
+            resolve(_.map(results, "pictureId"));
         }, reject).catch(function(err) {
             reject(err);
         });
