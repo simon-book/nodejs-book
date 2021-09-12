@@ -99,6 +99,7 @@ router.get('/galleryList/:page', page.galleryList);
 router.get('/galleryList/:tagId/:page', page.galleryList);
 router.get('/gallery/:pictureId/', page.gallery);
 router.get('/gallery/:pictureId/:page', page.gallery);
+router.get('/galleryImg/:pictureId/:page', page.galleryImg);
 
 router.get('/modelList/', page.modelList);
 router.get('/modelList/:page', page.modelList);

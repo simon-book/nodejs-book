@@ -1,63 +1,34 @@
 <%- include('common/top', {}); %>
-<%- include('common/mainHeader', {}); %>
-<div class="container">
+<div class="container-fluid padding-0">
     <div class="row ">
         <div class="col-xs-12 book-box">
             <div class="border book-list-box">
                 <h2 class="book-list-header">现在位置：<a href="/">首页</a> &raquo; <a href="/galleryList/">美女图片</a>
-                    &raquo; <span>
-                        <%= picture.title%></span>
+                    &raquo; <a href="/gallery/<%= picture.pictureId%>">
+                        <%= picture.title%></a>
                 </h2>
                 <div class="book-list">
-                    <div class="gallery-detail-header">
-                        <div class="gallery-detail-title">
-                            <%= picture.title%>
-                        </div>
-                        <% if(picture.tags && picture.tags.length){ %>
-                        <div class="gallery-detail-tags">
-                            <% picture.models.forEach(function(model){ %>
-                            <a href="/model/<%= model.modelId%>" target="_blank">
-                                <%= model.name%></a>
-                            <% }); %>
-                            <% picture.tags.forEach(function(tag){ %>
-                            <a href="/galleryList/<%= tag.tagId%>/1" target="_blank">
-                                <%= tag.name%></a>
-                            <% }); %>
-                        </div>
-                        <% } %>
-                        <div class="gallery-detail-remark">
-                            <%= picture.abstractContent%>
-                        </div>
-                        <div class="gallery-detail-other">
-                            该图集包含
-                            <%= picture.count%> 张照片，在
-                            <%= moment(picture.lastUpdatedAt).format("YYYY-MM-DD") %> 创建。
-                        </div>
-                    </div>
-                    <div class="gallery-detail-content">
-                        <% pics.forEach(function(pic,index){%>
-                        <a class="gallery-detail-img" href="/galleryImg/<%= picture.pictureId%>/<%= startIndex+index+1%>" target="_blank">
-                            <img src="<%= (/\/\/img\..+/.test(picture.imgHost)?'https://img.99nvshen.com':/\/\/t1\..+/.test(picture.imgHost)?'https://img1.99nvshen.com':picture.imgHost)+pic%>">
-                        </a>
-                        <% }); %>
-                    </div>
+                    <div style="text-align: center;font-weight: bold;color: red;">点击图片进入下一页~.~</div>
+                    <a class="gallery-img" href="/galleryImg/<%= picture.pictureId%>/<%= pagination.currentPage+1%>">
+                        <img src="<%= (/\/\/img\..+/.test(picture.imgHost)?'https://img.99nvshen.com':/\/\/t1\..+/.test(picture.imgHost)?'https://img1.99nvshen.com':picture.imgHost)+pic%>">
+                    </a>
                 </div>
                 <nav aria-label="Page navigation" class="pagination-box">
                     <ul class="pagination">
                         <% if(pagination.currentPage>1){%>
                         <li>
-                            <a href="/gallery/<%= picture.pictureId%>/<%= pagination.currentPage-1%>/" aria-label="Previous">
+                            <a href="/galleryImg/<%= picture.pictureId%>/<%= pagination.currentPage-1%>/" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
                         <% } %>
                         <% pagination.pages.forEach(function(page){ %>
-                        <li class=<%=page==pagination.currentPage?"active":""%>><a href="/gallery/<%= picture.pictureId%>/<%= page%>/">
+                        <li class=<%=page==pagination.currentPage?"active":""%>><a href="/galleryImg/<%= picture.pictureId%>/<%= page%>/">
                                 <%= page%></a></li>
                         <% }); %>
                         <% if(pagination.currentPage<pagination.totalPage){%>
                         <li>
-                            <a href="/gallery/<%= picture.pictureId%>/<%= pagination.currentPage+1%>/" aria-label="Next">
+                            <a href="/galleryImg/<%= picture.pictureId%>/<%= pagination.currentPage+1%>/" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>

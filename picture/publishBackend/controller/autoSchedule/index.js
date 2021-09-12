@@ -12,6 +12,7 @@ exports.auto_schedule_invshen = function() {
         await copyController.copy_articles(true);
         await copyController.copy_category_pictures(null, null, null, true);
         await copyController.copy_category_models(null, null, null, true);
+        await copyController.copy_rank_models();
         await copyController.complete_all_model_info();
         await baiduController.submitNew("www.99nvshen.com");
     });
@@ -24,6 +25,7 @@ exports.trigger_invshen_scheduele = async function() {
     await copyController.copy_articles(true);
     await copyController.copy_category_pictures(null, null, null, true);
     await copyController.copy_category_models(null, null, null, true);
+    await copyController.copy_rank_models();
     await copyController.complete_all_model_info();
     await baiduController.submitNew("www.99nvshen.com");
 }

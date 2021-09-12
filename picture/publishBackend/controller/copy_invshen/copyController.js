@@ -841,50 +841,16 @@ exports.copy_all_model_ranks = async function(originId) {
                 console.log(err);
             }
         }
-        var path = "/";
-        console.log(path);
-        var $ = await commonController.copyHtml(branch.pcCopyUrl, path, branch.charset);
-        var targetItems = $("#tabs .tab-inside").find("li");
-        var rankModelIds = [];
-        for (var i = 0; i < targetItems.length; i++) {
-            try {
-                var item = targetItems[i];
-                var href = $(item).find("a").attr("href");
-                // var rankName = $(item).find("a").text();
-                var originId = href.split("/")[2];
-                var savedModel = await modelSequelize.findOneModel({
-                    branchId: branch.branchId,
-                    originId: originId
-                })
-                if (!savedModel) {
-                    savedModel = await modelSequelize.create({
-                        branchId: branch.branchId,
-                        originId: originId
-                    })
-                }
-                if (savedModel) {
-                    rankModelIds.push(savedModel.modelId);
-                }
-            } catch (err) {
-                console.log(err);
-            }
-        }
-        if (rankModelIds.length) {
-            var savedRank = await rankSequelize.findOne({
+        var savedRank = await rankSequelize.findOne({
+            branchId: branch.branchId,
+            originId: "homepage"
+        })
+        if (!savedRank) {
+            savedRank = await rankSequelize.create({
                 branchId: branch.branchId,
-                originId: "homepage"
+                originId: "homepage",
+                name: "首页"
             })
-            if (savedRank) {
-                savedRank.set("rankModelIds", rankModelIds);
-                await savedRank.save();
-            } else {
-                savedRank = await rankSequelize.create({
-                    branchId: branch.branchId,
-                    originId: "homepage",
-                    name: "首页",
-                    rankModelIds: rankModelIds
-                })
-            }
         }
     } catch (err) {
         console.log(err);
@@ -948,6 +914,41 @@ async function copy_rank_models(originId) {
                 }
             } catch (err) {
                 console.log(err);
+            }
+        }
+        var path = "/";
+        console.log(path);
+        var $ = await commonController.copyHtml(branch.pcCopyUrl, path, branch.charset);
+        var targetItems = $("#tabs .tab-inside").find("li");
+        var rankModelIds = [];
+        for (var i = 0; i < targetItems.length; i++) {
+            try {
+                var item = targetItems[i];
+                var href = $(item).find("a").attr("href");
+                // var rankName = $(item).find("a").text();
+                var originId = href.split("/")[2];
+                var savedModel = await modelSequelize.findOneModel({
+                    branchId: branch.branchId,
+                    originId: originId
+                })
+                if (!savedModel) {
+                    savedModel = await modelSequelize.create({
+                        branchId: branch.branchId,
+                        originId: originId
+                    })
+                }
+                if (savedModel) {
+                    rankModelIds.push(savedModel.modelId);
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        if (rankModelIds.length) {
+            var savedRank = _.find(ranks, { originId: "homepage" });
+            if (savedRank) {
+                savedRank.set("rankModelIds", rankModelIds);
+                await savedRank.save();
             }
         }
     } catch (err) {

@@ -783,6 +783,15 @@ a:hover {
     margin-bottom: 10px;
 }
 
+.gallery-img {
+    display: block;
+    text-align: center;
+}
+
+.gallery-img img {
+    max-width: 100%;
+}
+
 .form-horizontal .control-label {
     font-weight: normal;
     color: #000;

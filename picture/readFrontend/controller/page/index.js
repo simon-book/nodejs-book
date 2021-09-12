@@ -53,7 +53,7 @@ exports.home = async function(req, res) {
             });
         }
         res.render('home', {
-            title: "首页_" + branchInfo.title,
+            title: "首页-" + branchInfo.title,
             keywords: null,
             description: null,
             branchInfo: branchInfo,
@@ -119,8 +119,8 @@ exports.articleList = async function(req, res) {
             branchId: branchInfo.branchId
         }, offset, pageSize, null, ["articleId", "title", "cover", "lastUpdatedAt"])
         res.render('articleList', {
-            title: "女神情报_" + branchInfo.title,
-            keywords: "美女新闻，美女资讯，美女情报",
+            title: "女神情报-" + branchInfo.title,
+            keywords: "美女新闻,美女资讯,美女情报",
             description: "爱女神（www.9invshen.com）发布最新最快最全的美女情报、新闻、资讯",
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
@@ -203,7 +203,7 @@ exports.article = async function(req, res) {
         if (!article) throw new Error("找不到资源");
         var currentPage = parseInt(req.params.page || 1);
         res.render('article', {
-            title: article.title + "_" + branchInfo.shorttitle,
+            title: article.title + "-" + branchInfo.shorttitle,
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "article",
@@ -258,7 +258,7 @@ exports.galleryList = async function(req, res) {
             });
         }
         res.render('galleryList', {
-            title: (tag ? tag.name : "爱女神") + "_美女图片_" + branchInfo.shorttitle,
+            title: (tag ? tag.name : "爱女神") + "-美女图片-" + branchInfo.shorttitle,
             keywords: tag ? tag.name + "," + tag.name + "美女图片," + tag.name + "写真," + tag.name + "模特" : null,
             description: tag ? tag.remark : null,
             branchInfo: branchInfo,
@@ -315,14 +315,15 @@ exports.gallery = async function(req, res) {
             tagNames.push(model.name);
         })
         res.render('gallery', {
-            title: picture.title + "_" + branchInfo.shorttitle,
-            keywords: picture.title + (tagNames.length ? "，" + tagNames.join("，") : "") + "-爱女神，宅男女神图片",
+            title: picture.title + "-" + branchInfo.shorttitle,
+            keywords: picture.title + (tagNames.length ? "," + tagNames.join(",") : "") + "-爱女神,宅男女神图片",
             description: picture.abstractContent || "",
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             pageTitle: picture.title,
             picture: picture,
             pics: picture.pictureList.slice((currentPage - 1) * pageSize, currentPage * pageSize),
+            startIndex: (currentPage - 1) * pageSize,
             currentRender: "gallery",
             recommendPictures: recommendPictures,
             moment: moment,
@@ -331,6 +332,68 @@ exports.gallery = async function(req, res) {
                 currentPage: currentPage,
                 pages: getSiblingPages(currentPage, Math.ceil(picture.pictureList.length / pageSize)),
                 totalPage: Math.ceil(picture.pictureList.length / pageSize)
+            }
+        });
+    } catch (err) {
+        console.log(err);
+        res.render('error', {
+            title: "资源错误" + branchInfo.title,
+            branchInfo: branchInfo,
+            user: auth.getUser(req, res),
+            currentRender: "search",
+            keywords: "",
+            pageTitle: "资源错误",
+            books: [],
+            pagination: null
+        });
+    }
+};
+
+exports.galleryImg = async function(req, res) {
+    try {
+        var branchInfo = req.branchInfo;
+        var pictureId = parseInt(req.params.pictureId);
+        var picture = await pictureSequelize.findByPk(pictureId);
+        var currentPage = parseInt(req.params.page || 1);
+        var pageSize = 1;
+        if (!picture || !picture.pictureHdList || !picture.pictureHdList.length) throw new Error("找不到资源");
+        if (!picture.pictureHdList[currentPage - 1] && picture.pictureHdList[0]) {
+            res.redirect("/galleryImg/" + picture.pictureId + "/1");
+            return;
+        }
+        var allIds = await pictureSequelize.findAllIds({
+            branchId: branchInfo.branchId
+        });
+        var relatedIds = await getSiblings(allIds);
+        var recommendPictures = await pictureSequelize.findAll({
+            pictureId: {
+                [Op.in]: relatedIds
+            }
+        }, 0, 12)
+        var tagNames = [];
+        _.forEach(picture.tags, function(tag) {
+            tagNames.push(tag.name);
+        })
+        _.forEach(picture.models, function(model) {
+            tagNames.push(model.name);
+        })
+        res.render('galleryImg', {
+            title: picture.title + "第" + currentPage + "张-" + branchInfo.shorttitle,
+            keywords: picture.title + (tagNames.length ? "," + tagNames.join(",") : "") + "-爱女神,宅男女神图片",
+            description: picture.abstractContent || "",
+            branchInfo: branchInfo,
+            user: auth.getUser(req, res),
+            pageTitle: picture.title,
+            picture: picture,
+            pic: picture.pictureHdList[currentPage - 1] || picture.pictureHdList[0],
+            currentRender: "galleryImg",
+            recommendPictures: recommendPictures,
+            moment: moment,
+            pagination: {
+                totalNum: picture.pictureHdList.length,
+                currentPage: currentPage,
+                pages: _.range(1, picture.pictureHdList.length + 1),
+                totalPage: Math.ceil(picture.pictureHdList.length / pageSize)
             }
         });
     } catch (err) {
@@ -380,8 +443,8 @@ exports.modelList = async function(req, res) {
             return row.name
         })
         res.render('modelList', {
-            title: (tag ? tag.name : "美人榜") + "_" + branchInfo.shorttitle,
-            keywords: tag ? tag.name + "，爱女神，美女图片、写真" : tagNames.join("，"),
+            title: (tag ? tag.name : "美人榜") + "-" + branchInfo.shorttitle,
+            keywords: tag ? tag.name + ",爱女神,美女图片、写真" : tagNames.join(","),
             description: modelNames.join("、"),
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
@@ -439,8 +502,8 @@ exports.model = async function(req, res) {
             }
         }, 0, 10, null, ["articleId", "title", "cover"])
         res.render('model', {
-            title: model.name + "_" + branchInfo.shorttitle,
-            keywords: model.name + "," + model.name + "的资料," + model.name + "的图片",
+            title: model.name + "-" + branchInfo.shorttitle,
+            keywords: model.name + "," + model.name + "的资料," + model.name + "的写真",
             description: model.remark,
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
@@ -487,9 +550,9 @@ exports.modelAlbum = async function(req, res) {
             }
         }, 0, 12)
         res.render('modelAlbum', {
-            title: model.name + "_" + branchInfo.shorttitle,
-            keywords: model.name + "," + (model.othername ? model.othername + "," : "") + (model.nickname ? model.nickname + "," : "") + "最新 最全 图片合集",
-            description: model.name + "," + (model.othername ? model.othername + "," : "") + (model.nickname ? model.nickname + "," : "") + "最新 最全 图片 合集" + ",出道至今的高清写真套图共" + model.pictures.length + "部",
+            title: model.name + "-" + branchInfo.shorttitle,
+            keywords: model.name + "," + (model.othername ? model.othername + "," : "") + (model.nickname ? model.nickname + "," : "") + "的写真合集",
+            description: model.name + "," + (model.othername ? model.othername + "," : "") + (model.nickname ? model.nickname + "," : "") + "最新最全写真合集" + ",出道至今的高清写真套图共" + model.pictures.length + "部",
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             pageTitle: model.name,
@@ -531,7 +594,7 @@ exports.todayModelList = async function(req, res) {
             statusId: 2
         }, 0, 10000);
         res.render('todayModel', {
-            title: "今日女神_" + branchInfo.shorttitle,
+            title: "今日女神-" + branchInfo.shorttitle,
             keywords: "今日女神、爱女神、宅男女神",
             description: "今天生日的女神,今天生日的美女,今天生日的正妹！",
             branchInfo: branchInfo,
@@ -586,7 +649,7 @@ exports.paihang = async function(req, res) {
             return rank.name + "排行榜"
         })
         res.render('paihangs', {
-            title: "宅男女神排行榜_" + branchInfo.shorttitle,
+            title: "宅男女神排行榜-" + branchInfo.shorttitle,
             keywords: "宅男女神排行榜,爱女神,宅男女神",
             description: "女神排行榜," + rankNames.join(","),
             branchInfo: branchInfo,
@@ -636,7 +699,7 @@ exports.rankModelList = async function(req, res) {
             return model.name
         })
         res.render('paihang', {
-            title: rank.name + "_" + branchInfo.shorttitle,
+            title: rank.name + "-" + branchInfo.shorttitle,
             keywords: rank.name,
             description: rank.name + ":" + modelNames.join(","),
             branchInfo: branchInfo,
@@ -675,9 +738,9 @@ exports.rankModelList = async function(req, res) {
 exports.findModel = async function(req, res) {
     var branchInfo = req.branchInfo;
     res.render('findModel', {
-        title: "找女神_" + branchInfo.title,
+        title: "找女神-" + branchInfo.title,
         keywords: "搜索美女,美女资料搜索,找美女",
-        description: "美女年龄，美女身高，美女体重，美女cup，美女罩杯，美女胸围，美女腰围，美女臀围，美女国家，美女职业，美女血型，美女星座",
+        description: "美女年龄,美女身高,美女体重,美女cup,美女罩杯,美女胸围,美女腰围,美女臀围,美女国家,美女职业,美女血型,美女星座",
         branchInfo: branchInfo,
         user: auth.getUser(req, res),
         currentRender: "findModel",
@@ -793,7 +856,7 @@ exports.search = async function(req, res) {
             }
         }, 0, 24)
         res.render('search', {
-            title: "搜索" + searchContent + "_" + branchInfo.title,
+            title: "搜索" + searchContent + "-" + branchInfo.title,
             keywords: searchContent + ",搜索" + searchContent + ",包含" + searchContent + "的结果",
             description: "包含" + searchContent + "的女神资料" + ",包含" + searchContent + "的图片、写真",
             branchInfo: branchInfo,
@@ -845,7 +908,7 @@ exports.searchModel = async function(req, res) {
             }]
         }, offset, pageSize);
         res.render('searchModel', {
-            title: "搜索_" + searchContent + "_" + branchInfo.title,
+            title: "包含" + searchContent + "的美女-" + branchInfo.title,
             keywords: searchContent + ",搜索" + searchContent + ",包含" + searchContent + "的结果",
             description: "包含" + searchContent + "的女神列表",
             branchInfo: branchInfo,
@@ -891,7 +954,7 @@ exports.searchGallery = async function(req, res) {
             }
         }, offset, pageSize)
         res.render('searchGallery', {
-            title: "搜索_" + searchContent + "_" + branchInfo.title,
+            title: "包含" + searchContent + "的图片-" + branchInfo.title,
             keywords: searchContent + ",搜索" + searchContent + ",包含" + searchContent + "的结果",
             description: "包含" + searchContent + "的女神图片、写真",
             branchInfo: branchInfo,
