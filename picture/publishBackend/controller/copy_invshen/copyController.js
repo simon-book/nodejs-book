@@ -577,8 +577,7 @@ async function complete_one_model_info(model) {
         await model.save();
     } catch (err) {
         console.log(err);
-        model.set("statusId", 3);
-        await model.save();
+        await model.destroy();
     }
 }
 
