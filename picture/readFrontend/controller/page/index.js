@@ -119,7 +119,7 @@ exports.articleList = async function(req, res) {
             branchId: branchInfo.branchId
         }, offset, pageSize, null, ["articleId", "title", "cover", "lastUpdatedAt"])
         res.render('articleList', {
-            title: "女神情报-" + branchInfo.title,
+            title: "女神情报-" + branchInfo.shorttitle,
             keywords: "美女新闻,美女动态,美女GIF",
             description: "发布最新最新最全的美女新闻、美女动态、美女GIF",
             branchInfo: branchInfo,
