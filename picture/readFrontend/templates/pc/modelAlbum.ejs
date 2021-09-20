@@ -59,12 +59,14 @@
                 <h2 class="book-list-header">热门高清套图</h2>
                 <div class="book-list">
                     <% recommendPictures.forEach(function(picture){ %>
-                    <a class="gallery-item" href="/gallery/<%= picture.pictureId%>" target="_blank" title="<%= picture.title%>">
-                        <div class="gallery-cover"><img src="<%= (/\/\/img\..+/.test(picture.imgHost)?'https://img.99nvshen.com':/\/\/t1\..+/.test(picture.imgHost)?'https://img1.99nvshen.com':picture.imgHost)+picture.cover%>" alt="<%= picture.title%>"></div>
-                        <div class="gallery-title-1">
-                            <%= picture.title%>
-                        </div>
-                    </a>
+                    <div class="col-md-12 col-xs-6 col-sm-4">
+                        <a class="gallery-item" href="/gallery/<%= picture.pictureId%>" target="_blank" title="<%= picture.title%>">
+                            <div class="gallery-cover"><img src="<%= (/\/\/img\..+/.test(picture.imgHost)?'https://img.99nvshen.com':/\/\/t1\..+/.test(picture.imgHost)?'https://img1.99nvshen.com':picture.imgHost)+picture.cover%>" alt="<%= picture.title%>"></div>
+                            <div class="gallery-title-1">
+                                <%= picture.title%>
+                            </div>
+                        </a>
+                    </div>
                     <% }); %>
                 </div>
             </div>
