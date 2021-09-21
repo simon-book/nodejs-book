@@ -15,7 +15,9 @@ var auth = require('../user/auth.js');
 exports.login = async function(req, res) {
     var branchInfo = req.branchInfo;
     res.render('login', {
-        title: "用户登录_" + branchInfo.title,
+        title: "用户登录_" + branchInfo.shorttitle,
+        keywords: "",
+        description: "",
         branchInfo: branchInfo,
         user: auth.getUser(req, res),
         currentRender: "login",
@@ -26,7 +28,9 @@ exports.login = async function(req, res) {
 exports.register = async function(req, res) {
     var branchInfo = req.branchInfo;
     res.render('register', {
-        title: "用户注册_" + branchInfo.title,
+        title: "用户注册_" + branchInfo.shorttitle,
+        keywords: "",
+        description: "",
         branchInfo: branchInfo,
         user: auth.getUser(req, res),
         currentRender: "register",
@@ -40,7 +44,9 @@ exports.bookshelf = async function(req, res) {
     if (user) {
         var bookMarks = await userController.getUserBookMarks(user.userId);
         res.render('bookshelf', {
-            title: "我的书架_" + branchInfo.title,
+            title: "我的书架_" + branchInfo.shorttitle,
+            keywords: "",
+            description: "",
             branchInfo: branchInfo,
             currentRender: "bookshelf",
             user: auth.getUser(req, res),
@@ -63,7 +69,9 @@ exports.home = async function(req, res) {
             page: 1
         })
         res.render('home', {
-            title: "首页_" + branchInfo.title,
+            title: branchInfo.title,
+            keywords: "",
+            description: "",
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "home",
@@ -108,7 +116,9 @@ exports.category = async function(req, res) {
         var lastUpdatedBooks = await bookController.listBook(query);
         var currentPage = query.page;
         res.render('category', {
-            title: currentCategory[0] + "_" + "好看的" + currentCategory[0] + "_" + branchInfo.title,
+            title: currentCategory[0] + "_" + branchInfo.shorttitle,
+            keywords: currentCategoryId ? "好看的" + currentCategory[0] + "," + "最新" + currentCategory[0] + "," + currentCategory[0] + "排行榜" : "",
+            description: currentCategoryId ? "收集了全网最新最全的" + currentCategory[0] + "，收录了" + moment().format("YYYY") + "年" + currentCategory[0] + "排行榜" : "",
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             pageTitle: currentCategory[0],
@@ -154,7 +164,9 @@ exports.paihang = async function(req, res) {
             var result = await rankController.listPaihang(currentRankId, currentPage, pageSize);
         }
         res.render('paihang', {
-            title: currentRank + "小说列表_" + branchInfo.title,
+            title: currentRank + "小说列表_" + branchInfo.shorttitle,
+            keywords: branchInfo.shorttitle + currentRank + "," + currentRank + "小说列表",
+            description: "",
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             pageTitle: currentRank,
@@ -203,7 +215,9 @@ exports.quanben = async function(req, res) {
         var lastUpdatedBooks = await bookController.listBook(query);
         var currentPage = query.page;
         res.render('quanben', {
-            title: "已完结" + currentCategory[0] + "小说列表_" + branchInfo.title,
+            title: "已完结" + currentCategory[0] + "_" + branchInfo.shorttitle,
+            keywords: "已完结" + currentCategory[0] + ",连载完成的" + currentCategory[0],
+            description: "本页提供已连载完成的" + currentCategory[0] + "列表",
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             pageTitle: currentCategory[0],
@@ -229,7 +243,9 @@ exports.quanbu = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
         res.render('quanbu', {
-            title: "全部小说列表_" + branchInfo.title,
+            title: "全部小说_" + branchInfo.shorttitle,
+            keywords: "",
+            description: "",
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             pageTitle: "全部小说",
@@ -248,7 +264,9 @@ exports.quanbu = async function(req, res) {
 exports.history = async function(req, res) {
     var branchInfo = req.branchInfo;
     res.render('history', {
-        title: "阅读记录_" + branchInfo.title,
+        title: "阅读记录_" + branchInfo.shorttitle,
+        keywords: "",
+        description: "",
         branchInfo: branchInfo,
         user: auth.getUser(req, res),
         pageTitle: "阅读记录",
@@ -262,17 +280,17 @@ exports.book = async function(req, res) {
         var result = await readController.bookDeail(parseInt(req.params.bookId));
         var bookUrl = req.protocol + "://" + req.headers.host + "/book/" + req.params.bookId + "/";
         var book = result.book;
-        var description = book.title + "最新章节由网友提供，《" + book.title + "》情节跌宕起伏、扣人心弦，是一本情节与文笔俱佳的" + book.categoryName + "小说，" + branchInfo.title + "免费提供" + book.writer + "最新清爽干净的文字章节在线阅读.";
+        var description = book.title + "最新章节由网友提供，《" + book.title + "》情节跌宕起伏、扣人心弦，是一本情节与文笔俱佳的" + book.categoryName + "，" + branchInfo.shorttitle + "免费提供" + book.writer + "最新小说章节在线阅读.";
         var currentCategory = _.find(branchInfo.categoryMap, function(category) {
             return category[1] == book.categoryId || _.indexOf(category[2], book.categoryId) > -1;
         });
         if (currentCategory) book.categoryId = currentCategory[1];
         res.render('book', {
-            title: book.title + "最新章节列表_" + book.title + "最新章节目录_" + branchInfo.shorttitle,
+            title: book.title + "最新章节_" + book.title + "全部章节_" + branchInfo.shorttitle,
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "book",
-            keywords: book.title + "," + book.title + "最新章节" + "," + book.writer,
+            keywords: book.title + "," + book.title + "最新章节," + (book.publishStatus == 2 ? "连载完成,已完结" : "连载中,每日更新") + "," + book.writer,
             description: description,
             pageTitle: book.title,
             book: book,
@@ -314,7 +332,9 @@ exports.mulu = async function(req, res) {
         var currentPage = query.page;
         var book = result.book;
         res.render('mulu', {
-            title: book.title + "全部章节列表_" + book.title + "全部章节目录_" + branchInfo.shorttitle,
+            title: book.title + "全部章节_" + branchInfo.shorttitle,
+            keywords: book.title + "全部章节," + book.title + "最新章节",
+            description: "本页提供" + book.title + "的全部章节，每日全网同步更新！",
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "mulu",
@@ -347,15 +367,13 @@ exports.chapter = async function(req, res) {
         var branchInfo = req.branchInfo;
         var chapter = await readController.chapterDetail(parseInt(req.params.bookId), parseInt(req.params.number));
         if (chapter) {
-            branchInfo.description1 = branchInfo.shorttitle + "提供了" + chapter.book.writer + "创作的" + chapter.book.categoryName + "《" + chapter.book.title + "》清爽干净的文字章节：" + chapter.title;
-            branchInfo.keywords1 = chapter.book.title + "," + chapter.title + "," + chapter.book.writer;
             res.render('chapter', {
-                title: chapter.title + "_" + branchInfo.title,
+                title: chapter.title + "_" + branchInfo.shorttitle,
+                keywords: chapter.book.title + "," + chapter.title + "," + chapter.book.writer,
+                description: branchInfo.shorttitle + "提供了" + chapter.book.writer + "创作的" + chapter.book.categoryName + "《" + chapter.book.title + "》，当前阅读章节：" + chapter.title,
                 branchInfo: branchInfo,
                 user: auth.getUser(req, res),
                 currentRender: "chapter",
-                // keywords: chapter.book.title + "," + chapter.title + "," + chapter.book.writer,
-                // description: description,
                 pageTitle: chapter.title,
                 chapter: chapter,
                 chapterCount: chapter.book.chapterCount,
@@ -383,7 +401,9 @@ exports.search = async function(req, res) {
         var branchInfo = req.branchInfo;
         if (!req.query.keyword) {
             res.render('search', {
-                title: "搜索_输入书名•作者_小说_" + branchInfo.title,
+                title: "搜索_输入书名•作者_小说_" + branchInfo.shorttitle,
+                keywords: "",
+                description: "",
                 branchInfo: branchInfo,
                 user: auth.getUser(req, res),
                 currentRender: "search",
@@ -406,13 +426,14 @@ exports.search = async function(req, res) {
         var lastUpdatedBooks = await bookController.listBook(query);
         var currentPage = query.page;
         res.render('search', {
-            title: "搜索_" + query.searchContent + "_" + branchInfo.title,
+            title: "搜索_" + query.searchContent + "_" + branchInfo.shorttitle,
+            keywords: query.searchContent,
+            description: "搜索" + query.searchContent + "的结果",
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "search",
             pageTitle: "搜索 " + query.searchContent + " 的结果",
             books: lastUpdatedBooks.list,
-            keywords: query.searchContent,
             pagination: {
                 totalNum: lastUpdatedBooks.pagination.totalNum,
                 currentPage: currentPage,

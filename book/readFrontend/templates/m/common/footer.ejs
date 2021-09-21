@@ -13,3 +13,23 @@
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 <script language="javascript" type="text/javascript" src="/static/m/js/core.js?v=<%= branchInfo.staticVersion%>"></script>
+<script type="text/javascript">
+$(function() {
+    $.get("/branchVisitStat", function(result) {
+        console.log(result)
+    });
+});
+</script>
+<script>
+(function() {
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+    } else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
