@@ -140,6 +140,7 @@ exports.submitNew = async function(site, startDate, endDate) {
         }, ["modelId"]);
         for (var i = 0; i < models.length; i++) {
             urls.push(siteInfo.site + "/model/" + models[i].modelId);
+            urls.push(siteInfo.site + "/model/" + models[i].modelId + "/album/");
         }
         var articles = await articleSequelize.findAll({
             createdAt: {
