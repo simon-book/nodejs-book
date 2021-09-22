@@ -13,6 +13,7 @@ var bookSequelize = require('../../data/sequelize/book/bookSequelize.js');
 var bookChapterSequelize = require('../../data/sequelize/book/bookChapterSequelize.js');
 var rankSequelize = require('../../data/sequelize/rank/rankSequelize.js');
 var pageSequelize = require('../../data/sequelize/rank/pageSequelize.js');
+var baiduController = require('../seo/baiduController.js');
 
 var branch = {
     copySrc: "ibs" //www.ibswtan.com
@@ -236,6 +237,7 @@ async function create_book(originId, categoryId, categoryName) {
         }
         savedBook.set("chapterCount", chapters.length);
         await savedBook.save();
+        baiduController.submitNewBook(savedBook.bookId);
         return savedBook;
     } catch (err) {
         console.log(err, book);

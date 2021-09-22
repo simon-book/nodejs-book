@@ -2,6 +2,7 @@ var http = require('http')
 var https = require('https')
 var zlib = require('zlib');
 var iconv = require('iconv-lite')
+var Platserver = require('../../service/platServer.js');
 
 exports.htmlStartReq = function(host, path, charset) {
     var _http = http;
