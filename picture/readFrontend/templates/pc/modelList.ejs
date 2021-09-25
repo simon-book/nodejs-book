@@ -57,7 +57,7 @@
                     <ul class="pagination">
                         <% if(pagination.currentPage>1){%>
                         <li>
-                            <a href="/modelList/<%= (tag?tag.tagId+'/':'')+ pagination.currentPage-1%>/" aria-label="Previous">
+                            <a href="/modelList/<%= (tag?tag.tagId+'/':'')+ (pagination.currentPage-1)%>/" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
@@ -68,7 +68,7 @@
                         <% }); %>
                         <% if(pagination.currentPage<pagination.totalPage){%>
                         <li>
-                            <a href="/modelList/<%= (tag?tag.tagId+'/':'')+ pagination.currentPage+1%>/" aria-label="Next">
+                            <a href="/modelList/<%= (tag?tag.tagId+'/':'')+ (pagination.currentPage+1)%>/" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
