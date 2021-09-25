@@ -129,7 +129,8 @@
                     </div>
                     <% if(relatedPicturesCount>12){ %>
                     <div class="book-list-footer">
-                        <a class="btn btn-primary btn-xs btn-more" href="/model/<%= model.modelId%>/album/">更多</a>
+                        <a class="btn btn-primary btn-xs btn-more" href="/model/<%= model.modelId%>/album/">共
+                            <%= relatedPicturesCount%>册</a>
                     </div>
                     <% } %>
                 </div>

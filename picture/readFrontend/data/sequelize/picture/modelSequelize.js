@@ -52,7 +52,7 @@ exports.findByPk = function(id) {
                 as: 'pictures',
                 required: false,
                 raw: true,
-                attributes: ["pictureId", "title", "imgHost", "cover"]
+                attributes: ["pictureId", "title", "imgHost", "cover", "lastUpdatedAt"]
             }]
         }).then(function(results) {
             resolve(results);

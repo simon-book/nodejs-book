@@ -505,6 +505,9 @@ a:hover {
 .model-item-1 .model-name {
     margin: 5px;
     text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .model-item-1 .model-job {

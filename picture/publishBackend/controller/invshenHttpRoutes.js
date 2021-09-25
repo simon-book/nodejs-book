@@ -29,6 +29,11 @@ router.post('/complete_all_model_info', async function(req, res) {
     copyController.complete_all_model_info();
     res.send(true);
 })
+router.post('/complete_all_model_othername', async function(req, res) {
+    await copyController.queryBranchInfo();
+    copyController.complete_all_model_othername();
+    res.send(true);
+})
 router.post('/copy_articles', async function(req, res) {
     await copyController.queryBranchInfo();
     copyController.copy_articles();

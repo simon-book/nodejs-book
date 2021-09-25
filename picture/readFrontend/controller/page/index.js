@@ -296,7 +296,7 @@ exports.gallery = async function(req, res) {
         var pictureId = parseInt(req.params.pictureId);
         var picture = await pictureSequelize.findByPk(pictureId);
         var currentPage = parseInt(req.params.page || 1);
-        var pageSize = 5;
+        var pageSize = 10;
         if (!picture) throw new Error("找不到资源");
         var allIds = await pictureSequelize.findAllIds({
             branchId: branchInfo.branchId
@@ -493,6 +493,12 @@ exports.model = async function(req, res) {
                 return _.indexOf(model.relatedModelIds, model.modelId);
             })
         }
+        if (model.pictures) {
+            model.pictures = _.map(model.pictures, function(picture) {
+                return picture.get();
+            })
+            model.pictures = _.orderBy(model.pictures, "lastUpdatedAt", "desc");
+        }
         var allIds = await articleSequelize.findAllIds({
             branchId: branchInfo.branchId
         });
@@ -504,8 +510,8 @@ exports.model = async function(req, res) {
             }
         }, 0, 10, null, ["articleId", "title", "cover"])
         res.render('model', {
-            title: model.name + "-" + branchInfo.shorttitle,
-            keywords: (model.birthIn ? model.birthIn : "") + model.name + "," + model.name + "资料," + model.name + "写真" + (model.job ? "," + model.job : ""),
+            title: model.name + "的资料和写真合集-" + branchInfo.shorttitle,
+            keywords: model.name + "," + (model.othername ? model.othername + "," : "") + (model.nickname ? model.nickname + "," : "") + model.name + "资料," + model.name + "写真,套图" + (model.job ? "," + model.job.replace(/、/g, ",") : ""),
             description: model.remark,
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
@@ -551,6 +557,12 @@ exports.modelAlbum = async function(req, res) {
                 [Op.in]: relatedIds
             }
         }, 0, 12)
+        if (model.pictures) {
+            model.pictures = _.map(model.pictures, function(picture) {
+                return picture.get();
+            })
+            model.pictures = _.orderBy(model.pictures, "lastUpdatedAt", "desc");
+        }
         res.render('modelAlbum', {
             title: model.name + "的写真集-" + branchInfo.shorttitle,
             keywords: model.name + "," + model.name + "写真集," + (model.othername ? model.othername + "写真集," : "") + (model.nickname ? model.nickname + "写真集," : "") + model.name + "套图",

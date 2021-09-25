@@ -469,6 +469,30 @@ exports.complete_all_model_info = async function() {
     }
 }
 
+exports.complete_all_model_othername = async function() {
+    try {
+        var models = await modelSequelize.findAllWithoutTags({
+            branchId: branch.branchId,
+            statusId: 2
+        }, ["modelId", "originId", "othername"]);
+        for (var i = 0; i < models.length; i++) {
+            if (branch.isTest && i > 10) break;
+            var model = models[i];
+            var bookHref = "/girl/" + model.originId + "/";
+            console.log(bookHref);
+            var $ = await commonController.copyHtml(branch.pcCopyUrl, bookHref, branch.charset);
+            var othername = $(".div_h1").find("h1").text().replace(/\s+/g, "").replace(")", "").split("(")[1];
+            if (othername) {
+                console.log(othername);
+                model.set("othername", othername);
+                await model.save();
+            }
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
+
 async function complete_one_model_info(model) {
     try {
         var bookHref = "/girl/" + model.originId + "/";
@@ -514,6 +538,7 @@ async function complete_one_model_info(model) {
         if (otherInfo["兴趣"]) model.set("interests", otherInfo["兴趣"]);
         if (otherInfo.cover) model.set("cover", otherInfo.cover);
         if (otherInfo.name) model.set("name", otherInfo.name);
+        if (otherInfo.othername) model.set("othername", otherInfo.othername);
         if (otherInfo.remark) model.set("remark", otherInfo.remark);
         // if ($(".archive_more").length) await copy_model_pictures(null, model.originId);
         // else {
