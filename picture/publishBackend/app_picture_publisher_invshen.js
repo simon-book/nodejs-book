@@ -53,6 +53,7 @@ app.use(__G__.CONTEXT || '/page/stat', require('./controller/statHttpRoutes.js')
 app.use(__G__.CONTEXT || '/seo', require('./controller/seoHttpRoutes.js'));
 app.use(__G__.CONTEXT || '/api/publisher', require('./controller/index.js'));
 app.use(__G__.CONTEXT || '/api/publisher/invshen', require('./controller/invshenHttpRoutes.js'));
+app.use(__G__.CONTEXT || '/api/publisher/da12', require('./controller/da12HttpRoutes.js'));
 
 auto_schedule.auto_schedule_invshen();
 

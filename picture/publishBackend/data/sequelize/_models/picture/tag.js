@@ -34,6 +34,7 @@ var Tag = sequelize.define('tag', {
         defaultValue: 0
     },
     originId: Sequelize.TEXT, //复制原始ID
+    pictureCount: Sequelize.INTEGER,
     tagGroupId: {
         type: Sequelize.BIGINT,
         references: {
