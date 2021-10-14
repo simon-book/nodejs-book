@@ -302,9 +302,9 @@ exports.book = async function(req, res) {
             lastChapterUrl: book.lastChapter ? bookUrl + book.lastChapter.number : "",
             // firstChapters: result.firstChapters
         });
-        if (book.publishStatus == 1) {
-            httpGateway.publishUpdateStartReq(book.branchId, "update_book", { bookId: book.bookId });
-        }
+        // if (book.publishStatus == 1) {
+        //     httpGateway.publishUpdateStartReq(book.branchId, "update_book", { bookId: book.bookId });
+        // }
     } catch (err) {
         console.log(err);
         res.render('error', {
