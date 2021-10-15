@@ -105,7 +105,7 @@ async function copy_category_pictures(tag, startIndex, endIndex, isUpdate) {
         if (!tag || !tag.originId || !tag.originPath) return false;
         if (!startIndex) startIndex = 1;
         var index = startIndex;
-        if (!endIndex) endIndex = 100;
+        if (!endIndex) endIndex = 1000;
         if (branch.isTest) endIndex = startIndex + 1;
         var stop = false;
         do {
@@ -153,6 +153,11 @@ async function copy_category_pictures(tag, startIndex, endIndex, isUpdate) {
                             savedPicture.set("count", savedPicture.pictureList.length);
                             await savedPicture.save();
                         }
+                        if (tag.originPath != "xin" && savedPicture && (!savedPicture.tags || _.findIndex(savedPicture.tags, {
+                                tagId: tag.tagId
+                            }) == -1)) {
+                            await savedPicture.addTags([tag.tagId]);
+                        }
                     } catch (err) {
                         console.log(index, i, originId);
                         console.log(err);
@@ -160,6 +165,10 @@ async function copy_category_pictures(tag, startIndex, endIndex, isUpdate) {
                 }
                 var pages = $(".pages a");
                 pages = $(pages[pages.length - 1]).text().match(/\d+/g);
+                if (index == 1 && !branch.isTest) {
+                    console.log(pages);
+                    endIndex = parseInt(pages[1]) + 1;
+                }
                 if (parseInt(pages[0] == parseInt(pages[1]))) stop = true;
             } catch (err) {
                 console.log(tag, index);
