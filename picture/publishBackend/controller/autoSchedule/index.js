@@ -5,6 +5,8 @@ var copyController = require("../copy_invshen/copyController.js");
 var baiduController = require("../seo/baiduController.js");
 var googleController = require("../seo/googleController.js");
 
+var copyDa12Controller = require("../copy_da12/copyController.js");
+
 exports.auto_schedule_invshen = function() {
     //每日更新
     schedule.scheduleJob('0 0 0 * * *', async function() {
@@ -31,4 +33,16 @@ exports.trigger_invshen_scheduele = async function() {
     await copyController.complete_all_model_info();
     await baiduController.submitNew("www.99nvshen.com");
     await googleController.createSitemapFiles("www.99nvshen.com");
+}
+
+
+exports.auto_schedule_da12 = function() {
+    //每日更新
+    schedule.scheduleJob('0 0 0 * * *', async function() {
+        console.log("更新最近1天数据！");
+        await copyDa12Controller.queryBranchInfo();
+        copyDa12Controller.copy_all_pictures(null, true);
+        // await baiduController.submitNew("www.99nvshen.com");
+        // await googleController.createSitemapFiles("www.99nvshen.com");
+    });
 }

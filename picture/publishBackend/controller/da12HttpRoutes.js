@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var auto_schedule = require('./autoSchedule/index.js');
 var autoSchedule = require('./autoSchedule/index.js');
 var copyController = require('./copy_da12/copyController.js');
 var commonController = require('./copy_invshen/commonController.js');
@@ -14,6 +15,13 @@ router.post('/copy_tags', async function(req, res) {
     await copyController.copy_tags();
     res.send(true);
 })
+
+router.post('/count_tag_pictures', async function(req, res) {
+    await copyController.queryBranchInfo();
+    await copyController.count_tag_pictures(req.body.tagId);
+    res.send(true);
+})
+
 router.post('/copy_all_pictures', async function(req, res) {
     await copyController.queryBranchInfo();
     copyController.copy_all_pictures(req.body.tagId);
@@ -22,13 +30,10 @@ router.post('/copy_all_pictures', async function(req, res) {
 
 router.post('/update_all_pictures', async function(req, res) {
     await copyController.queryBranchInfo();
-    copyController.copy_all_pictures({
-        tagId: "",
-        originPath: "xin",
-        originId: 1
-    }, null, null, true);
+    copyController.copy_all_pictures(req.body.tagId, true);
     res.send(true);
 })
 
+auto_schedule.auto_schedule_da12();
 
 module.exports = router;

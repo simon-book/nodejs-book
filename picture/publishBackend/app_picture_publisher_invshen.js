@@ -11,7 +11,6 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var properties = require('./config/properties.js')();
-var auto_schedule = require('./controller/autoSchedule/index.js');
 
 process.env.NODE_ENV = __G__.NODE_ENV;
 
@@ -55,7 +54,6 @@ app.use(__G__.CONTEXT || '/api/publisher', require('./controller/index.js'));
 app.use(__G__.CONTEXT || '/api/publisher/invshen', require('./controller/invshenHttpRoutes.js'));
 app.use(__G__.CONTEXT || '/api/publisher/da12', require('./controller/da12HttpRoutes.js'));
 
-auto_schedule.auto_schedule_invshen();
 
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);

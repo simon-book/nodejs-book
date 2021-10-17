@@ -64,4 +64,6 @@ router.post('/trigger_invshen_scheduele', async function(req, res) {
     res.send(true);
 })
 
+autoSchedule.auto_schedule_invshen();
+
 module.exports = router;

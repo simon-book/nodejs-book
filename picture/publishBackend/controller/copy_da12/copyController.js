@@ -81,7 +81,31 @@ exports.copy_tags = async function() {
     }
 }
 
-exports.copy_all_pictures = async function(tagId) {
+exports.count_tag_pictures = async function(tagId) {
+    try {
+        var savedTags = await tagSequelize.findAll({
+            branchId: branch.branchId
+        })
+        for (var j = 0; j < savedTags.length; j++) {
+            var tag = savedTags[j];
+            if (tagId && tag.tagId != tagId) continue;
+            try {
+                var count = await tag.countPictures();
+                console.log(count);
+                if (count) {
+                    tag.set("pictureCount", count);
+                    await tag.save();
+                }
+            } catch (err) {
+                console.log("获取分类totalPage失败", category, err);
+            }
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+exports.copy_all_pictures = async function(tagId, isUpdate) {
     try {
         for (var j = 0; j < branch.tags.length; j++) {
             if (branch.isTest && j > 2) break;
@@ -89,7 +113,7 @@ exports.copy_all_pictures = async function(tagId) {
             if (tagId && tag.tagId != tagId) continue;
             try {
                 console.log(tag);
-                await copy_category_pictures(tag);
+                await copy_category_pictures(tag, null, null, isUpdate);
             } catch (err) {
                 console.log("获取分类totalPage失败", category, err);
             }
@@ -165,11 +189,9 @@ async function copy_category_pictures(tag, startIndex, endIndex, isUpdate) {
                 }
                 var pages = $(".pages a");
                 pages = $(pages[pages.length - 1]).text().match(/\d+/g);
-                if (index == 1 && !branch.isTest) {
-                    console.log(pages);
-                    endIndex = parseInt(pages[1]) + 1;
+                if (!branch.isTest) {
+                    endIndex = parseInt(pages[0]);
                 }
-                if (parseInt(pages[0] == parseInt(pages[1]))) stop = true;
             } catch (err) {
                 console.log(tag, index);
                 console.log(err);
