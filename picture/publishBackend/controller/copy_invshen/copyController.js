@@ -250,7 +250,8 @@ async function copy_category_pictures(tag, startIndex, endIndex, isUpdate) {
                             }) == -1)) {
                             await savedPicture.addTags([tag.tagId], {
                                 through: {
-                                    pictureLastUpdatedAt: savedPicture.lastUpdatedAt
+                                    pictureLastUpdatedAt: savedPicture.lastUpdatedAt,
+                                    originId: savedPicture.originId
                                 }
                             });
                         }

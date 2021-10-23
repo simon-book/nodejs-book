@@ -165,3 +165,28 @@ exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
         })
     })
 }
+
+exports.updatePictureTag = function(obj, where) {
+    return new Promise(function(resolve, reject) {
+        PictureTag.update(obj, {
+            where: where
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
+
+exports.countPictureTag = function(where) {
+    return new Promise(function(resolve, reject) {
+        PictureTag.count({
+            where: where
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}

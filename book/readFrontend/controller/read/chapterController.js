@@ -4,10 +4,12 @@ var Op = Sequelize.Op;
 var moment = require('moment');
 var cheerio = require('cheerio');
 var util = require('../../util/index.js');
-var httpGateway = require('../../data/http/httpGateway.js')
+var httpGateway = require('../../data/http/httpGateway.js');
 
-async function copyBiqugeInfoChapterContent(host, path, charset) {
+async function copyBiqugeInfoChapterContent(host, path, charset, chapter) {
     try {
+        var content = await httpGateway.mossServerStartReq("GET", "/moss/get/" + chapter.branchId + "/" + chapter.bookId + "/" + chapter.number, "");
+        if (content) return content;
         var bookHtml = await httpGateway.htmlStartReq(host, path, charset);
         var $ = cheerio.load(bookHtml, {
             decodeEntities: false
@@ -30,7 +32,7 @@ async function copyBiqugeInfoChapterContent(host, path, charset) {
     }
 }
 
-exports.copyChapterContent = async function(branch, bookOriginId, chapterOriginId) {
+exports.copyChapterContent = async function(branch, bookOriginId, chapterOriginId, chapter) {
     try {
         var host = branch.pcCopyUrl;
         var content = "";
@@ -43,22 +45,22 @@ exports.copyChapterContent = async function(branch, bookOriginId, chapterOriginI
         } else if (/ibs/.test(branch.copySrc)) {
             var path = "/" + bookOriginId + "/" + chapterOriginId + ".html";
         }
-        content = await copyBiqugeInfoChapterContent(host, path, charset);
+        content = await copyBiqugeInfoChapterContent(host, path, charset, chapter);
         if (!content) {
             await util.sleep(1000);
-            var content = await copyBiqugeInfoChapterContent(host, path, charset);
+            var content = await copyBiqugeInfoChapterContent(host, path, charset, chapter);
         }
         if (!content) {
             await util.sleep(1000);
-            var content = await copyBiqugeInfoChapterContent(host, path, charset);
+            var content = await copyBiqugeInfoChapterContent(host, path, charset, chapter);
         }
         if (!content) {
             await util.sleep(1000);
-            var content = await copyBiqugeInfoChapterContent(host, path, charset);
+            var content = await copyBiqugeInfoChapterContent(host, path, charset, chapter);
         }
         if (!content) {
             await util.sleep(1000);
-            var content = await copyBiqugeInfoChapterContent(host, path, charset);
+            var content = await copyBiqugeInfoChapterContent(host, path, charset, chapter);
         }
         if (content) {
             console.log("success:" + host + path)

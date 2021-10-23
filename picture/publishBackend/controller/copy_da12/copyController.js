@@ -180,7 +180,11 @@ async function copy_category_pictures(tag, startIndex, endIndex, isUpdate) {
                         if (tag.originPath != "xin" && savedPicture && (!savedPicture.tags || _.findIndex(savedPicture.tags, {
                                 tagId: tag.tagId
                             }) == -1)) {
-                            await savedPicture.addTags([tag.tagId]);
+                            await savedPicture.addTags([tag.tagId], {
+                                through: {
+                                    originId: savedPicture.originId
+                                }
+                            });
                         }
                     } catch (err) {
                         console.log(index, i, originId);
@@ -242,6 +246,51 @@ async function create_picture(originId, picture, tagId) {
         return false;
     }
 }
+
+exports.fill_picture_tag_origin_id = async function(branchId) {
+    try {
+        var pictures = await pictureSequelize.findAllWithoutTags({
+            branchId: branchId
+        }, ["pictureId", "originId"]);
+        for (var i = 0; i < pictures.length; i++) {
+            await pictureSequelize.updatePictureTag({
+                originId: pictures[i].originId
+            }, {
+                pictureId: pictures[i].pictureId
+            })
+        }
+    } catch (err) {
+        console.log(err);
+        return false;
+    }
+}
+
+async function count_tag_pictures(tagId) {
+    try {
+        for (var j = 0; j < branch.tags.length; j++) {
+            var tag = branch.tags[j];
+            if (tagId && tag.tagId != tagId) continue;
+            try {
+                var count = await pictureSequelize.countPictureTag({
+                    tagId: tag.tagId
+                })
+                if (count) {
+                    await tagSequelize.update({
+                        pictureCount: count
+                    }, {
+                        tagId: tag.tagId
+                    })
+                }
+            } catch (err) {
+                console.log("获取分类totalPage失败", category, err);
+            }
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+exports.count_tag_pictures = count_tag_pictures;
 
 
 function mapObjToHrefSearch(obj) {

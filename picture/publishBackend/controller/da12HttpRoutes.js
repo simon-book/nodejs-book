@@ -34,6 +34,17 @@ router.post('/update_all_pictures', async function(req, res) {
     res.send(true);
 })
 
+router.post('/count_tag_pictures', async function(req, res) {
+    await copyController.queryBranchInfo();
+    copyController.count_tag_pictures(req.body.tagId);
+    res.send(true);
+})
+
+router.post('/fill_picture_tag_origin_id', async function(req, res) {
+    copyController.fill_picture_tag_origin_id(req.body.branchId);
+    res.send(true);
+})
+
 auto_schedule.auto_schedule_da12();
 
 module.exports = router;

@@ -49,12 +49,12 @@ exports.htmlStartReq = function(host, path, charset) {
             });
         });
         req.on('error', function(e) {
-            console.log("error", path, e);
+            console.log("error", path);
             reject(e);
         });
         req.on('timeout', function(e) {
             req.abort();
-            console.log("timeout", path, e);
+            console.log("timeout", path);
             reject("timeout");
         });
         req.write("");
