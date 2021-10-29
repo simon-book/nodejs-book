@@ -39,7 +39,7 @@
                         <% pictures.forEach(function(picture){ %>
                         <div class="col-lg-3 col-md-4 col-sm-4 col-xs-6">
                             <a class="gallery-item" href="/gallery/<%= picture.pictureId%>" target="_blank" title="<%= picture.title%>">
-                                <div class="gallery-cover"><img src="<%= (/\/\/img\..+/.test(picture.imgHost)?'https://img.99nvshen.com':/\/\/t1\..+/.test(picture.imgHost)?'https://img1.99nvshen.com':picture.imgHost)+picture.cover%>" alt="<%= picture.title%>"></div>
+                                <div class="gallery-cover"><img src="<%= branchInfo.pictureUrl+picture.cover%>" alt="<%= picture.title%>"></div>
                                 <div class="gallery-title-1">
                                     <%= picture.title%>
                                 </div>
