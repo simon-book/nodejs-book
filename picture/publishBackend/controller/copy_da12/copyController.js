@@ -108,7 +108,7 @@ exports.count_tag_pictures = async function(tagId) {
 exports.copy_all_pictures = async function(tagId, isUpdate) {
     try {
         for (var j = 0; j < branch.tags.length; j++) {
-            if (branch.isTest && j > 2) break;
+            // if (branch.isTest && j > 2) break;
             var tag = branch.tags[j];
             if (tagId && tag.tagId != tagId) continue;
             try {
@@ -153,7 +153,7 @@ async function copy_category_pictures(tag, startIndex, endIndex, isUpdate) {
                     try {
                         var item = targetItems[i];
                         var bookHref = $(item).find("a").attr("href");
-                        var tagId = bookHref.match(/\d+/g)[bookHref.match(/\d+/g).length - 2];
+                        var originTagId = bookHref.match(/\d+/g)[bookHref.match(/\d+/g).length - 2];
                         var originId = bookHref.match(/\d+/g)[bookHref.match(/\d+/g).length - 1];
                         var savedPicture = await pictureSequelize.findOne({
                             branchId: branch.branchId,
@@ -172,8 +172,9 @@ async function copy_category_pictures(tag, startIndex, endIndex, isUpdate) {
                             }
                             picture.imgHost = picture.cover.match(/http(s?):\/\/[^\/]+/g)[0];
                             picture.cover = picture.cover.replace(picture.imgHost, "");
-                            savedPicture = await create_picture(originId, picture, tagId);
-                        } else if (!savedPicture.count) {
+                            savedPicture = await create_picture(originId, picture, originTagId);
+                        }
+                        if (!savedPicture.count) {
                             savedPicture.set("count", savedPicture.pictureList.length);
                             await savedPicture.save();
                         }
@@ -209,15 +210,22 @@ async function copy_category_pictures(tag, startIndex, endIndex, isUpdate) {
 
 exports.copy_category_pictures = copy_category_pictures;
 
-async function create_picture(originId, picture, tagId) {
+async function create_picture(originId, picture, originTagId) {
     try {
-        picture.pictureList = [];
-        var bookHref = "/to/" + tagId + "/" + originId + ".html";
+        var bookHref = "/to/" + originTagId + "/" + originId + ".html";
         console.log(bookHref);
         var $ = await commonController.copyHtml(branch.pcCopyUrl, bookHref, branch.charset);
+        if (!picture) picture = {
+            branchId: branch.branchId,
+            // cover: $(item).find("img").attr("src"),
+            title: $($(".Title111")[1]).find("h9").text(),
+            originId: originId
+        };
+        picture.pictureList = [];
         var pics = $(".content").find("img");
         _.forEach(pics, function(pic) {
             var picUrl = $(pic).attr("src");
+            if (!picture.imgHost) picture.imgHost = picUrl.match(/http(s?):\/\/[^\/]+/g)[0];
             if (/^(https)/.test(picUrl)) picUrl = picUrl.replace(/https:\/\/[^\/]+/, "");
             else if (/^(http)/.test(picUrl)) picUrl = picUrl.replace(/http:\/\/[^\/]+/, "");
             picture.pictureList.push(picUrl);
@@ -226,7 +234,7 @@ async function create_picture(originId, picture, tagId) {
         if (pages && pages.length > 1) {
             pages = parseInt($(pages[0]).text().match(/\d+/g)[0]);
             for (var i = 2; i <= pages; i++) {
-                var bookHref = "/to/" + tagId + "/" + originId + "_" + i + ".html";
+                var bookHref = "/to/" + originTagId + "/" + originId + "_" + i + ".html";
                 console.log(bookHref);
                 var $ = await commonController.copyHtml(branch.pcCopyUrl, bookHref, branch.charset);
                 var pics = $(".content").find("img");
@@ -246,6 +254,8 @@ async function create_picture(originId, picture, tagId) {
         return false;
     }
 }
+
+exports.create_picture = create_picture;
 
 exports.fill_picture_tag_origin_id = async function(branchId) {
     try {
@@ -291,6 +301,121 @@ async function count_tag_pictures(tagId) {
 }
 
 exports.count_tag_pictures = count_tag_pictures;
+
+
+exports.copy_home_rank = async function() {
+    try {
+        var path = "";
+        console.log(path);
+        var $ = await commonController.copyHtml(branch.pcCopyUrl, path, branch.charset);
+        var rankPictureIds = [];
+        var targetItems = $("#D1pic1 .fcon");
+        for (var j = 0; j < targetItems.length; j++) {
+            var item = targetItems[j];
+            var bookHref = $(item).find("a").attr("href");
+            var originTagId = bookHref.match(/\d+/g)[bookHref.match(/\d+/g).length - 2];
+            var originId = bookHref.match(/\d+/g)[bookHref.match(/\d+/g).length - 1];
+            var horiCover = $(item).find("img").attr("src");
+            // horiCover = horiCover.replace(/http(s?):\/\/[^\/]+/, "");
+            var savedPicture = await pictureSequelize.findOne({
+                branchId: branch.branchId,
+                originId: originId
+            })
+            if (!savedPicture) {
+                savedPicture = await create_picture(originId, null, originTagId);
+            };
+            var tag = _.find(branch.tags, { originId: originTagId });
+            if (savedPicture && (!savedPicture.tags || _.findIndex(savedPicture.tags, {
+                    tagId: tag.tagId
+                }) == -1)) {
+                await savedPicture.addTags([tag.tagId], {
+                    through: {
+                        originId: savedPicture.originId
+                    }
+                });
+            }
+            if (savedPicture && !savedPicture.horiCover && horiCover) {
+                savedPicture.set("horiCover", horiCover);
+                await savedPicture.save();
+            }
+            rankPictureIds.push(savedPicture.pictureId);
+        }
+
+        var targetItems = $(".banner-r .img-box");
+        for (var j = 0; j < targetItems.length; j++) {
+            var item = targetItems[j];
+            var bookHref = $(item).find("a").attr("href");
+            var originTagId = bookHref.match(/\d+/g)[bookHref.match(/\d+/g).length - 2];
+            var originId = bookHref.match(/\d+/g)[bookHref.match(/\d+/g).length - 1];
+            var horiCover = $(item).find("img").attr("src");
+            // horiCover = horiCover.replace(/http(s?):\/\/[^\/]+/, "");
+            var savedPicture = await pictureSequelize.findOne({
+                branchId: branch.branchId,
+                originId: originId
+            })
+            if (!savedPicture) {
+                savedPicture = await create_picture(originId, null, originTagId);
+            };
+            var tag = _.find(branch.tags, { originId: originTagId });
+            if (savedPicture && (!savedPicture.tags || _.findIndex(savedPicture.tags, {
+                    tagId: tag.tagId
+                }) == -1)) {
+                await savedPicture.addTags([tag.tagId], {
+                    through: {
+                        originId: savedPicture.originId
+                    }
+                });
+            }
+            if (savedPicture && !savedPicture.horiCover && horiCover) {
+                savedPicture.set("horiCover", horiCover);
+                await savedPicture.save();
+            }
+            rankPictureIds.push(savedPicture.pictureId);
+        }
+
+        var targetItems = $(".list li");
+        for (var j = 0; j < targetItems.length; j++) {
+            var item = targetItems[j];
+            var abox = $(item).find("a");
+            var bookHref = $(abox[1]).attr("href");
+            var originTagId = bookHref.match(/\d+/g)[bookHref.match(/\d+/g).length - 2];
+            var originId = bookHref.match(/\d+/g)[bookHref.match(/\d+/g).length - 1];
+            var savedPicture = await pictureSequelize.findOne({
+                branchId: branch.branchId,
+                originId: originId
+            })
+            if (!savedPicture) {
+                savedPicture = await create_picture(originId, null, originTagId);
+            };
+            var tag = _.find(branch.tags, { originId: originTagId });
+            if (savedPicture && (!savedPicture.tags || _.findIndex(savedPicture.tags, {
+                    tagId: tag.tagId
+                }) == -1)) {
+                await savedPicture.addTags([tag.tagId], {
+                    through: {
+                        originId: savedPicture.originId
+                    }
+                });
+            }
+            rankPictureIds.push(savedPicture.pictureId);
+        }
+        var savedRank = await rankSequelize.findOne({
+            branchId: branch.branchId,
+            originId: "homepage"
+        })
+        if (!savedRank) {
+            savedRank = await rankSequelize.create({
+                branchId: branch.branchId,
+                originId: "homepage",
+                name: "首页"
+            })
+        }
+        savedRank.set("rankPictureIds", _.uniq(rankPictureIds));
+        await savedRank.save();
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 
 function mapObjToHrefSearch(obj) {

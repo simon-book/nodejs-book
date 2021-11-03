@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var moment = require('moment');
-var page = require('./page/index.js');
-var branchMap = require('./page/branchMap.js');
+var page = require('./page_da12/index.js');
+var branchMap = require('./page_da12/branchMap.js');
 var visitStatSequelize = require('../data/sequelize/visitStatSequelize.js');
 
 var branchVisitStat = {};
@@ -33,38 +33,6 @@ router.use(function(req, res, next) {
     // }
 });
 
-//ajax请求
-// router.post('/login', userController.login);
-// router.post('/register', userController.register);
-
-// //登陆相关
-// router.get('/login', page.login);
-// router.get('/register', page.register);
-// router.get('/logout', userController.logout);
-
-//页面访问
-// router.use(async function(req, res, next) {
-//     var branchInfo = req.branchInfo;
-//     var date = moment().format("YYYY-MM-DD");
-//     if (!branchVisitStat[req.hostname] || branchVisitStat[req.hostname].date != date) {
-//         var record = await visitStatSequelize.findOrCreate({
-//             hostname: req.hostname,
-//             date: date
-//         }, {
-//             branchId: branchInfo.branchId,
-//             date: date,
-//             hostname: req.hostname
-//         });
-//         branchVisitStat[req.hostname] = record;
-//     }
-//     if (branchVisitStat[req.hostname]) {
-//         visitStatSequelize.increment({
-//             id: branchVisitStat[req.hostname].id
-//         })
-//     }
-//     next();
-// });
-
 router.get('/branchVisitStat', async function(req, res) {
     var branchInfo = req.branchInfo;
     var date = moment().format("YYYY-MM-DD");
@@ -88,41 +56,15 @@ router.get('/branchVisitStat', async function(req, res) {
 });
 
 router.get('/', page.home);
-router.get('/articles/', page.articleList);
-router.get('/articles/:page', page.articleList);
-router.get('/article/:articleId/', page.article);
-router.get('/article/:articleId/:page', page.article);
-
+router.get('/tagList/', page.tagList);
 router.get('/galleryList/', page.galleryList);
 router.get('/galleryList/:page', page.galleryList);
-// router.get('/galleryList/:tagId/', page.galleryList);
 router.get('/galleryList/:tagId/:page', page.galleryList);
 router.get('/gallery/:pictureId/', page.gallery);
 router.get('/gallery/:pictureId/:page', page.gallery);
-router.get('/galleryImg/:pictureId/:page', page.galleryImg);
 
-router.get('/modelList/', page.modelList);
-router.get('/modelList/:page', page.modelList);
-router.get('/modelList/:tagId/:page', page.modelList);
-router.get('/model/:modelId/', page.model);
-router.get('/model/:modelId/album', page.modelAlbum);
-router.get('/model/:modelId/album/:page', page.modelAlbum);
-router.get('/jinrinvshen', page.todayModelList);
-router.get('/findModel', page.findModel);
-router.post('/findModel', page.findModelList);
-// router.get('/findModel/:page', page.findModelList);
-// router.post('/findModel', page.findModelList);
-// router.post('/findModel/:page', page.findModelList);
-
-router.get('/paihang/', page.paihang);
-router.get('/paihang/:rankId/', page.rankModelList);
-router.get('/paihang/:rankId/:page', page.rankModelList);
-
-router.get('/search', page.search);
-router.get('/searchModel', page.searchModel);
-router.get('/searchModel/:page', page.searchModel);
-router.get('/searchGallery', page.searchGallery);
-router.get('/searchGallery/:page', page.searchGallery);
+router.get('/search', page.searchGallery);
+router.get('/search/:page', page.searchGallery);
 router.get('/error', page.error);
 
 module.exports = router;

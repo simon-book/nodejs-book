@@ -1,0 +1,35 @@
+<%- include('common/top', {}); %>
+<%- include('common/mainHeader', {}); %>
+<div class="container">
+    <ol class="breadcrumb">
+        <li>当前位置</li>
+        <li><a href="/">首页</a></li>
+        <li><a href="/tagList">图片分类</a></li>
+        <li class="active">列表</li>
+    </ol>
+    <div class="border book-list-box">
+        <h2 class="book-list-title">所有图片分类（共
+            <%= totalCount%>套）</h2>
+        <div class="book-list row">
+            <% tags.forEach(function(tag){ %>
+            <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                <div class="tag-item">
+                    <a class="tag-title" href="/galleryList/<%= tag.tagId%>/1" title="<%= tag.name%>">
+                        <%= tag.name%>
+                    </a>
+                    <div class="tag-pictureCount">
+                        <%= tag.pictureCount%>套
+                    </div>
+                </div>
+            </div>
+            <% }); %>
+        </div>
+    </div>
+</div>
+<%- include('common/footer', {}); %>
+<script type="text/javascript">
+$('.carousel').carousel({
+    interval: 2000000
+})
+</script>
+<%- include('common/bottom', {}); %>

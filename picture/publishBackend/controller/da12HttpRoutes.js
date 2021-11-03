@@ -28,6 +28,12 @@ router.post('/copy_all_pictures', async function(req, res) {
     res.send(true);
 })
 
+router.post('/create_picture', async function(req, res) {
+    await copyController.queryBranchInfo();
+    copyController.create_picture(req.body.originId, null, req.body.originTagId);
+    res.send(true);
+})
+
 router.post('/update_all_pictures', async function(req, res) {
     await copyController.queryBranchInfo();
     copyController.copy_all_pictures(req.body.tagId, true);
@@ -42,6 +48,12 @@ router.post('/count_tag_pictures', async function(req, res) {
 
 router.post('/fill_picture_tag_origin_id', async function(req, res) {
     copyController.fill_picture_tag_origin_id(req.body.branchId);
+    res.send(true);
+})
+
+router.post('/copy_home_rank', async function(req, res) {
+    await copyController.queryBranchInfo();
+    copyController.copy_home_rank();
     res.send(true);
 })
 

@@ -12,14 +12,14 @@ var session = require('express-session');
 var bodyParser = require('body-parser');
 var compression = require('compression');
 var properties = require('./config/properties.js')();
-var branchMap = require('./controller/page/branchMap.js');
+var branchMap = require('./controller/page_da12/branchMap.js');
 
 process.env.NODE_ENV = __G__.NODE_ENV;
 
 var app = express();
 // all environments
-app.set('port', process.env.PORT || 4100);
-app.set('views', path.join(__dirname, 'templates/pc'));
+app.set('port', process.env.PORT || 4200);
+app.set('views', path.join(__dirname, 'templates/pc_da12'));
 app.set('view engine', 'ejs');
 app.set('view options');
 app.use(favicon(path.join(__dirname, 'static/src/images/favicon.ico')));
@@ -51,7 +51,7 @@ app.use(__G__.CONTEXT + "/static", express.static(path.join(__dirname, '/static'
 }));
 app.use(__G__.CONTEXT + "/html", express.static(path.join(__dirname, '/html')));
 
-app.use(__G__.CONTEXT || '/', require('./controller/pageRoutes.js'));
+app.use(__G__.CONTEXT || '/', require('./controller/da12PageRoutes.js'));
 
 branchMap.queryBranchInfo();
 

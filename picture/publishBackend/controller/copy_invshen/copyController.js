@@ -172,7 +172,7 @@ async function copy_tags(tagGroupType, tagGroups) {
     }
 }
 
-exports.copy_all_pictures = async function(tagGroupId) {
+exports.copy_all_pictures = async function(tagGroupId, tagId) {
     try {
         for (var i = 0; i < branch.pictureTagGroups.length; i++) {
             var tagGroup = branch.pictureTagGroups[i];
@@ -180,6 +180,7 @@ exports.copy_all_pictures = async function(tagGroupId) {
             for (var j = 0; j < tagGroup.tags.length; j++) {
                 if (branch.isTest && j > 2) break;
                 var tag = tagGroup.tags[j];
+                if (tagId && tag.tagId != tagId) continue;
                 try {
                     console.log(tag);
                     await copy_category_pictures(tag);

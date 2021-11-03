@@ -5,7 +5,7 @@ var sequelize = require("../../../../service/sequelizeConn.js");
 
 var Branch = require("../branch/branch.js");
 
-var ModelRank = sequelize.define('model_rank', {
+var ModelRank = sequelize.define('rank', {
     rankId: {
         type: Sequelize.BIGINT,
         primaryKey: true,
@@ -20,6 +20,7 @@ var ModelRank = sequelize.define('model_rank', {
     originId: Sequelize.TEXT,
     carousel: Sequelize.JSONB,
     rankModelIds: Sequelize.JSONB,
+    rankPictureIds: Sequelize.JSONB,
     // moreLink: Sequelize.TEXT,
     orderIndex: {
         type: Sequelize.INTEGER,
@@ -35,7 +36,7 @@ var ModelRank = sequelize.define('model_rank', {
     }
 }, {
     schema: __PGSQL__.schemas.picture_publisher,
-    tableName: 'model_rank',
+    tableName: 'rank',
     timestamps: true,
     underscored: true,
 });

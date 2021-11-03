@@ -1,0 +1,65 @@
+<%- include('common/top', {}); %>
+<%- include('common/mainHeader', {}); %>
+<div class="container">
+    <div class="row ">
+        <ol class="col-xs-12 breadcrumb">
+            <li>当前位置</li>
+            <li><a href="/">首页</a></li>
+            <li><a href="/tagList">图片分类</a></li>
+            <% if(tag){%>
+            <li><a href="/galleryList/<%= tag.tagId%>/1">
+                    <%= tag.name%></a></li>
+            <% }else{ %>
+            <li>最近更新</li>
+            <% } %>
+        </ol>
+        <div class="col-md-12 col-xs-12">
+            <div class="border book-list-box">
+                <div class="book-list">
+                    <% pictures.forEach(function(picture){ %>
+                    <div class="col-lg-2 col-md-3 col-sm-4 col-xs-6">
+                        <a class="gallery-item" href="/gallery/<%= picture.pictureId%>" target="_blank" title="<%= picture.title%>">
+                            <div class="gallery-cover"><img src="<%= branchInfo.pictureUrl+picture.cover%>" alt="<%= picture.title%>"></div>
+                            <div class="gallery-title-1">
+                                <%= picture.title%>
+                            </div>
+                        </a>
+                    </div>
+                    <% }); %>
+                </div>
+                <nav aria-label="Page navigation" class="pagination-box">
+                    <ul class="pagination">
+                        <% if(pagination.currentPage>1){%>
+                        <li>
+                            <a href="/galleryList/<%= (tag?tag.tagId+'/':'')+ (pagination.currentPage-1)%>/" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <% } %>
+                        <% pagination.pages.forEach(function(page){ %>
+                        <li class=<%=page==pagination.currentPage?"active":""%>><a href="/galleryList/<%= (tag?tag.tagId+'/':'')+ page%>/">
+                                <%= page%></a></li>
+                        <% }); %>
+                        <% if(pagination.currentPage<pagination.totalPage){%>
+                        <li>
+                            <a href="/galleryList/<%= (tag?tag.tagId+'/':'')+ (pagination.currentPage+1)%>/" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        <% } %>
+                        <% if(pagination.pages[pagination.pages.length-1]<pagination.totalPage){%>
+                        <li><a href="/galleryList/<%= (tag?tag.tagId+'/':'')+ pagination.totalPage%>/">...
+                                <%= pagination.totalPage%></a></li>
+                        <% } %>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+var currentPage = <%= pagination.currentPage%>;
+var totalPage = <%= pagination.totalPage%>;
+</script>
+<%- include('common/footer', {}); %>
+<%- include('common/bottom', {}); %>

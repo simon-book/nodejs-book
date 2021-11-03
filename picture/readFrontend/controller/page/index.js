@@ -3,7 +3,6 @@ var Op = Sequelize.Op;
 var _ = require('lodash');
 var moment = require('moment');
 var util = require("../../util/index.js");
-// var httpGateway = require("../../data/http/httpGateway.js");
 var branchSequelize = require('../../data/sequelize/branch/branchSequelize.js');
 var tagSequelize = require('../../data/sequelize/picture/tagSequelize.js');
 var modelSequelize = require('../../data/sequelize/picture/modelSequelize.js');
@@ -235,7 +234,6 @@ exports.article = async function(req, res) {
 exports.galleryList = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
-        var pictureTagGroups = branchInfo.pictureTagGroups;
         var tagId = parseInt(req.params.tagId);
         var currentPage = parseInt(req.params.page || 1);
         var pageSize = 24;
@@ -416,7 +414,6 @@ exports.galleryImg = async function(req, res) {
 exports.modelList = async function(req, res) {
     try {
         var branchInfo = req.branchInfo;
-        var pictureTagGroups = branchInfo.pictureTagGroups;
         var tagId = parseInt(req.params.tagId);
         var currentPage = parseInt(req.params.page || 1);
         var pageSize = 30;

@@ -40,7 +40,7 @@ exports.findOne = function(where) {
                 model: Tag,
                 as: 'tags',
                 required: false,
-                attributes: ["tagId", "name"]
+                attributes: ["tagId", "name", "remark"]
             }, {
                 model: Model,
                 as: 'models',
@@ -59,12 +59,12 @@ exports.findAll = function(where, offset, limit, attributes) {
     return new Promise(function(resolve, reject) {
         Picture.findAll({
             where: where,
-            attributes: attributes || ["pictureId", "title", "cover", "imgHost", "lastUpdatedAt"],
+            attributes: attributes || ["pictureId", "title", "cover", "horiCover", "imgHost", "lastUpdatedAt", "originId"],
             offset: offset || 0,
             limit: limit || 200000,
-            raw: true,
             order: [
-                ["lastUpdatedAt", "DESC"]
+                ["lastUpdatedAt", "DESC"],
+                [sequelize.cast(sequelize.col('picture.origin_id'), 'BIGINT'), 'DESC']
             ],
             // include: [{
             //     model: Tag,
@@ -85,6 +85,32 @@ exports.findAll = function(where, offset, limit, attributes) {
     })
 }
 
+exports.findAllWithTags = function(where, offset, limit, attributes) {
+    return new Promise(function(resolve, reject) {
+        Picture.findAll({
+            where: where,
+            attributes: attributes || ["pictureId", "title", "cover", "horiCover", "imgHost", "lastUpdatedAt", "originId"],
+            offset: offset || 0,
+            limit: limit || 200000,
+            // order: [
+            //     ["lastUpdatedAt", "DESC"],
+            //     [sequelize.cast(sequelize.col('picture.origin_id'), 'BIGINT'), 'DESC']
+            // ],
+            include: [{
+                model: Tag,
+                as: 'tags',
+                required: false,
+                raw: true,
+                attributes: ["tagId", "name", "remark"]
+            }]
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
 exports.findByPk = function(id) {
     return new Promise(function(resolve, reject) {
         Picture.findByPk(id, {
@@ -93,7 +119,7 @@ exports.findByPk = function(id) {
                 as: 'tags',
                 required: false,
                 raw: true,
-                attributes: ["tagId", "name"]
+                attributes: ["tagId", "name", "remark"]
             }, {
                 model: Model,
                 as: 'models',
@@ -116,13 +142,14 @@ exports.findAndCountAllPictureTag = function(where, offset, limit, order) {
             limit: limit || 10000,
             offset: offset || 0,
             order: order || [
-                ['pictureLastUpdatedAt', 'DESC']
+                ['pictureLastUpdatedAt', 'DESC'],
+                ['originId', 'DESC']
             ],
             include: [{
                 model: Picture,
                 as: 'picture',
                 required: false,
-                attributes: ["pictureId", "title", "imgHost", "cover", "lastUpdatedAt"],
+                attributes: ["pictureId", "title", "imgHost", "cover", "lastUpdatedAt", "originId"],
                 // include: [{
                 //     model: Tag,
                 //     as: 'tags',
@@ -152,9 +179,10 @@ exports.findAndCountAll = function(where, offset, limit, order) {
             limit: limit || 10000,
             offset: offset || 0,
             order: order || [
-                ['lastUpdatedAt', 'DESC']
+                ['lastUpdatedAt', 'DESC'],
+                ['originId', 'DESC']
             ],
-            attributes: ["pictureId", "title", "imgHost", "cover", "lastUpdatedAt"],
+            attributes: ["pictureId", "title", "imgHost", "cover", "lastUpdatedAt", "originId"],
             // include: [{
             //     model: Tag,
             //     as: 'tags',

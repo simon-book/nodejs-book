@@ -42,6 +42,7 @@ exports.auto_schedule_da12 = function() {
         console.log("更新最近1天数据！");
         await copyDa12Controller.queryBranchInfo();
         copyDa12Controller.copy_all_pictures(null, true);
+        copyDa12Controller.copy_home_rank();
         // await baiduController.submitNew("www.99nvshen.com");
         // await googleController.createSitemapFiles("www.99nvshen.com");
     });
