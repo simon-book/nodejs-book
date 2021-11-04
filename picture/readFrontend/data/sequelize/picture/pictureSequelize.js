@@ -59,12 +59,11 @@ exports.findAll = function(where, offset, limit, attributes) {
     return new Promise(function(resolve, reject) {
         Picture.findAll({
             where: where,
-            attributes: attributes || ["pictureId", "title", "cover", "horiCover", "imgHost", "lastUpdatedAt", "originId"],
+            attributes: attributes || ["pictureId", "title", "cover", "horiCover", "imgHost", "lastUpdatedAt", "originId", "orderIndex"],
             offset: offset || 0,
             limit: limit || 200000,
             order: [
-                ["lastUpdatedAt", "DESC"],
-                [sequelize.cast(sequelize.col('picture.origin_id'), 'BIGINT'), 'DESC']
+                ["orderIndex", "DESC"],
             ],
             // include: [{
             //     model: Tag,
@@ -89,13 +88,12 @@ exports.findAllWithTags = function(where, offset, limit, attributes) {
     return new Promise(function(resolve, reject) {
         Picture.findAll({
             where: where,
-            attributes: attributes || ["pictureId", "title", "cover", "horiCover", "imgHost", "lastUpdatedAt", "originId"],
+            attributes: attributes || ["pictureId", "title", "cover", "horiCover", "imgHost", "lastUpdatedAt", "originId", "orderIndex"],
             offset: offset || 0,
             limit: limit || 200000,
-            // order: [
-            //     ["lastUpdatedAt", "DESC"],
-            //     [sequelize.cast(sequelize.col('picture.origin_id'), 'BIGINT'), 'DESC']
-            // ],
+            order: [
+                ["orderIndex", "DESC"],
+            ],
             include: [{
                 model: Tag,
                 as: 'tags',
@@ -143,7 +141,7 @@ exports.findAndCountAllPictureTag = function(where, offset, limit, order) {
             offset: offset || 0,
             order: order || [
                 ['pictureLastUpdatedAt', 'DESC'],
-                ['originId', 'DESC']
+                ['orderIndex', 'DESC']
             ],
             include: [{
                 model: Picture,
@@ -179,10 +177,9 @@ exports.findAndCountAll = function(where, offset, limit, order) {
             limit: limit || 10000,
             offset: offset || 0,
             order: order || [
-                ['lastUpdatedAt', 'DESC'],
-                ['originId', 'DESC']
+                ['orderIndex', 'DESC']
             ],
-            attributes: ["pictureId", "title", "imgHost", "cover", "lastUpdatedAt", "originId"],
+            attributes: ["pictureId", "title", "imgHost", "cover", "lastUpdatedAt", "originId", "orderIndex"],
             // include: [{
             //     model: Tag,
             //     as: 'tags',

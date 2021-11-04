@@ -168,7 +168,8 @@ async function copy_category_pictures(tag, startIndex, endIndex, isUpdate) {
                                 branchId: branch.branchId,
                                 cover: $(item).find("img").attr("src"),
                                 title: $(item).find("p").text(),
-                                originId: originId
+                                originId: originId,
+                                orderIndex: parseInt(originId)
                             }
                             picture.imgHost = picture.cover.match(/http(s?):\/\/[^\/]+/g)[0];
                             picture.cover = picture.cover.replace(picture.imgHost, "");
@@ -183,7 +184,8 @@ async function copy_category_pictures(tag, startIndex, endIndex, isUpdate) {
                             }) == -1)) {
                             await savedPicture.addTags([tag.tagId], {
                                 through: {
-                                    originId: savedPicture.originId
+                                    orderIndex: parseInt(savedPicture.originId)
+                                    // originId: savedPicture.originId
                                 }
                             });
                         }
@@ -219,7 +221,8 @@ async function create_picture(originId, picture, originTagId) {
             branchId: branch.branchId,
             // cover: $(item).find("img").attr("src"),
             title: $($(".Title111")[1]).find("h9").text(),
-            originId: originId
+            originId: originId,
+            orderIndex: parseInt(originId)
         };
         picture.pictureList = [];
         var pics = $(".content").find("img");
@@ -330,7 +333,8 @@ exports.copy_home_rank = async function() {
                 }) == -1)) {
                 await savedPicture.addTags([tag.tagId], {
                     through: {
-                        originId: savedPicture.originId
+                        orderIndex: parseInt(savedPicture.originId)
+                        // originId: savedPicture.originId
                     }
                 });
             }
@@ -362,7 +366,8 @@ exports.copy_home_rank = async function() {
                 }) == -1)) {
                 await savedPicture.addTags([tag.tagId], {
                     through: {
-                        originId: savedPicture.originId
+                        orderIndex: parseInt(savedPicture.originId)
+                        // originId: savedPicture.originId
                     }
                 });
             }
@@ -393,7 +398,8 @@ exports.copy_home_rank = async function() {
                 }) == -1)) {
                 await savedPicture.addTags([tag.tagId], {
                     through: {
-                        originId: savedPicture.originId
+                        orderIndex: parseInt(savedPicture.originId)
+                        // originId: savedPicture.originId
                     }
                 });
             }

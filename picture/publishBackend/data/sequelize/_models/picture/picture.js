@@ -33,6 +33,7 @@ var Picture = sequelize.define('picture', {
     },
     lastUpdatedAt: Sequelize.DATE, //最近更新时间
     originId: Sequelize.TEXT, //复制原始ID
+    orderIndex: Sequelize.INTEGER, //复制原始ID
     branchId: {
         type: Sequelize.BIGINT,
         // references: {

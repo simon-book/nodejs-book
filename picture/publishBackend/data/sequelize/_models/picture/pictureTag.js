@@ -22,8 +22,9 @@ var PictureTags = sequelize.define('picture_tags', {
         },
         allowNull: false
     },
+    orderIndex: Sequelize.INTEGER,
     pictureLastUpdatedAt: Sequelize.DATE,
-    originId: Sequelize.TEXT,
+    // originId: Sequelize.TEXT,
     tagId: {
         type: Sequelize.BIGINT,
         references: {

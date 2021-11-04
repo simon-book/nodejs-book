@@ -63,7 +63,7 @@ exports.findAll = function(where, attributes, offset, limit) {
             limit: limit || 200000,
             order: [
                 [
-                    "lastUpdatedAt", "DESC"
+                    "orderIndex", "DESC"
                 ]
             ],
             include: [{
@@ -137,7 +137,7 @@ exports.findAndCountAll = function(where, offset, limit, order, tagWhere) {
                 limit: limit || 10000,
                 offset: offset || 0,
                 order: order || [
-                    ['lastUpdatedAt', 'DESC']
+                    ['orderIndex', 'DESC']
                 ],
                 raw: true,
                 attributes: {

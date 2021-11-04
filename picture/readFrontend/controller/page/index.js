@@ -103,8 +103,8 @@ function getSiblingPages(currentPage, totalPage, halfNum) {
         halfPages2.push(currentPage + i);
         i++;
     }
-    console.log(halfNum1, halfPages1);
-    console.log(halfNum2, halfPages2);
+    // console.log(halfNum1, halfPages1);
+    // console.log(halfNum2, halfPages2);
     return halfPages1.concat(pages).concat(halfPages2);
 }
 

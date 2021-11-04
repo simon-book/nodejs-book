@@ -238,7 +238,8 @@ async function copy_category_pictures(tag, startIndex, endIndex, isUpdate) {
                                 branchId: branch.branchId,
                                 cover: $(item).find("img").attr("data-original"),
                                 title: $(item).find("a.caption").text(),
-                                originId: originId
+                                originId: originId,
+                                orderIndex: parseInt(originId)
                             }
                             picture.imgHost = picture.cover.match(/http(s?):\/\/[^\/]+/g)[0];
                             picture.cover = picture.cover.replace(picture.imgHost, "");
@@ -252,7 +253,8 @@ async function copy_category_pictures(tag, startIndex, endIndex, isUpdate) {
                             await savedPicture.addTags([tag.tagId], {
                                 through: {
                                     pictureLastUpdatedAt: savedPicture.lastUpdatedAt,
-                                    originId: savedPicture.originId
+                                    orderIndex: parseInt(savedPicture.originId)
+                                    // originId: savedPicture.originId
                                 }
                             });
                         }
@@ -348,7 +350,8 @@ async function create_picture(originId, picture, tag) {
             if (tag && _.indexOf(tagIds, tag.tagId) == -1) tagIds.push(tag.tagId);
             await savedPicture.addTags(_.uniq(tagIds), {
                 through: {
-                    pictureLastUpdatedAt: savedPicture.lastUpdatedAt
+                    pictureLastUpdatedAt: savedPicture.lastUpdatedAt,
+                    orderIndex: parseInt(savedPicture.originId)
                 }
             });
         }
@@ -560,7 +563,8 @@ async function complete_one_model_info(model) {
                         branchId: branch.branchId,
                         cover: $(item).find("img").attr("data-original"),
                         title: $(item).find("a.caption").text(),
-                        originId: originId
+                        originId: originId,
+                        orderIndex: parseInt(originId)
                     }
                     picture.imgHost = picture.cover.match(/http(s?):\/\/[^\/]+/g)[0];
                     picture.cover = picture.cover.replace(picture.imgHost, "");
@@ -642,7 +646,8 @@ async function copy_model_pictures(modelId, originId) {
                                 branchId: branch.branchId,
                                 cover: $(item).find("img").attr("src"),
                                 title: $(item).find("a.caption").text(),
-                                originId: originId
+                                originId: originId,
+                                orderIndex: parseInt(originId)
                             }
                             picture.imgHost = picture.cover.match(/http(s?):\/\/[^\/]+/g)[0];
                             picture.cover = picture.cover.replace(picture.imgHost, "");
