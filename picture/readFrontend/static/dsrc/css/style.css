@@ -93,7 +93,7 @@ a {
 }
 
 a:hover {
-    color: #337ab7;
+    color: #f55072;
     text-decoration: none;
 }
 
@@ -133,35 +133,37 @@ a:hover {
 
 
 .header .logo a {
-    font-family: 楷体_GB2312, STKaiti;
+    /*font-family: 楷体_GB2312, STKaiti;*/
     /*display: block;*/
     /*float: left;*/
-    height: 76px;
+    height: 96px;
     /*width: 250px;*/
-    line-height: 76px;
-    color: #0065b5;
+    line-height: 96px;
+    color: #666;
     font-size: 40px;
-    text-shadow: #8c8989 3px 3px 6px;
+    /*text-shadow: #8c8989 3px 3px 6px;*/
 }
 
 .search-form {
-    margin-top: 22px;
+    margin-top: 29px;
 }
 
 .search-form .input-key {
-    border: 1px solid #A6D3E8;
+    border: 1px solid #f55072;
+    outline: none;
     font: 14px/32px arial;
-    height: 32px;
+    height: 38px;
     /*margin-right: 5px;*/
     text-indent: 5px;
     width: 320px;
 }
 
 .search-form .btn-tosearch {
-    background: #DDD;
+    background: #f55072;
+    color: #fff;
     cursor: pointer;
-    font-size: 14px;
-    height: 32px;
+    font-size: 16px;
+    height: 38px;
     width: 95px;
     border: 0 none;
 }
@@ -181,34 +183,35 @@ a:hover {
 }
 
 .navbar-container {
-    background: #3a6ca4;
+    background: #f55072;
     padding: 0;
 }
 
 .navbar {
-    background: #3a6ca4;
+    background: #f55072;
     border: none;
     padding: 0;
     margin: 0;
+    min-height: inherit;
 }
 
 .navbar li * {
     color: white !important;
-    font-size: 15px;
+    font-size: 16px;
     padding-left: 14px !important;
     padding-right: 14px !important;
-    padding: 15px 25px !important;
+    padding: 12px 25px !important;
 }
 
 .navbar-default .navbar-nav>.active>a,
 .navbar-default .navbar-nav>.active>a:hover {
-    background: #337ab7;
+    background: #ef2851;
     color: white !important;
 }
 
 .breadcrumb {
     margin: 0;
-    padding: 10px;
+    padding: 12px;
     background: #fff;
     overflow: hidden;
     white-space: nowrap;
@@ -225,7 +228,7 @@ a:hover {
 }
 
 .border {
-    border: 1px solid #ccc;
+    border: 1px solid #e5e5e5;
     /*border-radius: 4px;*/
     overflow: hidden;
 }
@@ -236,7 +239,7 @@ a:hover {
 
 .carousel .carousel-indicators {
     /*height: 300px;*/
-    bottom: 20px;
+    bottom: 25px;
 }
 
 .carousel .carousel-inner .item img {
@@ -252,15 +255,15 @@ a:hover {
 }
 
 .carousel .carousel-inner .carousel-caption {
-    padding: 5px 0;
-    text-indent: 5px;
+    padding: 6px 0;
+    text-indent: 10px;
     left: 0;
     bottom: 0;
     width: 100%;
     text-align: left;
     white-space: nowrap;
-    font-size: 14px;
-    background-color: rgba(0, 0, 0, 0.5);
+    font-size: 16px;
+    background-color: rgba(0, 0, 0, 0.7);
 }
 
 .book-box {
@@ -282,9 +285,7 @@ a:hover {
 
 .book-list-title {
     background-color: #f1f1f1;
-    border-bottom: 1px solid #ccc;
-    /*border-top: none;*/
-    /*letter-spacing: 1px;*/
+    border-bottom: 1px solid #e5e5e5;
     font-size: 20px;
     color: #333;
     overflow: hidden;
@@ -312,10 +313,14 @@ a:hover {
     font-size: 14px;
 }
 
+.article-item .article-title:last-child {
+    margin-left: 5px;
+}
+
 .tag-item {
     display: block;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #e5e5e5;
     text-align: center;
     margin: 10px 5px;
     font-size: 16px;
@@ -327,7 +332,7 @@ a:hover {
 }
 
 .tag-item:hover .tag-title {
-    color: #d54721;
+    color: #ef2851;
 }
 
 .tag-item .tag-pictureCount {
@@ -394,7 +399,7 @@ footer {
 }
 
 #firendlink {
-    margin: 10px;
+    /*margin: 10px;*/
     font-size: 12px;
     border: 1px solid #ccc;
     line-height: 24px;
@@ -408,7 +413,7 @@ footer {
 }
 
 #firendlink a {
-    color: #000;
+    /*color: #000;*/
     display: inline-block;
     margin: 0 9px 0 0;
 }

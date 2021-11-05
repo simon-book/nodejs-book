@@ -56,15 +56,7 @@ app.use(__G__.CONTEXT || '/', require('./controller/da12PageRoutes.js'));
 branchMap.queryBranchInfo();
 
 app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.send(err.message || err);
-    // res.render('error', {
-    //     title: "出错了",
-    //     keywords: "出错了",
-    //     description: "出错了",
-    //     message: err.message,
-    //     error: {}
-    // });
+    res.status(404).send("您访问的资源不存在！");
 });
 app.listen(app.get('port'), function() {
     console.log('Express server listening on port ' + app.get('port'));

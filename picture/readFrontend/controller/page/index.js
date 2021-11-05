@@ -72,10 +72,9 @@ exports.home = async function(req, res) {
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "search",
-            keywords: "",
-            pageTitle: "资源错误",
-            books: [],
-            pagination: null
+            keywords: null,
+            description: null,
+            pageTitle: "资源错误"
         });
     }
 };
@@ -141,10 +140,9 @@ exports.articleList = async function(req, res) {
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "search",
-            keywords: "",
-            pageTitle: "资源错误",
-            books: [],
-            pagination: null
+            keywords: null,
+            description: null,
+            pageTitle: "资源错误"
         });
     }
 };
@@ -223,10 +221,9 @@ exports.article = async function(req, res) {
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "search",
-            keywords: "",
-            pageTitle: "资源错误",
-            books: [],
-            pagination: null
+            keywords: null,
+            description: null,
+            pageTitle: "资源错误"
         });
     }
 };
@@ -280,10 +277,9 @@ exports.galleryList = async function(req, res) {
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "search",
-            keywords: "",
-            pageTitle: "资源错误",
-            books: [],
-            pagination: null
+            keywords: null,
+            description: null,
+            pageTitle: "资源错误"
         });
     }
 };
@@ -339,10 +335,9 @@ exports.gallery = async function(req, res) {
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "search",
-            keywords: "",
-            pageTitle: "资源错误",
-            books: [],
-            pagination: null
+            keywords: null,
+            description: null,
+            pageTitle: "资源错误"
         });
     }
 };
@@ -403,10 +398,9 @@ exports.galleryImg = async function(req, res) {
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "search",
-            keywords: "",
-            pageTitle: "资源错误",
-            books: [],
-            pagination: null
+            keywords: null,
+            description: null,
+            pageTitle: "资源错误"
         });
     }
 };
@@ -465,10 +459,9 @@ exports.modelList = async function(req, res) {
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "search",
-            keywords: "",
-            pageTitle: "资源错误",
-            books: [],
-            pagination: null
+            keywords: null,
+            description: null,
+            pageTitle: "资源错误"
         });
     }
 };
@@ -529,10 +522,9 @@ exports.model = async function(req, res) {
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "search",
-            keywords: "",
-            pageTitle: "资源错误",
-            books: [],
-            pagination: null
+            keywords: null,
+            description: null,
+            pageTitle: "资源错误"
         });
     }
 };
@@ -586,10 +578,9 @@ exports.modelAlbum = async function(req, res) {
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "search",
-            keywords: "",
-            pageTitle: "资源错误",
-            books: [],
-            pagination: null
+            keywords: null,
+            description: null,
+            pageTitle: "资源错误"
         });
     }
 };
@@ -622,10 +613,9 @@ exports.todayModelList = async function(req, res) {
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "search",
-            keywords: "",
-            pageTitle: "资源错误",
-            books: [],
-            pagination: null
+            keywords: null,
+            description: null,
+            pageTitle: "资源错误"
         });
     }
 };
@@ -678,10 +668,9 @@ exports.paihang = async function(req, res) {
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "search",
-            keywords: "",
-            pageTitle: "资源错误",
-            books: [],
-            pagination: null
+            keywords: null,
+            description: null,
+            pageTitle: "资源错误"
         });
     }
 };
@@ -738,10 +727,9 @@ exports.rankModelList = async function(req, res) {
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "search",
-            keywords: "",
-            pageTitle: "资源错误",
-            books: [],
-            pagination: null
+            keywords: null,
+            description: null,
+            pageTitle: "资源错误"
         });
     }
 };
@@ -831,10 +819,9 @@ exports.findModelList = async function(req, res) {
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "search",
-            keywords: "",
-            pageTitle: "资源错误",
-            books: [],
-            pagination: null
+            keywords: null,
+            description: null,
+            pageTitle: "资源错误"
         });
     }
 };
@@ -887,10 +874,9 @@ exports.search = async function(req, res) {
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "search",
-            keywords: "",
-            pageTitle: "资源错误",
-            books: [],
-            pagination: null
+            keywords: null,
+            description: null,
+            pageTitle: "资源错误"
         });
     }
 };
@@ -943,10 +929,9 @@ exports.searchModel = async function(req, res) {
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "search",
-            keywords: "",
-            pageTitle: "资源错误",
-            books: [],
-            pagination: null
+            keywords: null,
+            description: null,
+            pageTitle: "资源错误"
         });
     }
 };
@@ -989,10 +974,9 @@ exports.searchGallery = async function(req, res) {
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "search",
-            keywords: "",
-            pageTitle: "资源错误",
-            books: [],
-            pagination: null
+            keywords: null,
+            description: null,
+            pageTitle: "资源错误"
         });
     }
 };
@@ -1005,16 +989,20 @@ exports.error = async function(req, res) {
             branchInfo: branchInfo,
             user: auth.getUser(req, res),
             currentRender: "search",
-            keywords: "",
-            pageTitle: "资源错误",
-            books: [],
-            pagination: null
+            keywords: null,
+            description: null,
+            pageTitle: "资源错误"
         });
     } catch (err) {
         console.log(err);
         res.render('error', {
-            message: "请求错误！",
-            error: err ? JSON.stringify(err) : ""
+            title: "资源错误" + branchInfo.title,
+            branchInfo: branchInfo,
+            user: auth.getUser(req, res),
+            currentRender: "search",
+            keywords: null,
+            description: null,
+            pageTitle: "资源错误"
         });
     }
 };
