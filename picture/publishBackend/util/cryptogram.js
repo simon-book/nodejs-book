@@ -10,10 +10,10 @@ iv = Buffer.from(iv);
  * @param data
  */
 function aesEncrypt(data) {
-  var cipher = crypto.createCipheriv('aes-128-cbc', key, iv);
-  var encoded = cipher.update(data, 'utf8', 'hex');
-  encoded += cipher.final('hex');
-  return encoded;
+    var cipher = crypto.createCipheriv('aes-128-cbc', key, iv);
+    var encoded = cipher.update(data, 'utf8', 'hex');
+    encoded += cipher.final('hex');
+    return encoded;
 }
 
 /**
@@ -22,35 +22,35 @@ function aesEncrypt(data) {
  * @returns {*}
  */
 function aesDecrypt(data) {
-  var cipher = crypto.createDecipheriv('aes-128-cbc', key, iv);
-  var decoded = cipher.update(data, 'hex', 'utf8');
-  decoded += cipher.final('utf8');
-  return decoded;
+    var cipher = crypto.createDecipheriv('aes-128-cbc', key, iv);
+    var decoded = cipher.update(data, 'hex', 'utf8');
+    decoded += cipher.final('utf8');
+    return decoded;
 }
 
 //md5加密
 function md5Encrypt(data) {
-  var md5 = crypto.createHash('md5');
-  md5.update(data);
-  var d = md5.digest('hex');
-  return d;
+    var md5 = crypto.createHash('md5');
+    md5.update(data);
+    var d = md5.digest('hex');
+    return d;
 }
 
 
 //sha1加密
 function sha1Encrypt(data) {
-  var sha1 = crypto.createHash('sha1');
-  sha1.update(data);
-  var d = sha1.digest('hex');
-  return d;
+    var sha1 = crypto.createHash('sha1');
+    sha1.update(data);
+    var d = sha1.digest('hex');
+    return d;
 }
 
 
 function hmacEncrypt(data, key) {
-  var hmac = crypto.createHmac('sha256', key);
-  hmac.update(data);
-  var d = hmac.digest('hex');
-  return d;
+    var hmac = crypto.createHmac('md5', key);
+    hmac.update(data);
+    var d = hmac.digest('hex');
+    return d;
 }
 
 

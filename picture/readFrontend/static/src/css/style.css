@@ -419,6 +419,7 @@ a:hover {
 }
 
 .article-item-2 .article-title {
+    min-height: 40px;
     margin: 10px 0;
     overflow: hidden;
     text-overflow: ellipsis;

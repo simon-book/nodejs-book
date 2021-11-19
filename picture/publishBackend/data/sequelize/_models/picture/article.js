@@ -30,6 +30,10 @@ var Article = sequelize.define('article', {
     relatedModelIds: Sequelize.JSONB,
     lastUpdatedAt: Sequelize.DATE, //更新时间
     originId: Sequelize.TEXT, //复制原始ID
+    local: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+    },
     branchId: {
         type: Sequelize.BIGINT,
         allowNull: false

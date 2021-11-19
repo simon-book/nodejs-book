@@ -16,6 +16,18 @@ exports.create = function(obj) {
     })
 }
 
+exports.update = function(where, obj) {
+    return new Promise(function(resolve, reject) {
+        Article.update(obj, {
+            where: where
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
 exports.bulkCreate = function(obj) {
     return new Promise(function(resolve, reject) {
         Article.bulkCreate(obj).then(function(results) {
@@ -55,14 +67,15 @@ exports.findByPk = function(id) {
     })
 }
 
-exports.findAll = function(where, offset, limit, order) {
+exports.findAll = function(where, offset, limit, order, attributes) {
     return new Promise(function(resolve, reject) {
         Article.findAll({
             where: where,
+            attributes: attributes,
             limit: limit || 10000,
             offset: offset || 0,
             order: order || [
-                ['lastUpdatedAt', 'DESC']
+                ['articleId', 'ASC']
             ]
         }).then(function(results) {
             resolve(results);

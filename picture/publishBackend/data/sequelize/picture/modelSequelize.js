@@ -18,6 +18,18 @@ exports.create = function(obj) {
     })
 }
 
+exports.update = function(where, obj) {
+    return new Promise(function(resolve, reject) {
+        Model.update(obj, {
+            where: where
+        }).then(function(results) {
+            resolve(results);
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}
+
 exports.bulkCreate = function(obj) {
     return new Promise(function(resolve, reject) {
         Model.bulkCreate(obj).then(function(results) {
@@ -77,7 +89,7 @@ exports.findAll = function(where, offset, limit, order) {
     return new Promise(function(resolve, reject) {
         Model.findAll({
             where: where,
-            limit: limit || 10000,
+            limit: limit || 100000,
             offset: offset || 0,
             order: order || [
                 ['modelId', 'DESC']

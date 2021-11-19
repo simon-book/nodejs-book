@@ -42,10 +42,8 @@ exports.htmlStartReq = function(host, path, charset) {
                     }
                 } else {
                     // console.log("status error", path, _data);
-                    reject("status error");
+                    reject("status error: " + res.statusCode);
                 }
-
-
             });
         });
         req.on('error', function(e) {

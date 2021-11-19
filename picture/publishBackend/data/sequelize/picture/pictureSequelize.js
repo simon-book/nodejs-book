@@ -63,7 +63,7 @@ exports.findAll = function(where, attributes, offset, limit) {
             limit: limit || 200000,
             order: [
                 [
-                    "orderIndex", "DESC"
+                    "pictureId", "ASC"
                 ]
             ],
             include: [{

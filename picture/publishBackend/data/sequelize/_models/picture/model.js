@@ -34,6 +34,10 @@ var Model = sequelize.define('model', {
     relatedModelIds: Sequelize.JSONB,
     originId: Sequelize.TEXT, //复制原始ID
     branchId: Sequelize.BIGINT,
+    local: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
+    },
     statusId: {
         type: Sequelize.INTEGER,
         defaultValue: 1

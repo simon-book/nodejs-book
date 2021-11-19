@@ -316,7 +316,7 @@ exports.gallery = async function(req, res) {
             user: auth.getUser(req, res),
             pageTitle: picture.title,
             picture: picture,
-            pics: picture.pictureList.slice((currentPage - 1) * pageSize, currentPage * pageSize),
+            pics: picture.pictureHdList.slice((currentPage - 1) * pageSize, currentPage * pageSize),
             startIndex: (currentPage - 1) * pageSize,
             currentRender: "gallery",
             recommendPictures: recommendPictures,

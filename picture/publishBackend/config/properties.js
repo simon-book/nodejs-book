@@ -31,6 +31,13 @@ module.exports = function() {
                 picture_publisher: 'picture_publisher'
             }
         };
+        global.__ALIOSS__ = {
+            region: 'oss-cn-hangzhou',
+            accessKeyId: 'LTAI5tLCE9zGUoRTD8JupGn4',
+            accessKeySecret: 'L2fuo6Polz53eoYuZ8Juz7IOSEPSLM',
+            bucket: '99nvshen',
+            endpoint: 'oss-cn-hangzhou.aliyuncs.com'
+        };
         global.__MOSS__ = {
             endPoint: "127.0.0.1",
             port: 9000,
@@ -61,6 +68,13 @@ module.exports = function() {
             schemas: {
                 picture_publisher: 'picture_publisher'
             }
+        };
+        global.__ALIOSS__ = {
+            region: 'oss-cn-hangzhou',
+            accessKeyId: 'LTAI5tLCE9zGUoRTD8JupGn4',
+            accessKeySecret: 'L2fuo6Polz53eoYuZ8Juz7IOSEPSLM',
+            bucket: '99nvshen',
+            endpoint: 'oss-cn-hangzhou-internal.aliyuncs.com'
         };
         global.__MOSS__ = {
             endPoint: "127.0.0.1",

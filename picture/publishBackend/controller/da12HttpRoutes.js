@@ -57,6 +57,6 @@ router.post('/copy_home_rank', async function(req, res) {
     res.send(true);
 })
 
-auto_schedule.auto_schedule_da12();
+// auto_schedule.auto_schedule_da12();
 
 module.exports = router;
