@@ -45,6 +45,7 @@ exports.queryBranchInfo = async function() {
             branch.branchId = savedBranch.branchId;
             branch.copyUrl = savedBranch.copyParams.copyUrl;
             branch.pcCopyUrl = savedBranch.copyParams.pcCopyUrl;
+            branch.copyPictureUrl = savedBranch.copyParams.copyPictureUrl;
             branch.pictureUrl = savedBranch.copyParams.pictureUrl;
             branch.charset = savedBranch.copyParams.charset;
             branch.isTest = savedBranch.copyParams.isTest || false;

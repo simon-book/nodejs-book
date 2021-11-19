@@ -42,7 +42,7 @@ exports.copy_articles_img = async function(articleId, startIndex) {
                 }
                 var local = true;
                 var index = 0;
-                var imgUrl = branchInfo.pictureUrl + article.cover;
+                var imgUrl = branchInfo.copyPictureUrl + article.cover;
                 var imgFormat = /(\.jpg|\.png|\.jpeg|\.gif)$/i.test(imgUrl) ? imgUrl.split(".").pop() : "jpg";
                 var fileName = filePath + "/" + index + "." + imgFormat;
                 var ossName = ossPath + "/" + index + "." + imgFormat;
@@ -53,7 +53,7 @@ exports.copy_articles_img = async function(articleId, startIndex) {
                 index++;
                 for (var j = 0; j < article.content.length; j++) {
                     var content = article.content[j];
-                    content = content.replace(/\*{4}pictureUrl\*{3}/g, branchInfo.pictureUrl);
+                    content = content.replace(/\*{4}pictureUrl\*{3}/g, branchInfo.copyPictureUrl);
                     var $ = cheerio.load(content, null, false);
                     var imgs = $("img");
                     console.log(imgs.length);
@@ -109,7 +109,7 @@ exports.copy_models_img = async function(modelId, startIndex) {
                     });
                 }
                 var local = true;
-                var imgUrl = branchInfo.pictureUrl + model.cover;
+                var imgUrl = branchInfo.copyPictureUrl + model.cover;
                 var imgFormat = /(\.jpg|\.png|\.jpeg|\.gif)$/i.test(imgUrl) ? imgUrl.split(".").pop() : "jpg";
                 var fileName = filePath + "/" + model.modelId + "." + imgFormat;
                 var ossName = ossPath + "/" + model.modelId + "." + imgFormat;
@@ -152,7 +152,7 @@ exports.copy_gallerys_img = async function(pictureId, startIndex) {
                     });
                 }
                 var local = true;
-                var imgUrl = branchInfo.pictureUrl + picture.cover;
+                var imgUrl = branchInfo.copyPictureUrl + picture.cover;
                 var imgFormat = imgUrl.split(".").pop();
                 var fileName = filePath + "/" + picture.pictureId + "." + imgFormat;
                 var ossName = ossPath + "/" + picture.pictureId + "." + imgFormat;
@@ -174,7 +174,7 @@ exports.copy_gallerys_img = async function(pictureId, startIndex) {
                     console.log(imgs.length);
                     for (var k = 0; k < imgs.length; k++) {
                         var img = imgs[k];
-                        var imgUrl = branchInfo.pictureUrl + img;
+                        var imgUrl = branchInfo.copyPictureUrl + img;
                         var imgFormat = imgUrl.split(".").pop();
                         var fileName = filePath + "/" + index + "." + imgFormat;
                         var ossName = ossPath + "/" + index + "." + imgFormat;
@@ -200,7 +200,7 @@ exports.copy_gallerys_img = async function(pictureId, startIndex) {
                     console.log(imgs.length);
                     for (var k = 0; k < imgs.length; k++) {
                         var img = imgs[k];
-                        var imgUrl = branchInfo.pictureUrl + img;
+                        var imgUrl = branchInfo.copyPictureUrl + img;
                         var imgFormat = imgUrl.split(".").pop();
                         var fileName = filePath + "/" + index + "." + imgFormat;
                         var ossName = ossPath + "/" + index + "." + imgFormat;
