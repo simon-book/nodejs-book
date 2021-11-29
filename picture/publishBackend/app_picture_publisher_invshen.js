@@ -12,6 +12,7 @@ var session = require('express-session');
 var bodyParser = require('body-parser');
 var properties = require('./config/properties.js')();
 
+__G__.copySrc = "fnvshen";
 process.env.NODE_ENV = __G__.NODE_ENV;
 
 var app = express();

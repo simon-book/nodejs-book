@@ -49,6 +49,10 @@ exports.queryBranchInfo = async function() {
             branch.pictureUrl = savedBranch.copyParams.pictureUrl;
             branch.charset = savedBranch.copyParams.charset;
             branch.isTest = savedBranch.copyParams.isTest || false;
+            branch.copyPictureToOss = savedBranch.copyParams.copyPictureToOss || false;
+            branch.copyPictureFromRemoteOss = savedBranch.copyParams.copyPictureFromRemoteOss || false;
+            branch.submitUrlToGoogle = savedBranch.copyParams.submitUrlToGoogle || false;
+            branch.submitUrlToBaidu = savedBranch.copyParams.submitUrlToBaidu || false;
             branch.pictureTagGroups = [];
             branch.modelTagGroups = [];
             branch.pictureTags = [];
@@ -609,7 +613,6 @@ async function complete_one_model_info(model, $) {
                     }) == -1)) {
                     await savedPicture.addModels([model.modelId]);
                 }
-                if (!result) throw new Error("save picture error.")
             } catch (err) {
                 console.log(err);
             }

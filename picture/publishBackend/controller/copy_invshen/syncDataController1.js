@@ -19,7 +19,7 @@ var rankSequelize = require('../../data/sequelize/rank/rankSequelize.js');
 var OssClient = require('../../service/aliossConn.js');
 var crytogram = require('../../util/cryptogram.js')
 
-exports.receive_local_data = async function(req, res) {
+exports.get_local_data = async function(req, res) {
     try {
         var body = req.body;
         if (!body.copySrc) {
@@ -40,73 +40,73 @@ exports.receive_local_data = async function(req, res) {
             return false;
         };
         console.log(body);
-        // res.send({
-        //     result: true,
-        //     remark: "测试数据"
-        // });
-        // return true;
-        if (body.branchInfo && body.branchInfo.copyParams) {
-            branchInfo.set("copyParams", body.branchInfo.copyParams);
-            await branchInfo.save();
-        }
-        if (body.articles && body.articles.length) {
-            console.log("update articles count: ", body.articles.length);
-            for (var i = 0; i < body.articles.length; i++) {
-                var article = body.articles[i];
-                if (!article.local) continue;
-                await articleSequelize.update({
-                    branchId: branchInfo.branchId,
-                    originId: article.originId
-                }, {
+        var data = {
+            copySrc: body.copySrc
+        };
+        if (body.articleOriginIds && body.articleOriginIds.length) {
+            var articles = await articleSequelize.findAll({
+                branchId: branchInfo.branchId,
+                originId: {
+                    [Op.in]: body.articleOriginIds
+                }
+            }, 0, 100000, null, ["articleId", "cover", "title", "content", "local", "originId"]);
+            data.articles = _.map(articles, function(article) {
+                return {
+                    originId: article.originId,
                     local: article.local,
                     cover: article.cover,
                     content: article.content
-                })
-            }
+                }
+            })
         }
-        if (body.models && body.models.length) {
-            console.log("update models count: ", body.models.length);
-            for (var i = 0; i < body.models.length; i++) {
-                var model = body.models[i];
-                if (!model.local) continue;
-                await modelSequelize.update({
-                    branchId: branchInfo.branchId,
-                    originId: model.originId
-                }, {
+        if (body.modelOriginIds && body.modelOriginIds.length) {
+            var models = await modelSequelize.findAllWithoutTags({
+                branchId: branchInfo.branchId,
+                originId: {
+                    [Op.in]: body.modelOriginIds
+                }
+            }, ["modelId", "cover", "local", "originId"]);
+            data.models = _.map(models, function(model) {
+                return {
+                    originId: model.originId,
                     local: model.local,
                     cover: model.cover
-                })
-            }
+                }
+            })
         }
-        if (body.pictures && body.pictures.length) {
-            console.log("update pictures count: ", body.pictures.length);
-            for (var i = 0; i < body.pictures.length; i++) {
-                var picture = body.pictures[i];
-                if (!picture.local) continue;
-                await pictureSequelize.update({
+        if (body.pictureOriginIds && body.pictureOriginIds.length) {
+            var pictures = await pictureSequelize.findAllWithoutTags({
+                branchId: branchInfo.branchId,
+                originId: {
+                    [Op.in]: body.pictureOriginIds
+                }
+            }, ["pictureId", "cover", "local", "originId", "pictureHdList", "pictureList"]);
+            data.pictures = _.map(pictures, function(picture) {
+                return {
+                    originId: picture.originId,
                     local: picture.local,
                     cover: picture.cover,
                     pictureHdList: picture.pictureHdList,
                     // pictureList: picture.pictureList,
-                }, {
-                    branchId: branchInfo.branchId,
-                    originId: picture.originId
-                })
-            }
+                }
+            })
         }
         res.send({
             result: true,
-            remark: "已更新全部信息"
+            data: data
         });
     } catch (err) {
-
+        res.send({
+            result: false,
+            remark: err
+        })
     }
 }
 
 
-exports.send_local_data = async function(body) {
+exports.get_remote_oss_data = async function(body) {
     try {
-        if (!body.copySrc || !body.receiveHost || !body.receivePort) return false;
+        if (!body.copySrc || !body.getHost || !body.getPort) return false;
         var data = {
             copySrc: body.copySrc
         };
@@ -114,43 +114,84 @@ exports.send_local_data = async function(body) {
             copySrc: body.copySrc
         });
         if (!branchInfo) return false;
-        if (body.copyBranchInfo) data.branchInfo = branchInfo.get();
         var where = {
             branchId: branchInfo.branchId,
-            local: true
+            local: false
         };
         if (body.startDate) where.createdAt = {
             [Op.gte]: new Date(body.startDate + " 00:00:00.000")
         }
         if (body.copyArticle) {
             var articles = await articleSequelize.findAll(where, 0, 100000, null);
-            data.articles = _.map(articles, function(article) {
-                return article.get();
-            })
+            data.articleOriginIds = _.map(articles, "originId");
         }
         if (body.copyModel) {
             var models = await modelSequelize.findAllWithoutTags(where);
-            data.models = _.map(models, function(model) {
-                return model.get();
-            })
+            data.modelOriginIds = _.map(models, "originId");
         }
         if (body.copyPicture) {
             var pictures = await pictureSequelize.findAllWithoutTags(where);
-            data.pictures = _.map(pictures, function(picture) {
-                return picture.get();
-            })
+            data.pictureOriginIds = _.map(pictures, "originId");
         }
         console.log(data);
-        var result = await sendData(body.receiveHost, body.receivePort, "/api/publisher/invshen/receive_local_data", data);
+        var result = await getData(body.getHost, body.getPort, "/api/publisher/invshen/get_local_data", data);
         console.log(result);
-        return result;
+        if (result.result) {
+            var body = result.data;
+            if (body.articles && body.articles.length) {
+                console.log("update articles count: ", body.articles.length);
+                for (var i = 0; i < body.articles.length; i++) {
+                    var article = body.articles[i];
+                    if (!article.local) continue;
+                    await articleSequelize.update({
+                        branchId: branchInfo.branchId,
+                        originId: article.originId
+                    }, {
+                        local: article.local,
+                        cover: article.cover,
+                        content: article.content
+                    })
+                }
+            }
+            if (body.models && body.models.length) {
+                console.log("update models count: ", body.models.length);
+                for (var i = 0; i < body.models.length; i++) {
+                    var model = body.models[i];
+                    if (!model.local) continue;
+                    await modelSequelize.update({
+                        branchId: branchInfo.branchId,
+                        originId: model.originId
+                    }, {
+                        local: model.local,
+                        cover: model.cover
+                    })
+                }
+            }
+            if (body.pictures && body.pictures.length) {
+                console.log("update pictures count: ", body.pictures.length);
+                for (var i = 0; i < body.pictures.length; i++) {
+                    var picture = body.pictures[i];
+                    if (!picture.local) continue;
+                    await pictureSequelize.update({
+                        local: picture.local,
+                        cover: picture.cover,
+                        pictureHdList: picture.pictureHdList,
+                        // pictureList: picture.pictureList,
+                    }, {
+                        branchId: branchInfo.branchId,
+                        originId: picture.originId
+                    })
+                }
+            }
+        }
+        return true;
     } catch (err) {
         console.log(err);
         return false;
     }
 }
 
-function sendData(host, port, path, data) {
+function getData(host, port, path, data) {
     return new Promise(function(resolve, reject) {
         var req = http.request({
             host: host,
@@ -167,7 +208,7 @@ function sendData(host, port, path, data) {
                 _data += chunk;
             });
             res.on('end', function() {
-                if (res.statusCode == 200) resolve(_data);
+                if (res.statusCode == 200) resolve(JSON.parse(_data));
                 else reject(_data);
             });
         });

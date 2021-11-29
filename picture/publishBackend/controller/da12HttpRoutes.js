@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var _ = require('lodash');
 var auto_schedule = require('./autoSchedule/index.js');
 var autoSchedule = require('./autoSchedule/index.js');
 var copyController = require('./copy_da12/copyController.js');
@@ -57,6 +58,6 @@ router.post('/copy_home_rank', async function(req, res) {
     res.send(true);
 })
 
-// auto_schedule.auto_schedule_da12();
+if (__G__.copySrc == "da12") auto_schedule.auto_schedule_da12();
 
 module.exports = router;

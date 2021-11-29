@@ -42,7 +42,8 @@ exports.copy_articles_img = async function(articleId, startIndex) {
                 }
                 var local = true;
                 var index = 0;
-                var imgUrl = branchInfo.copyPictureUrl + article.cover;
+                var copyPictureUrl = "https://img.xiublog.com:85";
+                var imgUrl = copyPictureUrl + article.cover;
                 var imgFormat = /(\.jpg|\.png|\.jpeg|\.gif)$/i.test(imgUrl) ? imgUrl.split(".").pop() : "jpg";
                 var fileName = filePath + "/" + index + "." + imgFormat;
                 var ossName = ossPath + "/" + index + "." + imgFormat;
@@ -53,7 +54,7 @@ exports.copy_articles_img = async function(articleId, startIndex) {
                 index++;
                 for (var j = 0; j < article.content.length; j++) {
                     var content = article.content[j];
-                    content = content.replace(/\*{4}pictureUrl\*{3}/g, branchInfo.copyPictureUrl);
+                    content = content.replace(/\*{4}pictureUrl\*{3}/g, copyPictureUrl);
                     var $ = cheerio.load(content, null, false);
                     var imgs = $("img");
                     console.log(imgs.length);
@@ -109,7 +110,8 @@ exports.copy_models_img = async function(modelId, startIndex) {
                     });
                 }
                 var local = true;
-                var imgUrl = branchInfo.copyPictureUrl + model.cover;
+                var copyPictureUrl = "https://img.xiublog.com:85";
+                var imgUrl = copyPictureUrl + model.cover;
                 var imgFormat = /(\.jpg|\.png|\.jpeg|\.gif)$/i.test(imgUrl) ? imgUrl.split(".").pop() : "jpg";
                 var fileName = filePath + "/" + model.modelId + "." + imgFormat;
                 var ossName = ossPath + "/" + model.modelId + "." + imgFormat;

@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var _ = require('lodash');
 var autoSchedule = require('./autoSchedule/index.js');
 var copyController = require('./copy_invshen/copyController.js');
 var copyImgController = require('./copy_invshen/copyImgController.js');
@@ -7,8 +8,8 @@ var commonController = require('./copy_invshen/commonController.js');
 var checkController = require('./copy_invshen/checkController.js');
 var uploadToOssController = require('./copy_invshen/uploadToOssController.js');
 var syncDataController = require('./copy_invshen/syncDataController.js');
+var syncDataController1 = require('./copy_invshen/syncDataController1.js');
 
-// copyController.queryBranchInfo();
 router.post('/query_branch_info', async function(req, res) {
     var result = await copyController.queryBranchInfo();
     res.send(result);
@@ -89,7 +90,7 @@ router.post('/check_all_pictures_by_max', async function(req, res) {
     res.send(true);
 })
 
-// autoSchedule.auto_schedule_invshen();
+if (__G__.copySrc == "fnvshen") autoSchedule.auto_schedule_invshen();
 
 router.post('/copy_articles_img', async function(req, res) {
     copyImgController.copy_articles_img(req.body.articleId, req.body.startIndex);
@@ -128,5 +129,20 @@ router.post('/send_local_data', async function(req, res) {
 })
 
 router.post('/receive_local_data', syncDataController.receive_local_data)
+router.post('/get_local_data', syncDataController1.get_local_data)
+router.post('/get_remote_oss_data', async function(req, res) {
+    var body = req.body;
+    var result = await syncDataController1.get_remote_oss_data({
+        copySrc: body.copySrc,
+        getHost: body.getHost,
+        getPort: body.getPort,
+        // copyBranchInfo: body.copyBranchInfo,
+        copyArticle: body.copyArticle,
+        copyModel: body.copyModel,
+        copyPicture: body.copyPicture,
+        startDate: body.startDate
+    });
+    res.send(result);
+})
 
 module.exports = router;
