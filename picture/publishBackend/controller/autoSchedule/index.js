@@ -8,6 +8,7 @@ var baiduController = require("../seo/baiduController.js");
 var googleController = require("../seo/googleController.js");
 
 var copyDa12Controller = require("../copy_da12/copyController.js");
+var da12GoogleController = require("../copy_da12/googleController.js");
 
 exports.auto_schedule_invshen = function() {
     //每日更新
@@ -145,7 +146,6 @@ exports.auto_schedule_da12 = function() {
         await copyDa12Controller.queryBranchInfo();
         copyDa12Controller.copy_all_pictures(null, true);
         copyDa12Controller.copy_home_rank();
-        // await baiduController.submitNew("www.99nvshen.com");
-        // await googleController.createSitemapFiles("www.99nvshen.com");
+        await da12GoogleController.createSitemapFiles("www.9iktb.com");
     });
 }
