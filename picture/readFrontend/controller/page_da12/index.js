@@ -203,8 +203,19 @@ exports.gallery = async function(req, res) {
             pictureId: {
                 [Op.in]: relatedIds
             }
-        }, 0, 12)
+        }, 0, 12);
         var tag = picture.tags[0];
+        if (tag) {
+            var allIds = await pictureSequelize.findAllIdsForTag({
+                tagId: tag.tagId
+            });
+            var relatedIds = await getSiblings(allIds);
+            var recommendTagPictures = await pictureSequelize.findAll({
+                pictureId: {
+                    [Op.in]: relatedIds
+                }
+            }, 0, 12)
+        }
         res.render('gallery', {
             title: picture.title + "-" + branchInfo.shorttitle,
             keywords: (tag ? tag.name + "," : "") + picture.title,
@@ -217,6 +228,7 @@ exports.gallery = async function(req, res) {
             startIndex: (currentPage - 1) * pageSize,
             currentRender: "gallery",
             recommendPictures: recommendPictures,
+            recommendTagPictures: recommendTagPictures,
             moment: moment,
             pagination: {
                 totalNum: picture.pictureList.length,

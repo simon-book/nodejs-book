@@ -134,7 +134,7 @@ a:hover {
 
 .header .logo a {
     /*font-family: 楷体_GB2312, STKaiti;*/
-    /*display: block;*/
+    display: block;
     /*float: left;*/
     height: 96px;
     /*width: 250px;*/
@@ -142,6 +142,10 @@ a:hover {
     color: #666;
     font-size: 40px;
     /*text-shadow: #8c8989 3px 3px 6px;*/
+}
+
+.header .logo a img {
+    height: 100%;
 }
 
 .search-form {
@@ -382,10 +386,24 @@ a:hover {
 }
 
 .gallery-detail-content .gallery-detail-img {
-    max-width: 1600px;
+    position: relative;
+    max-width: 1400px;
     /*text-align: center;*/
     margin: 10px auto;
 }
+
+/*.gallery-detail-content .gallery-detail-img::after {
+    content: " ";
+    display: block;
+    width: 9%;
+    height: 1.5%;
+    position: absolute;
+    background: url(../images/9iktb.jpg) center center no-repeat;
+    background-size: 100% 100%;
+    background-color: rgba(0, 0, 0, 1);
+    bottom: 0.25%;
+    right: 2%;
+}*/
 
 .gallery-detail-content .gallery-detail-img img {
     width: 100%;

@@ -214,3 +214,17 @@ exports.findAllIds = function(where) {
         });
     })
 }
+
+exports.findAllIdsForTag = function(where) {
+    return new Promise(function(resolve, reject) {
+        PictureTag.findAll({
+            where: where,
+            attributes: ["pictureId"],
+            raw: true
+        }).then(function(results) {
+            resolve(_.map(results, "pictureId"));
+        }, reject).catch(function(err) {
+            reject(err);
+        });
+    })
+}

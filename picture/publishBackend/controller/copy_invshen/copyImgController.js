@@ -294,3 +294,7 @@ function httpFile(src, fileName) {
         req.end();
     })
 }
+
+exports.startDownloadFile = startDownloadFile;
+exports.downloadFile = downloadFile;
+exports.httpFile = httpFile;
