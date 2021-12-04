@@ -40,7 +40,7 @@ exports.queryBranchInfo = async function() {
                 hostMap[url].pictureUrl = savedBranch.copyParams.pictureUrl;
                 hostMap[url].pcCopyUrl = savedBranch.copyParams.pcCopyUrl;
                 hostMap[url].charset = savedBranch.copyParams.charset;
-
+                hostMap[url].imgWatermark = savedBranch.copyParams.imgWatermark || "";
                 hostMap[url].pictureTagGroups = [];
                 hostMap[url].modelTagGroups = [];
                 hostMap[url].pictureTags = [];

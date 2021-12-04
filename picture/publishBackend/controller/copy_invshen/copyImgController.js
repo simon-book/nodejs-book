@@ -247,7 +247,8 @@ async function startDownloadFile(src, fileName) {
         } else throw new Error("5次请求img失败");
     } catch (err) {
         console.log("5次请求img失败:", src, fileName);
-        return false;
+        throw new Error("5次请求img失败");
+        // return false;
     }
 }
 
@@ -274,6 +275,7 @@ function httpFile(src, fileName) {
             port: "85",
             path: src.replace(/https:\/\/|http:\/\//, "").split(":85")[1],
             method: 'GET',
+            rejectUnauthorized: false,
             headers: {
                 "Referer": "https://www.fnvshen.com/"
             },

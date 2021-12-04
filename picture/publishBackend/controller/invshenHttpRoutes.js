@@ -19,6 +19,11 @@ router.post('/create_tag_groups', async function(req, res) {
     await copyController.create_tag_groups();
     res.send(true);
 })
+router.post('/create_picture', async function(req, res) {
+    await copyController.queryBranchInfo();
+    copyController.create_picture(req.body.originId);
+    res.send(true);
+})
 router.post('/copy_all_pictures', async function(req, res) {
     await copyController.queryBranchInfo();
     copyController.copy_all_pictures(req.body.tagGroupId, req.body.tagId);

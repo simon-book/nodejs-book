@@ -37,7 +37,7 @@
                     <div class="gallery-detail-content">
                         <% pics.forEach(function(pic,index){%>
                         <a class="gallery-detail-img" href="/galleryImg/<%= picture.pictureId%>/<%= startIndex+index+1%>" target="_blank">
-                            <img src="<%= branchInfo.pictureUrl+pic%>"> </a>
+                            <img src="<%= branchInfo.pictureUrl+pic+branchInfo.imgWatermark%>"> </a>
                         <% }); %>
                     </div>
                 </div>

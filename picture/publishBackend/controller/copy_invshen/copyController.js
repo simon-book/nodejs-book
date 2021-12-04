@@ -317,7 +317,24 @@ async function create_picture(originId, picture, tag) {
                 picture.pictureHdList.push(picHdPath + util.prefixInteger(i, 3) + "." + picForamt);
             }
         }
-        var savedPicture = await pictureSequelize.create(picture);
+        var savedPicture = await pictureSequelize.findOne({
+            branchId: branch.branchId,
+            originId: originId
+        })
+        if (!savedPicture) {
+            savedPicture = await pictureSequelize.create(picture);
+        } else {
+            savedPicture = await pictureSequelize.update(picture, {
+                pictureId: savedPicture.pictureId
+            }, true);
+        }
+        if (!savedPicture) {
+            savedPicture = await pictureSequelize.findOne({
+                branchId: branch.branchId,
+                originId: originId
+            })
+        }
+
         var utags = $("#utag").find("li a");
         var girlIds = [];
         var tagIds = [];
@@ -375,6 +392,13 @@ async function create_picture(originId, picture, tag) {
         return savedPicture;
     } catch (err) {
         console.log(err);
+        var savedPicture = await pictureSequelize.findOne({
+            branchId: branch.branchId,
+            originId: originId
+        })
+        if (!savedPicture && picture) {
+            var savedPicture = await pictureSequelize.create(picture);
+        }
         return false;
     }
 }

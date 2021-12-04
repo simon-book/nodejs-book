@@ -11,8 +11,7 @@ var copyDa12Controller = require("../copy_da12/copyController.js");
 var da12GoogleController = require("../copy_da12/googleController.js");
 
 exports.auto_schedule_invshen = function() {
-    //每日更新
-    schedule.scheduleJob('0 0 0 * * *', async function() {
+    setInterval(async function() {
         var branchInfo = await copyController.queryBranchInfo();
         await copyController.copy_articles(true);
         await copyController.copy_category_pictures(null, null, null, true);
@@ -34,76 +33,10 @@ exports.auto_schedule_invshen = function() {
                 startDate: "2021-11-10"
             })
         }
-    });
-    schedule.scheduleJob('0 0 4 * * *', async function() {
-        var branchInfo = await copyController.queryBranchInfo();
-        await copyController.copy_articles(true);
-        await copyController.copy_category_pictures(null, null, null, true);
-        await copyController.copy_category_models(null, null, null, true);
-        await copyController.complete_all_model_info();
-        if (branchInfo.copyPictureToOss) {
-            await copyImgController.copy_articles_img();
-            await copyImgController.copy_models_img();
-            await copyImgController.copy_gallerys_img();
-        }
-        if (branchInfo.copyPictureFromRemoteOss) {
-            await syncDataController1.get_remote_oss_data({
-                copySrc: "fnvshen",
-                getHost: branchInfo.copyPictureFromRemoteOss,
-                getPort: "4800",
-                copyArticle: true,
-                copyModel: true,
-                copyPicture: true,
-                startDate: "2021-11-10"
-            })
-        }
-    });
-    schedule.scheduleJob('0 0 8 * * *', async function() {
-        var branchInfo = await copyController.queryBranchInfo();
-        await copyController.copy_articles(true);
-        await copyController.copy_category_pictures(null, null, null, true);
-        await copyController.copy_category_models(null, null, null, true);
-        await copyController.complete_all_model_info();
-        if (branchInfo.copyPictureToOss) {
-            await copyImgController.copy_articles_img();
-            await copyImgController.copy_models_img();
-            await copyImgController.copy_gallerys_img();
-        }
-        if (branchInfo.copyPictureFromRemoteOss) {
-            await syncDataController1.get_remote_oss_data({
-                copySrc: "fnvshen",
-                getHost: branchInfo.copyPictureFromRemoteOss,
-                getPort: "4800",
-                copyArticle: true,
-                copyModel: true,
-                copyPicture: true,
-                startDate: "2021-11-10"
-            })
-        }
-    });
+    }, 5 * 60 * 1000)
     schedule.scheduleJob('0 0 12 * * *', async function() {
         var branchInfo = await copyController.queryBranchInfo();
-        await copyController.copy_articles(true);
-        await copyController.copy_category_pictures(null, null, null, true);
-        await copyController.copy_category_models(null, null, null, true);
         await copyController.copy_rank_models();
-        await copyController.complete_all_model_info();
-        if (branchInfo.copyPictureToOss) {
-            await copyImgController.copy_articles_img();
-            await copyImgController.copy_models_img();
-            await copyImgController.copy_gallerys_img();
-        }
-        if (branchInfo.copyPictureFromRemoteOss) {
-            await syncDataController1.get_remote_oss_data({
-                copySrc: "fnvshen",
-                getHost: branchInfo.copyPictureFromRemoteOss,
-                getPort: "4800",
-                copyArticle: true,
-                copyModel: true,
-                copyPicture: true,
-                startDate: "2021-11-10"
-            })
-        }
         if (branchInfo.submitUrlToBaidu) await baiduController.submitNew("www.99nvshen.com");
         if (branchInfo.submitUrlToGoogle) await googleController.createSitemapFiles("www.99nvshen.com");
     });
@@ -140,11 +73,13 @@ exports.trigger_invshen_scheduele = async function() {
 
 
 exports.auto_schedule_da12 = function() {
-    //每日更新
+    setInterval(async function() {
+        await copyDa12Controller.queryBranchInfo();
+        copyDa12Controller.copy_all_pictures(null, true);
+    }, 5 * 60 * 1000)
     schedule.scheduleJob('0 0 0 * * *', async function() {
         console.log("更新最近1天数据！");
         await copyDa12Controller.queryBranchInfo();
-        copyDa12Controller.copy_all_pictures(null, true);
         copyDa12Controller.copy_home_rank();
         await da12GoogleController.createSitemapFiles("www.9iktb.com");
     });
