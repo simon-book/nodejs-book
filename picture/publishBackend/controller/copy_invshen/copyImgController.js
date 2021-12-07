@@ -145,6 +145,9 @@ exports.copy_gallerys_img = async function(pictureId, startIndex) {
             var picture = pictures[i];
             if (picture.local) continue;
             try {
+                if (!picture.cover || !picture.pictureHdList) {
+                    picture = await copyController.create_picture(picture.originId);
+                }
                 console.log("picture-" + picture.pictureId);
                 var filePath = "./assets/branch" + branchInfo.branchId + "/pictures/cover";
                 var ossPath = "assets/branch" + branchInfo.branchId + "/pictures/cover";

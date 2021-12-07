@@ -16,6 +16,12 @@ var sitemap = {
         site: "https://www.99nvshen.com",
         token: "MLVSuDUPIqTlqZVO",
         startDate: "2021-09-20"
+    },
+    "nvshen.datuxiu.com": {
+        branchId: 1,
+        site: "https://nvshen.datuxiu.com",
+        token: "MLVSuDUPIqTlqZVO",
+        startDate: "2021-09-20"
     }
 }
 
@@ -120,13 +126,13 @@ exports.submitNew = async function(site, startDate, endDate) {
         if (!site || !sitemap[site]) return false;
         var siteInfo = sitemap[site];
         if (!startDate || !endDate) {
-            startDate = moment().format("YYYY-MM-DD");
-            endDate = startDate;
+            endDate = moment().toDate();
+            startDate = moment().subtract(1, 'days').toDate();
         }
         var urls = [];
         var pictures = await pictureSequelize.findAllWithoutTags({
             createdAt: {
-                [Op.between]: [startDate + " 00:00:00", endDate + " 23:59:59"]
+                [Op.between]: [startDate, endDate]
             }
         }, ["pictureId"]);
         for (var i = 0; i < pictures.length; i++) {
@@ -134,7 +140,7 @@ exports.submitNew = async function(site, startDate, endDate) {
         }
         var models = await modelSequelize.findAllWithoutTags({
             createdAt: {
-                [Op.between]: [startDate + " 00:00:00", endDate + " 23:59:59"]
+                [Op.between]: [startDate, endDate]
             },
             statusId: 2
         }, ["modelId"]);
@@ -144,7 +150,7 @@ exports.submitNew = async function(site, startDate, endDate) {
         }
         var articles = await articleSequelize.findAll({
             createdAt: {
-                [Op.between]: [startDate + " 00:00:00", endDate + " 23:59:59"]
+                [Op.between]: [startDate, endDate]
             }
         }, 0, 10000, null, ["articleId"]);
         for (var i = 0; i < articles.length; i++) {

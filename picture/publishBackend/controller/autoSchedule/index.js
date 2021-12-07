@@ -4,8 +4,8 @@ var moment = require('moment');
 var copyController = require("../copy_invshen/copyController.js");
 var copyImgController = require("../copy_invshen/copyImgController.js");
 var syncDataController1 = require("../copy_invshen/syncDataController1.js");
-var baiduController = require("../seo/baiduController.js");
-var googleController = require("../seo/googleController.js");
+var invshenBaiduController = require("../copy_invshen/baiduController.js");
+var invshenGoogleController = require("../copy_invshen/googleController.js");
 
 var copyDa12Controller = require("../copy_da12/copyController.js");
 var da12GoogleController = require("../copy_da12/googleController.js");
@@ -37,8 +37,8 @@ exports.auto_schedule_invshen = function() {
     schedule.scheduleJob('0 0 12 * * *', async function() {
         var branchInfo = await copyController.queryBranchInfo();
         await copyController.copy_rank_models();
-        if (branchInfo.submitUrlToBaidu) await baiduController.submitNew("www.99nvshen.com");
-        if (branchInfo.submitUrlToGoogle) await googleController.createSitemapFiles("www.99nvshen.com");
+        if (branchInfo.submitUrlToBaidu) await invshenBaiduController.submitNew(branchInfo.domain);
+        if (branchInfo.submitUrlToGoogle) await invshenGoogleController.createSitemapFiles(branchInfo.domain);
     });
 }
 
@@ -67,8 +67,8 @@ exports.trigger_invshen_scheduele = async function() {
             startDate: "2021-11-10"
         })
     }
-    if (branchInfo.submitUrlToBaidu) await baiduController.submitNew("www.99nvshen.com");
-    if (branchInfo.submitUrlToGoogle) await googleController.createSitemapFiles("www.99nvshen.com");
+    if (branchInfo.submitUrlToBaidu) await invshenBaiduController.submitNew(branchInfo.domain);
+    if (branchInfo.submitUrlToGoogle) await invshenGoogleController.createSitemapFiles(branchInfo.domain);
 }
 
 

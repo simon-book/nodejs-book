@@ -53,6 +53,7 @@ exports.queryBranchInfo = async function() {
             branch.copyPictureFromRemoteOss = savedBranch.copyParams.copyPictureFromRemoteOss || false;
             branch.submitUrlToGoogle = savedBranch.copyParams.submitUrlToGoogle || false;
             branch.submitUrlToBaidu = savedBranch.copyParams.submitUrlToBaidu || false;
+            branch.domain = savedBranch.domain || false;
             branch.pictureTagGroups = [];
             branch.modelTagGroups = [];
             branch.pictureTags = [];

@@ -16,7 +16,11 @@ var sitemap = {
     "www.99nvshen.com": {
         branchId: 1,
         site: "https://www.99nvshen.com",
-        token: "MLVSuDUPIqTlqZVO",
+        startDate: "2021-09-20"
+    },
+    "nvshen.datuxiu.com": {
+        branchId: 1,
+        site: "https://nvshen.datuxiu.com",
         startDate: "2021-09-20"
     }
 }
@@ -70,7 +74,7 @@ exports.createSitemapFiles = async function(site) {
                 var content = toUrls.join("\n");
                 var fileName = site.replace(/\./g, "") + index;
                 await fsPromises.writeFile(sitemapPath + "/" + fileName + ".txt", content);
-                https.get('https://www.google.com/ping?sitemap=https://www.99nvshen.com/www99nvshencom1.txt', (res) => {
+                https.get('https://www.google.com/ping?sitemap=' + siteInfo.site + '/' + fileName + '.txt', (res) => {
                     console.log('statusCode:', res.statusCode);
                     res.setEncoding('utf8');
                     let rawData = '';

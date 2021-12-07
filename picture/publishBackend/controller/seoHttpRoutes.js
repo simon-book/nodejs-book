@@ -1,24 +1,24 @@
 var express = require('express');
 var router = express.Router();
-var baiduController = require('./seo/baiduController.js');
-var googleController = require('./seo/googleController.js');
+var invshenBaiduController = require('./copy_invshen/baiduController.js');
+var invshenGoogleController = require('./copy_invshen/googleController.js');
 var da12GoogleController = require('./copy_da12/googleController.js');
 
 router.post('/createSitemapFiles', async function(req, res) {
-    await baiduController.createSitemapFiles(req.body.site);
+    await invshenBaiduController.createSitemapFiles(req.body.site);
     res.send(true);
 })
 router.post('/submitAll', async function(req, res) {
-    await baiduController.submitAll(req.body.site);
+    await invshenBaiduController.submitAll(req.body.site);
     res.send(true);
 });
 router.post('/submitNew', async function(req, res) {
-    await baiduController.submitNew(req.body.site, req.body.startDate, req.body.endDate);
+    await invshenBaiduController.submitNew(req.body.site, req.body.startDate, req.body.endDate);
     res.send(true);
 });
 
 router.post('/submitGoogleSitemapFiles', async function(req, res) {
-    await googleController.createSitemapFiles(req.body.site);
+    await invshenGoogleController.createSitemapFiles(req.body.site);
     res.send(true);
 })
 
