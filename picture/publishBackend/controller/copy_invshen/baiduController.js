@@ -21,7 +21,7 @@ var sitemap = {
         branchId: 1,
         site: "https://nvshen.datuxiu.com",
         token: "MLVSuDUPIqTlqZVO",
-        startDate: "2021-09-20"
+        startDate: "2021-12-09"
     }
 }
 
@@ -56,6 +56,7 @@ exports.createSitemapFiles = async function(site) {
         }, ["modelId"]);
         for (var i = 0; i < models.length; i++) {
             urls.push(siteInfo.site + "/model/" + models[i].modelId);
+            urls.push(siteInfo.site + "/model/" + models[i].modelId + "/album/");
         }
         var articles = await articleSequelize.findAll({}, 0, 10000, null, ["articleId"]);
         for (var i = 0; i < articles.length; i++) {
@@ -96,6 +97,7 @@ exports.submitAll = async function(site) {
         }, ["modelId"]);
         for (var i = 0; i < models.length; i++) {
             urls.push(siteInfo.site + "/model/" + models[i].modelId);
+            urls.push(siteInfo.site + "/model/" + models[i].modelId + "/album/");
         }
         var articles = await articleSequelize.findAll({}, 0, 10000, null, ["articleId"]);
         for (var i = 0; i < articles.length; i++) {
@@ -156,15 +158,15 @@ exports.submitNew = async function(site, startDate, endDate) {
         for (var i = 0; i < articles.length; i++) {
             urls.push(siteInfo.site + "/article/" + articles[i].articleId);
         }
-        var diff = moment().diff(moment(siteInfo.startDate), "days");
-        if (diff) {
-            var models = await modelSequelize.findAllWithPictures({
-                statusId: 2
-            }, (diff - 1) * 30, 30, null, ["modelId"]);
-            for (var i = 0; i < models.length; i++) {
-                urls.push(siteInfo.site + "/model/" + models[i].modelId + "/album/");
-            }
-        }
+        // var diff = moment().diff(moment(siteInfo.startDate), "days");
+        // if (diff) {
+        //     var models = await modelSequelize.findAllWithPictures({
+        //         statusId: 2
+        //     }, (diff - 1) * 30, 30, null, ["modelId"]);
+        //     for (var i = 0; i < models.length; i++) {
+        //         urls.push(siteInfo.site + "/model/" + models[i].modelId + "/album/");
+        //     }
+        // }
         var start = 0;
         var len = 2000;
         do {

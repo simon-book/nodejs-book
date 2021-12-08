@@ -20,6 +20,9 @@ var Branch = sequelize.define('branch', {
         allowNull: false,
         unique: true
     },
+    icpNo: Sequelize.TEXT,
+    qq: Sequelize.TEXT,
+    email: Sequelize.TEXT,
     domain: Sequelize.TEXT,
     copySrc: Sequelize.TEXT,
     copyParams: Sequelize.JSONB,

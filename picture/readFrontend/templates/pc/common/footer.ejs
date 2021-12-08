@@ -23,8 +23,21 @@
     </div>
 </div>
 <footer>
-    <div class="container">
-        <p>本站所收录作品均是来源于网友上传,与本站立场无关,如有侵犯版权或涉黄问题,请来信告知,本站立即予以删除。 <br />邮箱:9invshen.com@gmail.com</p>
+    <div class="container bottom-addon">
+        <p class="copyright-notice">本站所收录作品均是来源于网友上传,与本站立场无关,如有侵犯版权或涉黄问题,请来信告知,本站立即予以删除！
+            <% if(branchInfo.qq){ %>
+            QQ:
+            <%= branchInfo.qq %>
+            <% } %>
+            <% if(branchInfo.email){ %>
+            邮箱:
+            <%= branchInfo.email %>
+            <% } %>
+        </p>
+        <% if(branchInfo.icpNo){ %>
+        <p class="ipc-info">Copyright © 2021 <a href="https://beian.miit.gov.cn/" target="_blank">
+                <%= branchInfo.icpNo %></a></p>
+        <% } %>
     </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>

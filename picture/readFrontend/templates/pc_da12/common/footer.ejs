@@ -21,7 +21,15 @@
 </div>
 <footer>
     <div class="container">
-        <p>本站所收录作品均收集于网络,如有侵犯版权或涉黄问题,请来信告知,本站立即予以删除。 <br />邮箱:9invshen.com@gmail.com</p>
+        <p>本站所收录作品均收集于网络,如有侵犯版权或涉黄问题,请来信告知,本站立即予以删除！
+            <% if(branchInfo.qq){ %>
+            QQ:
+            <%= branchInfo.qq %>
+            <% } %>
+            <% if(branchInfo.email){ %>
+            邮箱:
+            <%= branchInfo.email %>
+            <% } %>
     </div>
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>

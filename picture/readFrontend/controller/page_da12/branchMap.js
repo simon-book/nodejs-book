@@ -23,6 +23,8 @@ exports.queryBranchInfo = async function() {
             if (savedBranch && savedBranch.copyParams) {
                 hostMap[url].branchId = savedBranch.branchId;
                 hostMap[url].copySrc = savedBranch.copySrc;
+                hostMap[url].qq = savedBranch.qq;
+                hostMap[url].email = savedBranch.email;
                 hostMap[url].copyUrl = savedBranch.copyParams.copyUrl;
                 hostMap[url].pictureUrl = savedBranch.copyParams.pictureUrl;
                 hostMap[url].pictureUrl1 = savedBranch.copyParams.pictureUrl1;

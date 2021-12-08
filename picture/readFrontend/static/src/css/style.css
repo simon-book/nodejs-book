@@ -855,6 +855,11 @@ footer {
     text-align: center;
     margin: 30px auto;
     line-height: 24px;
+    font-size: 12px;
+}
+
+.ipc-info a {
+    color: #b2b2b2;
 }
 
 #firendlink {
