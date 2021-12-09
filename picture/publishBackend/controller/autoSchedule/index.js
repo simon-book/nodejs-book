@@ -33,7 +33,7 @@ exports.auto_schedule_invshen = function() {
                 startDate: "2021-11-10"
             })
         }
-    }, 5 * 60 * 1000)
+    }, 1 * 60 * 60 * 1000)
     schedule.scheduleJob('0 0 12 * * *', async function() {
         var branchInfo = await copyController.queryBranchInfo();
         await copyController.copy_rank_models();
@@ -76,7 +76,7 @@ exports.auto_schedule_da12 = function() {
     setInterval(async function() {
         await copyDa12Controller.queryBranchInfo();
         copyDa12Controller.copy_all_pictures(null, true);
-    }, 5 * 60 * 1000)
+    }, 12 * 60 * 60 * 1000)
     schedule.scheduleJob('0 0 0 * * *', async function() {
         console.log("更新最近1天数据！");
         await copyDa12Controller.queryBranchInfo();

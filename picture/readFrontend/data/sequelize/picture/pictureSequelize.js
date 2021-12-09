@@ -59,7 +59,7 @@ exports.findAll = function(where, offset, limit, attributes) {
     return new Promise(function(resolve, reject) {
         Picture.findAll({
             where: where,
-            attributes: attributes || ["pictureId", "title", "cover", "horiCover", "imgHost", "lastUpdatedAt", "originId", "orderIndex"],
+            attributes: attributes || ["pictureId", "title", "cover", "horiCover", "imgHost", "lastUpdatedAt", "originId", "orderIndex", "local"],
             offset: offset || 0,
             limit: limit || 200000,
             order: [
@@ -88,7 +88,7 @@ exports.findAllWithTags = function(where, offset, limit, attributes) {
     return new Promise(function(resolve, reject) {
         Picture.findAll({
             where: where,
-            attributes: attributes || ["pictureId", "title", "cover", "horiCover", "imgHost", "lastUpdatedAt", "originId", "orderIndex"],
+            attributes: attributes || ["pictureId", "title", "cover", "horiCover", "imgHost", "lastUpdatedAt", "originId", "orderIndex", "local"],
             offset: offset || 0,
             limit: limit || 200000,
             order: [
@@ -147,7 +147,7 @@ exports.findAndCountAllPictureTag = function(where, offset, limit, order) {
                 model: Picture,
                 as: 'picture',
                 required: false,
-                attributes: ["pictureId", "title", "imgHost", "cover", "lastUpdatedAt", "originId"],
+                attributes: ["pictureId", "title", "imgHost", "cover", "lastUpdatedAt", "originId", "local"],
                 // include: [{
                 //     model: Tag,
                 //     as: 'tags',
@@ -179,7 +179,7 @@ exports.findAndCountAll = function(where, offset, limit, order) {
             order: order || [
                 ['orderIndex', 'DESC']
             ],
-            attributes: ["pictureId", "title", "imgHost", "cover", "lastUpdatedAt", "originId", "orderIndex"],
+            attributes: ["pictureId", "title", "imgHost", "cover", "lastUpdatedAt", "originId", "orderIndex", "local"],
             // include: [{
             //     model: Tag,
             //     as: 'tags',

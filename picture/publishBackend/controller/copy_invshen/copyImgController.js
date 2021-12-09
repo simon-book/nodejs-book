@@ -267,11 +267,11 @@ async function downloadFile(src, fileName) {
 
 function httpFile(src, fileName) {
     return new Promise(function(resolve, reject) {
-        var stream = fs.createWriteStream(fileName);
-        stream.on('finish', async () => {
-            console.log("download!", fileName);
-            resolve(true);
-        });
+        // var stream = fs.createWriteStream(fileName);
+        // stream.on('finish', async () => {
+        //     console.log("download!", fileName);
+        //     resolve(true);
+        // });
         console.log("start download!", src, fileName);
         var req = http.request({
             host: src.replace(/https:\/\/|http:\/\//, "").split(":85")[0],
@@ -283,8 +283,28 @@ function httpFile(src, fileName) {
                 "Referer": "https://www.fnvshen.com/"
             },
             timeout: 10000
-        }, function(response) {
-            response.pipe(stream);
+        }, function(res) {
+            // response.pipe(stream);
+            var _data = [];
+            res.on('data', function(chunk) {
+                _data.push(chunk);
+            });
+            res.on('end', async function() {
+                if (res.statusCode == 200) {
+                    try {
+                        var body = Buffer.concat(_data);
+                        await fsPromises.writeFile(fileName, body);
+                        console.log("download!", fileName);
+                        resolve(true);
+                    } catch (err) {
+                        console.log(path, err);
+                        reject(err);
+                    }
+                } else {
+                    // console.log("status error", path, _data);
+                    reject("status error: " + res.statusCode);
+                }
+            });
         });
         req.on('error', function(e) {
             console.log("error", e);

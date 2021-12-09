@@ -252,6 +252,7 @@ exports.galleryList = async function(req, res) {
                 return row.picture;
             });
         }
+        _.remove(rows, { local: false });
         res.render('galleryList', {
             title: (tag ? tag.name : "") + "美女图片-" + branchInfo.shorttitle,
             keywords: tag ? tag.name + "美女," + tag.name + "美女图片," + tag.name + "美女写真," + tag.name + "模特" : "性感美女图片,性感写真,性感模特",

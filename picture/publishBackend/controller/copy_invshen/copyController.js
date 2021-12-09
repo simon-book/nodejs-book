@@ -318,6 +318,7 @@ async function create_picture(originId, picture, tag) {
                 picture.pictureHdList.push(picHdPath + util.prefixInteger(i, 3) + "." + picForamt);
             }
         }
+        var isUpdate = false;
         var savedPicture = await pictureSequelize.findOne({
             branchId: branch.branchId,
             originId: originId
@@ -325,15 +326,11 @@ async function create_picture(originId, picture, tag) {
         if (!savedPicture) {
             savedPicture = await pictureSequelize.create(picture);
         } else {
-            savedPicture = await pictureSequelize.update(picture, {
+            picture.local = false;
+            isUpdate = true;
+            await pictureSequelize.update(picture, {
                 pictureId: savedPicture.pictureId
             }, true);
-        }
-        if (!savedPicture) {
-            savedPicture = await pictureSequelize.findOne({
-                branchId: branch.branchId,
-                originId: originId
-            })
         }
 
         var utags = $("#utag").find("li a");
@@ -356,7 +353,7 @@ async function create_picture(originId, picture, tag) {
                     })
                 }
                 if (savedModel) girlIds.push(savedModel.modelId);
-                if (!picture.cover) {
+                if (isUpdate && girlIds.length == 1) {
                     savedPicture.set("cover", "/gallery/" + tagOriginId + "/" + originId + "/cover/0.jpg");
                     await savedPicture.save();
                 }
