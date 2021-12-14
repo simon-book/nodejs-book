@@ -178,15 +178,19 @@ exports.copy_gallerys_img = async function(pictureId, startIndex) {
                     var index = 1;
                     console.log(imgs.length);
                     for (var k = 0; k < imgs.length; k++) {
-                        var img = imgs[k];
-                        var imgUrl = branchInfo.copyPictureUrl + img;
-                        var imgFormat = imgUrl.split(".").pop();
-                        var fileName = filePath + "/" + index + "." + imgFormat;
-                        var ossName = ossPath + "/" + index + "." + imgFormat;
-                        await startDownloadFile(imgUrl, fileName);
-                        var putresult = await OssClient.put(ossName, fileName);
-                        console.log("upload!", fileName);
-                        imgs.splice(k, 1, "/" + ossName);
+                        try {
+                            var img = imgs[k];
+                            var imgUrl = branchInfo.copyPictureUrl + img;
+                            var imgFormat = imgUrl.split(".").pop();
+                            var fileName = filePath + "/" + index + "." + imgFormat;
+                            var ossName = ossPath + "/" + index + "." + imgFormat;
+                            await startDownloadFile(imgUrl, fileName);
+                            var putresult = await OssClient.put(ossName, fileName);
+                            console.log("upload!", fileName);
+                            imgs.splice(k, 1, "/" + ossName);
+                        } catch (err) {
+                            console.log(err);
+                        }
                         index++;
                     };
                     picture.set("pictureHdList", picture.pictureHdList);
@@ -204,15 +208,19 @@ exports.copy_gallerys_img = async function(pictureId, startIndex) {
                     var index = 1;
                     console.log(imgs.length);
                     for (var k = 0; k < imgs.length; k++) {
-                        var img = imgs[k];
-                        var imgUrl = branchInfo.copyPictureUrl + img;
-                        var imgFormat = imgUrl.split(".").pop();
-                        var fileName = filePath + "/" + index + "." + imgFormat;
-                        var ossName = ossPath + "/" + index + "." + imgFormat;
-                        await startDownloadFile(imgUrl, fileName);
-                        var putresult = await OssClient.put(ossName, fileName);
-                        console.log("upload!", fileName);
-                        imgs.splice(k, 1, "/" + ossName);
+                        try {
+                            var img = imgs[k];
+                            var imgUrl = branchInfo.copyPictureUrl + img;
+                            var imgFormat = imgUrl.split(".").pop();
+                            var fileName = filePath + "/" + index + "." + imgFormat;
+                            var ossName = ossPath + "/" + index + "." + imgFormat;
+                            await startDownloadFile(imgUrl, fileName);
+                            var putresult = await OssClient.put(ossName, fileName);
+                            console.log("upload!", fileName);
+                            imgs.splice(k, 1, "/" + ossName);
+                        } catch (err) {
+                            console.log(err);
+                        }
                         index++;
                     };
                     picture.set("pictureList", picture.pictureList);
