@@ -403,7 +403,7 @@ async function create_picture(originId, picture, tag) {
 
 exports.create_picture = create_picture;
 
-exports.copy_all_tag_models = async function(tagGroupId) {
+exports.copy_all_tag_models = async function(tagGroupId, isUpdate) {
     try {
         for (var i = 0; i < branch.modelTagGroups.length; i++) {
             var tagGroup = branch.modelTagGroups[i];
@@ -413,10 +413,68 @@ exports.copy_all_tag_models = async function(tagGroupId) {
                 var tag = tagGroup.tags[j];
                 try {
                     console.log(tag);
-                    await copy_category_models(tag);
+                    await copy_category_models(tag, null, null, isUpdate);
                 } catch (err) {
                     console.log("获取分类totalPage失败", category, err);
                 }
+            }
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+exports.complete_all_model_tags = async function(tagGroupId) {
+    try {
+        for (var i = 0; i < branch.modelTagGroups.length; i++) {
+            var tagGroup = branch.modelTagGroups[i];
+            if (tagGroupId && tagGroup.tagGroupId != tagGroupId) continue;
+            for (var j = 0; j < tagGroup.tags.length; j++) {
+                if (branch.isTest && j > 2) break;
+                var tag = tagGroup.tags[j];
+                var index = 1;
+                var endIndex = 5;
+                var stop = false;
+                do {
+                    try {
+                        var path = "/tag/" + tag.originId + "/";
+                        if (index > 1) path += index + ".html";
+                        console.log(path);
+                        var $ = await commonController.copyHtml(branch.pcCopyUrl, path, branch.charset);
+                        var targetItems = $("#listdiv").find("li.beautyli");
+                        for (var k = 0; k < targetItems.length; k++) {
+                            try {
+                                var item = targetItems[k];
+                                var modelHref = $($(item).find("a")[1]).attr("href");
+                                if (modelHref.match(/\/girl\//g).length) {
+                                    var originId = modelHref.split("/")[2];
+                                    var savedModel = await modelSequelize.findOneModel({
+                                        branchId: branch.branchId,
+                                        originId: originId
+                                    })
+                                    if (tag && savedModel && (!savedModel.tags || _.findIndex(savedModel.tags, {
+                                            tagId: tag.tagId
+                                        }) == -1)) {
+                                        await savedModel.addTags([tag.tagId], {
+                                            through: {
+                                                modelOriginId: savedModel.originId
+                                            }
+                                        });
+                                    }
+                                }
+                            } catch (err) {
+                                console.log(index, i, originId);
+                                console.log(err);
+                            }
+                        }
+                        var pages = $("#listdiv").find(".pagesYY a");
+                        if ($(pages[pages.length - 1]).hasClass("cur")) stop = true;
+                    } catch (err) {
+                        console.log(tag, index);
+                        console.log(err);
+                    }
+                    index++;
+                } while (index <= endIndex && !stop);
             }
         }
     } catch (err) {
@@ -428,7 +486,7 @@ async function copy_category_models(tag, startIndex, endIndex, isUpdate) {
     try {
         if (!startIndex) startIndex = 1;
         var index = 1;
-        if (!endIndex) endIndex = 10000;
+        if (!endIndex) endIndex = 20;
         if (branch.isTest) endIndex = startIndex + 2;
         var stop = false;
         do {
@@ -740,7 +798,7 @@ async function copy_model_pictures(modelId, originId) {
 exports.copy_articles = async function(isUpdate) {
     try {
         var index = 1;
-        var endIndex = 10000;
+        var endIndex = 100;
         if (branch.isTest) endIndex = 3
         var stop = false;
         do {

@@ -50,17 +50,22 @@ exports.createSitemapFiles = async function(site) {
         for (var i = 0; i < ranks.length; i++) {
             urls.push(siteInfo.site + "/paihang/" + ranks[i].rankId);
         }
-        var pictures = await pictureSequelize.findAllWithoutTags({}, ["pictureId"]);
+        var pictures = await pictureSequelize.findAllWithoutTags({
+            local: true
+        }, ["pictureId"]);
         for (var i = 0; i < pictures.length; i++) {
             urls.push(siteInfo.site + "/gallery/" + pictures[i].pictureId);
         }
         var models = await modelSequelize.findAllWithoutTags({
-            statusId: 2
+            statusId: 2,
+            local: true
         }, ["modelId"]);
         for (var i = 0; i < models.length; i++) {
             urls.push(siteInfo.site + "/model/" + models[i].modelId);
         }
-        var articles = await articleSequelize.findAll({}, 0, 10000, null, ["articleId"]);
+        var articles = await articleSequelize.findAll({
+            local: true
+        }, 0, 10000, null, ["articleId"]);
         for (var i = 0; i < articles.length; i++) {
             urls.push(siteInfo.site + "/article/" + articles[i].articleId);
         }

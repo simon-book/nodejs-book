@@ -70,12 +70,12 @@ exports.findAll = function(where, attributes, offset, limit) {
                 model: Tag,
                 as: 'tags',
                 required: false,
-                attributes: ["tagId", "name"]
+                // attributes: ["tagId", "name"]
             }, {
                 model: Model,
                 as: 'models',
                 required: false,
-                attributes: ["modelId", "name"]
+                // attributes: ["modelId", "name"]
             }]
         }).then(function(results) {
             resolve(results);

@@ -58,6 +58,6 @@ router.post('/copy_home_rank', async function(req, res) {
     res.send(true);
 })
 
-if (__G__.copySrc == "da12") auto_schedule.auto_schedule_da12();
+if (_.indexOf(__G__.copySrcs, "da12") > -1) auto_schedule.auto_schedule_da12();
 
 module.exports = router;

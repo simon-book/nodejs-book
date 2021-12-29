@@ -12,12 +12,12 @@ var session = require('express-session');
 var bodyParser = require('body-parser');
 var properties = require('./config/properties.js')();
 
-__G__.copySrcs = ["da12", "tuaox"];
+__G__.copySrc = "fnvshen";
 process.env.NODE_ENV = __G__.NODE_ENV;
 
 var app = express();
 // all environments
-app.set('port', process.env.PORT || 4800);
+app.set('port', process.env.PORT || 4801);
 app.set('views', path.join(__dirname, 'templates/stat'));
 app.set('view engine', 'ejs');
 app.set('view options');
@@ -46,16 +46,7 @@ app.use('*', function(req, res, next) {
     next();
 })
 
-app.use(__G__.CONTEXT + "/static", express.static(path.join(__dirname, '/statics')));
-app.use(__G__.CONTEXT + "/html", express.static(path.join(__dirname, '/html')));
-
-app.use(__G__.CONTEXT || '/page/stat', require('./controller/statHttpRoutes.js'));
-app.use(__G__.CONTEXT || '/seo', require('./controller/seoHttpRoutes.js'));
-app.use(__G__.CONTEXT || '/api/publisher', require('./controller/index.js'));
-app.use(__G__.CONTEXT || '/api/publisher/invshen', require('./controller/invshenHttpRoutes.js'));
-app.use(__G__.CONTEXT || '/api/publisher/da12', require('./controller/da12HttpRoutes.js'));
-app.use(__G__.CONTEXT || '/api/publisher/tuaox', require('./controller/tuaoxHttpRoutes.js'));
-
+app.use(__G__.CONTEXT + "/assets", express.static(path.join(__dirname, '/assets')));
 
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);

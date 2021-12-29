@@ -17,7 +17,7 @@ exports.htmlStartReq = function(host, path, charset) {
             headers: {
                 "Content-Type": "text/html;"
             },
-            timeout: 10000
+            timeout: 60000
         }, function(res) {
             var contentEncoding = res.headers['content-encoding'];
             var _data = [];

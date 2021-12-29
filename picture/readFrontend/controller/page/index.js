@@ -433,8 +433,11 @@ exports.modelList = async function(req, res) {
         var tagNames = _.map(branchInfo.modelTagGroups[0].tags, function(tag) {
             return tag.name
         })
+        _.remove(rows, function(row) {
+            return !row;
+        });
         var modelNames = _.map(rows, function(row) {
-            return row.name
+            return row ? row.name : "";
         })
         res.render('modelList', {
             title: (tag ? tag.name : "倾城美人榜") + "-" + branchInfo.shorttitle,

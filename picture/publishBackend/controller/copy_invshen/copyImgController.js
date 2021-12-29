@@ -23,6 +23,7 @@ exports.copy_articles_img = async function(articleId, startIndex) {
     try {
         var branchInfo = await copyController.queryBranchInfo();
         var where = {
+            branchId: branchInfo.branchId,
             local: false
         };
         if (articleId) where.articleId = articleId;
@@ -33,8 +34,8 @@ exports.copy_articles_img = async function(articleId, startIndex) {
             if (article.local) continue;
             try {
                 console.log("article-" + article.articleId);
-                var filePath = "./assets/branch" + branchInfo.branchId + "/articles/" + article.articleId;
-                var ossPath = "assets/branch" + branchInfo.branchId + "/articles/" + article.articleId;
+                var filePath = "./assets/branch" + branchInfo.branchId + "/articles/" + article.originId;
+                var ossPath = "assets/branch" + branchInfo.branchId + "/articles/" + article.originId;
                 if (!fs.existsSync(filePath)) {
                     await fsPromises.mkdir(filePath, {
                         recursive: true
@@ -52,6 +53,7 @@ exports.copy_articles_img = async function(articleId, startIndex) {
                 console.log("upload!", fileName);
                 article.set("cover", "/" + ossName);
                 index++;
+                await util.sleep(1000);
                 for (var j = 0; j < article.content.length; j++) {
                     var content = article.content[j];
                     content = content.replace(/\*{4}pictureUrl\*{3}/g, copyPictureUrl);
@@ -69,6 +71,7 @@ exports.copy_articles_img = async function(articleId, startIndex) {
                         console.log("upload!", fileName);
                         $(img).attr("src", "****pictureUrl***/" + ossName)
                         index++;
+                        await util.sleep(1000);
                     };
                     content = $.html();
                     // console.log(content);
@@ -92,6 +95,7 @@ exports.copy_models_img = async function(modelId, startIndex) {
     try {
         var branchInfo = await copyController.queryBranchInfo();
         var where = {
+            branchId: branchInfo.branchId,
             local: false
         };
         if (modelId) where.modelId = modelId;
@@ -113,12 +117,13 @@ exports.copy_models_img = async function(modelId, startIndex) {
                 var copyPictureUrl = "https://img.xiublog.com:85";
                 var imgUrl = copyPictureUrl + model.cover;
                 var imgFormat = /(\.jpg|\.png|\.jpeg|\.gif)$/i.test(imgUrl) ? imgUrl.split(".").pop() : "jpg";
-                var fileName = filePath + "/" + model.modelId + "." + imgFormat;
-                var ossName = ossPath + "/" + model.modelId + "." + imgFormat;
+                var fileName = filePath + "/" + model.originId + "." + imgFormat;
+                var ossName = ossPath + "/" + model.originId + "." + imgFormat;
                 await startDownloadFile(imgUrl, fileName);
                 var putresult = await OssClient.put(ossName, fileName);
                 console.log("upload!", fileName);
                 model.set("cover", "/" + ossName);
+                await util.sleep(1000);
             } catch (err) {
                 console.log("model error", err);
                 local = false;
@@ -136,6 +141,7 @@ exports.copy_gallerys_img = async function(pictureId, startIndex) {
     try {
         var branchInfo = await copyController.queryBranchInfo();
         var where = {
+            branchId: branchInfo.branchId,
             local: false
         };
         if (pictureId) where.pictureId = pictureId;
@@ -159,17 +165,17 @@ exports.copy_gallerys_img = async function(pictureId, startIndex) {
                 var local = true;
                 var imgUrl = branchInfo.copyPictureUrl + picture.cover;
                 var imgFormat = imgUrl.split(".").pop();
-                var fileName = filePath + "/" + picture.pictureId + "." + imgFormat;
-                var ossName = ossPath + "/" + picture.pictureId + "." + imgFormat;
+                var fileName = filePath + "/" + picture.originId + "." + imgFormat;
+                var ossName = ossPath + "/" + picture.originId + "." + imgFormat;
                 await startDownloadFile(imgUrl, fileName);
                 var putresult = await OssClient.put(ossName, fileName);
                 console.log("upload!", fileName);
                 picture.set("cover", "/" + ossName);
-
+                await util.sleep(1000);
                 var imgs = picture.pictureHdList;
                 if (imgs && imgs.length) {
-                    var filePath = "./assets/branch" + branchInfo.branchId + "/pictures/hdlist/" + picture.pictureId;
-                    var ossPath = "assets/branch" + branchInfo.branchId + "/pictures/hdlist/" + picture.pictureId;
+                    var filePath = "./assets/branch" + branchInfo.branchId + "/pictures/hdlist/" + picture.originId;
+                    var ossPath = "assets/branch" + branchInfo.branchId + "/pictures/hdlist/" + picture.originId;
                     if (!fs.existsSync(filePath)) {
                         await fsPromises.mkdir(filePath, {
                             recursive: true
@@ -188,6 +194,7 @@ exports.copy_gallerys_img = async function(pictureId, startIndex) {
                             var putresult = await OssClient.put(ossName, fileName);
                             console.log("upload!", fileName);
                             imgs.splice(k, 1, "/" + ossName);
+                            await util.sleep(1000);
                         } catch (err) {
                             console.log(err);
                         }
@@ -218,6 +225,7 @@ exports.copy_gallerys_img = async function(pictureId, startIndex) {
                             var putresult = await OssClient.put(ossName, fileName);
                             console.log("upload!", fileName);
                             imgs.splice(k, 1, "/" + ossName);
+                            await util.sleep(1000);
                         } catch (err) {
                             console.log(err);
                         }

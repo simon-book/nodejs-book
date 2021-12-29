@@ -125,34 +125,37 @@ exports.send_local_data = async function(body) {
         if (body.copyArticle) {
             var articles = await articleSequelize.findAll(where, 0, 100000, null, ["articleId", "cover", "title", "content", "local", "originId"]);
             data.articles = _.map(articles, function(article) {
-                return {
-                    originId: article.originId,
-                    local: article.local,
-                    cover: article.cover,
-                    content: article.content
-                }
+                // return {
+                //     originId: article.originId,
+                //     local: article.local,
+                //     cover: article.cover,
+                //     content: article.content
+                // }
+                return article.get();
             })
         }
         if (body.copyModel) {
             var models = await modelSequelize.findAllWithoutTags(where, ["modelId", "cover", "local", "originId"]);
             data.models = _.map(models, function(model) {
-                return {
-                    originId: model.originId,
-                    local: model.local,
-                    cover: model.cover
-                }
+                // return {
+                //     originId: model.originId,
+                //     local: model.local,
+                //     cover: model.cover
+                // }
+                return model.get();
             })
         }
         if (body.copyPicture) {
             var pictures = await pictureSequelize.findAllWithoutTags(where, ["pictureId", "cover", "local", "originId", "pictureHdList", "pictureList"]);
             data.pictures = _.map(pictures, function(picture) {
-                return {
-                    originId: picture.originId,
-                    local: picture.local,
-                    cover: picture.cover,
-                    pictureHdList: picture.pictureHdList,
-                    // pictureList: picture.pictureList,
-                }
+                // return {
+                //     originId: picture.originId,
+                //     local: picture.local,
+                //     cover: picture.cover,
+                //     pictureHdList: picture.pictureHdList,
+                //     // pictureList: picture.pictureList,
+                // }
+                return picture.get();
             })
         }
         console.log(data);

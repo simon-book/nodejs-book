@@ -7,7 +7,7 @@ var copyImgController = require('./copy_invshen/copyImgController.js');
 var commonController = require('./copy_invshen/commonController.js');
 var checkController = require('./copy_invshen/checkController.js');
 var uploadToOssController = require('./copy_invshen/uploadToOssController.js');
-var syncDataController = require('./copy_invshen/syncDataController.js');
+var syncDataController = require('./copy_invshen/syncDataController2.js');
 var syncDataController1 = require('./copy_invshen/syncDataController1.js');
 
 router.post('/query_branch_info', async function(req, res) {
@@ -47,6 +47,11 @@ router.post('/complete_all_model_info', async function(req, res) {
 router.post('/complete_all_model_othername', async function(req, res) {
     await copyController.queryBranchInfo();
     copyController.complete_all_model_othername();
+    res.send(true);
+})
+router.post('/complete_all_model_tags', async function(req, res) {
+    await copyController.queryBranchInfo();
+    copyController.complete_all_model_tags(req.body.tagGroupId);
     res.send(true);
 })
 router.post('/copy_articles', async function(req, res) {
@@ -95,7 +100,7 @@ router.post('/check_all_pictures_by_max', async function(req, res) {
     res.send(true);
 })
 
-if (__G__.copySrc == "fnvshen") autoSchedule.auto_schedule_invshen();
+if (_.indexOf(__G__.copySrcs, "fnvshen") > -1) autoSchedule.auto_schedule_invshen();
 
 router.post('/copy_articles_img', async function(req, res) {
     copyImgController.copy_articles_img(req.body.articleId, req.body.startIndex);
@@ -128,7 +133,9 @@ router.post('/send_local_data', async function(req, res) {
         copyArticle: body.copyArticle,
         copyModel: body.copyModel,
         copyPicture: body.copyPicture,
-        startDate: body.startDate
+        startDate: body.startDate,
+        modelStartDate: body.modelStartDate,
+        pictureStartDate: body.pictureStartDate
     });
     res.send(result);
 })

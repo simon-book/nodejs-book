@@ -10,12 +10,15 @@ var invshenGoogleController = require("../copy_invshen/googleController.js");
 var copyDa12Controller = require("../copy_da12/copyController.js");
 var da12GoogleController = require("../copy_da12/googleController.js");
 
+var copyTuaoxController = require("../copy_tuaox/copyController.js");
+var copyTuaoxImgController = require("../copy_tuaox/copyImgController.js");
+
 exports.auto_schedule_invshen = function() {
     setInterval(async function() {
         var branchInfo = await copyController.queryBranchInfo();
         await copyController.copy_articles(true);
         await copyController.copy_category_pictures(null, null, null, true);
-        await copyController.copy_category_models(null, null, null, true);
+        await copyController.copy_all_tag_models(null, true);
         await copyController.complete_all_model_info();
         if (branchInfo.copyPictureToOss) {
             await copyImgController.copy_articles_img();
@@ -33,7 +36,7 @@ exports.auto_schedule_invshen = function() {
                 startDate: "2021-11-10"
             })
         }
-    }, 1 * 60 * 60 * 1000)
+    }, 12 * 60 * 60 * 1000)
     schedule.scheduleJob('0 0 12 * * *', async function() {
         var branchInfo = await copyController.queryBranchInfo();
         await copyController.copy_rank_models();
@@ -48,7 +51,7 @@ exports.trigger_invshen_scheduele = async function() {
     var branchInfo = await copyController.queryBranchInfo();
     await copyController.copy_articles(true);
     await copyController.copy_category_pictures(null, null, null, true);
-    await copyController.copy_category_models(null, null, null, true);
+    await copyController.copy_all_tag_models(null, true);
     // await copyController.copy_rank_models();
     await copyController.complete_all_model_info();
     if (branchInfo.copyPictureToOss) {
@@ -82,5 +85,16 @@ exports.auto_schedule_da12 = function() {
         await copyDa12Controller.queryBranchInfo();
         copyDa12Controller.copy_home_rank();
         await da12GoogleController.createSitemapFiles("www.9iktb.com");
+    });
+}
+
+exports.auto_schedule_tuaox = function() {
+    schedule.scheduleJob('0 0 2 * * *', async function() {
+        console.log("更新最近1天数据！");
+        var branchInfo = await copyTuaoxController.queryBranchInfo();
+        copyTuaoxController.copy_all_pictures(null, true);
+        if (branchInfo.copyPictureToOss) {
+            await copyTuaoxImgController.copy_gallerys_img();
+        }
     });
 }

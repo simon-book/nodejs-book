@@ -98,12 +98,12 @@ exports.findAll = function(where, offset, limit, order) {
                 model: Tag,
                 as: 'tags',
                 required: false,
-                attributes: ["tagId", "name"]
+                // attributes: ["tagId", "name"]
             }, {
                 model: Article,
                 as: 'articles',
                 required: false,
-                attributes: ["articleId", "title"]
+                // attributes: ["articleId", "title"]
             }]
         }).then(function(results) {
             resolve(results);
