@@ -51,7 +51,7 @@ router.post('/complete_all_model_othername', async function(req, res) {
 })
 router.post('/complete_all_model_tags', async function(req, res) {
     await copyController.queryBranchInfo();
-    copyController.complete_all_model_tags(req.body.tagGroupId);
+    copyController.complete_all_model_tags(req.body.tagGroupId, req.body.tagId);
     res.send(true);
 })
 router.post('/copy_articles', async function(req, res) {

@@ -1,6 +1,6 @@
 exports.hostMap = {
     "localhost": {
-        branchId: 1,
+        branchId: 2,
         staticVersion: "20210522-01",
         title: "笔趣阁_书友最值得收藏的网络小说阅读网",
         shorttitle: "笔趣阁",

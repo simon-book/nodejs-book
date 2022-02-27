@@ -103,7 +103,8 @@ exports.htmlStartReq = function(host, path, charset) {
             path: path,
             method: 'GET',
             headers: {
-                "Content-Type": "text/html;"
+                "Content-Type": "text/html;",
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.109 Safari/537.36"
             },
             timeout: 60000
         }, function(res) {

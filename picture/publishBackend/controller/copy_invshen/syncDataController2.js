@@ -78,7 +78,7 @@ exports.receive_local_data = async function(req, res) {
                         cover: model.cover
                     })
                 }
-                if (savedModel.tags && savedModel.tags.length) continue;
+                if (savedModel && savedModel.tags && savedModel.tags.length) continue;
                 if (!savedModel) {
                     delete model.modelId;
                     delete model.relatedModelIds;
@@ -136,7 +136,7 @@ exports.receive_local_data = async function(req, res) {
                     branchId: branchInfo.branchId,
                     originId: picture.originId
                 })
-                if (savedPicture && savedPicture.local) continue;
+                // if (savedPicture && savedPicture.local) continue;
                 if (savedPicture) {
                     await pictureSequelize.update({
                         local: picture.local,
@@ -148,34 +148,34 @@ exports.receive_local_data = async function(req, res) {
                         originId: picture.originId
                     })
                 } else {
-                    var modelOriginIds = _.map(picture.models, "originId");
-                    var tagOriginIds = _.map(picture.tags, "originId");
                     delete picture.pictureId;
                     picture.branchId = branchInfo.branchId;
-                    var addedPicture = await pictureSequelize.create(picture);
-                    var models = await modelSequelize.findAll({
-                        branchId: branchInfo.branchId,
-                        originId: {
-                            [Op.in]: modelOriginIds
-                        }
-                    })
-                    var modelIds = _.map(models, "modelId");
-                    if (modelIds && modelIds.length) await addedPicture.addModels(modelIds);
-                    var tags = await tagSequelize.findAll({
-                        branchId: branchInfo.branchId,
-                        originId: {
-                            [Op.in]: tagOriginIds
-                        }
-                    })
-                    var tagIds = _.map(tags, "tagId");
-                    if (tagIds && tagIds.length) {
-                        await addedPicture.addTags(_.uniq(tagIds), {
-                            through: {
-                                pictureLastUpdatedAt: addedPicture.lastUpdatedAt,
-                                orderIndex: parseInt(addedPicture.originId)
-                            }
-                        });
+                    savedPicture = await pictureSequelize.create(picture);
+                }
+                var modelOriginIds = _.map(picture.models, "originId");
+                var tagOriginIds = _.map(picture.tags, "originId");
+                var models = await modelSequelize.findAll({
+                    branchId: branchInfo.branchId,
+                    originId: {
+                        [Op.in]: modelOriginIds
                     }
+                })
+                var modelIds = _.map(models, "modelId");
+                if (modelIds && modelIds.length) await savedPicture.addModels(modelIds);
+                var tags = await tagSequelize.findAll({
+                    branchId: branchInfo.branchId,
+                    originId: {
+                        [Op.in]: tagOriginIds
+                    }
+                })
+                var tagIds = _.map(tags, "tagId");
+                if (tagIds && tagIds.length) {
+                    await savedPicture.addTags(_.uniq(tagIds), {
+                        through: {
+                            pictureLastUpdatedAt: savedPicture.lastUpdatedAt,
+                            orderIndex: parseInt(savedPicture.originId)
+                        }
+                    });
                 }
 
             }

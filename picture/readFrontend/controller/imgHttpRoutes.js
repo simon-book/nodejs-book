@@ -4,6 +4,7 @@ var moment = require('moment');
 var path = require('path');
 var fs = require('fs');
 var fsPromises = fs.promises;
+var schedule = require('node-schedule');
 var crytogram = require('../util/cryptogram.js')
 var copyImgController = require('./common/copyImgController.js');
 
@@ -47,4 +48,31 @@ router.get('/kuku/*', async function(req, res) {
 });
 console.log(__dirname);
 console.log(path.resolve());
+
+schedule.scheduleJob('0 0 15 * * 1', async function() {
+    var filePath = "./proxy";
+    delFile(filePath, filePath);
+});
+
+function delFile(path, reservePath) {
+    if (fs.existsSync(path)) {
+        if (fs.statSync(path).isDirectory()) {
+            var files = fs.readdirSync(path);
+            files.forEach(function(file, index) {
+                var currentPath = path + "/" + file;
+                if (fs.statSync(currentPath).isDirectory()) {
+                    delFile(currentPath, reservePath)
+                } else {
+                    fs.unlinkSync(currentPath);
+                }
+            })
+            if (path != reservePath) {
+                fs.rmdirSync(path);
+            }
+        } else {
+            fs.unlinkSync(path);
+        }
+    }
+}
+
 module.exports = router;

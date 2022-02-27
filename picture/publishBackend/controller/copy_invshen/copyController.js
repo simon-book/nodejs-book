@@ -157,6 +157,7 @@ async function copy_tags(tagGroupType, tagGroups) {
                     var savedTag = await tagSequelize.findOneTag({
                         branchId: branch.branchId,
                         originId: originId,
+                        tagGroupId: savedTagGroup.tagGroupId,
                         name: name
                     })
                     if (!savedTag) {
@@ -424,7 +425,7 @@ exports.copy_all_tag_models = async function(tagGroupId, isUpdate) {
     }
 }
 
-exports.complete_all_model_tags = async function(tagGroupId) {
+exports.complete_all_model_tags = async function(tagGroupId, tagId) {
     try {
         for (var i = 0; i < branch.modelTagGroups.length; i++) {
             var tagGroup = branch.modelTagGroups[i];
@@ -432,8 +433,9 @@ exports.complete_all_model_tags = async function(tagGroupId) {
             for (var j = 0; j < tagGroup.tags.length; j++) {
                 if (branch.isTest && j > 2) break;
                 var tag = tagGroup.tags[j];
+                if (tagId && tag.tagId != tagId) continue;
                 var index = 1;
-                var endIndex = 5;
+                var endIndex = 15;
                 var stop = false;
                 do {
                     try {
