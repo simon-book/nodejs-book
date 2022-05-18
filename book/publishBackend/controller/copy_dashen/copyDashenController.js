@@ -236,7 +236,7 @@ async function create_book(originId, categoryId, categoryName) {
         }
         savedBook.set("chapterCount", chapters.length);
         await savedBook.save();
-        baiduController.submitNewBook(savedBook.bookId);
+        // baiduController.submitNewBook(savedBook.bookId);
         return savedBook;
     } catch (err) {
         console.log(err, book);

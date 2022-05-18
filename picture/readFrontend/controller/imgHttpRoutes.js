@@ -49,7 +49,7 @@ router.get('/kuku/*', async function(req, res) {
 console.log(__dirname);
 console.log(path.resolve());
 
-schedule.scheduleJob('0 0 15 * * 1', async function() {
+schedule.scheduleJob('0 0 15 * * *', async function() {
     var filePath = "./proxy";
     delFile(filePath, filePath);
 });
