@@ -29,7 +29,7 @@
     "pg-hstore": "^2.3.3",
     "request": "^2.88.2",
     "sequelize": "^5.0.0",
-    "sharp": "^0.29.3",
+    "sharp": "^0.30.5",
     "static-favicon": "~1.0.0",
     "xml2js": "*"
   }
